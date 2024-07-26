@@ -1,0 +1,4 @@
+#!/bin/bash
+file_name=v$(date +"%Y.%m.%d.%H.%M.%S")__description.sql
+touch ./sql/${file_name}
+echo "created new sql file: ${file_name}"
