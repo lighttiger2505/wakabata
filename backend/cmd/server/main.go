@@ -9,13 +9,17 @@ import (
 
 	"github.com/lighttiger2505/wakabata/internal/app"
 	"github.com/lighttiger2505/wakabata/internal/app/v1/wakabatav1connect"
+	"github.com/lighttiger2505/wakabata/internal/domain/service"
+	"github.com/lighttiger2505/wakabata/internal/infra"
 )
 
 func main() {
 	mux := http.NewServeMux()
 
 	{
-		svc := app.NewUserHandler()
+		i := infra.NewUserInfra()
+		s := service.NewUserService(i)
+		svc := app.NewUserHandler(s)
 		path, handler := wakabatav1connect.NewUserServiceHandler(svc)
 		mux.Handle(path, handler)
 	}

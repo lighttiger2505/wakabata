@@ -14,10 +14,16 @@ func NewUserInfra() *UserInfra {
 	return &UserInfra{}
 }
 
-func (i *UserInfra) Create(ctx context.Context, user *model.User) error {
-	return query.User.WithContext(ctx).Create(user)
+func (i *UserInfra) Create(ctx context.Context, user *model.User) (*model.User, error) {
+	if err := query.User.WithContext(ctx).Create(user); err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
-func (i *UserInfra) Update(ctx context.Context, user *model.User) error {
-	return query.User.WithContext(ctx).Create(user)
+func (i *UserInfra) Update(ctx context.Context, user *model.User) (*model.User, error) {
+	if err := query.User.WithContext(ctx).Create(user); err != nil {
+		return nil, err
+	}
+	return user, nil
 }
