@@ -16,34 +16,59 @@ import (
 )
 
 var (
-	Q    = new(Query)
-	User *user
+	Q           = new(Query)
+	Project     *project
+	Tag         *tag
+	Task        *task
+	TaskComment *taskComment
+	TaskTag     *taskTag
+	User        *user
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	Project = &Q.Project
+	Tag = &Q.Tag
+	Task = &Q.Task
+	TaskComment = &Q.TaskComment
+	TaskTag = &Q.TaskTag
 	User = &Q.User
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:   db,
-		User: newUser(db, opts...),
+		db:          db,
+		Project:     newProject(db, opts...),
+		Tag:         newTag(db, opts...),
+		Task:        newTask(db, opts...),
+		TaskComment: newTaskComment(db, opts...),
+		TaskTag:     newTaskTag(db, opts...),
+		User:        newUser(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	User user
+	Project     project
+	Tag         tag
+	Task        task
+	TaskComment taskComment
+	TaskTag     taskTag
+	User        user
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:   db,
-		User: q.User.clone(db),
+		db:          db,
+		Project:     q.Project.clone(db),
+		Tag:         q.Tag.clone(db),
+		Task:        q.Task.clone(db),
+		TaskComment: q.TaskComment.clone(db),
+		TaskTag:     q.TaskTag.clone(db),
+		User:        q.User.clone(db),
 	}
 }
 
@@ -57,18 +82,33 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:   db,
-		User: q.User.replaceDB(db),
+		db:          db,
+		Project:     q.Project.replaceDB(db),
+		Tag:         q.Tag.replaceDB(db),
+		Task:        q.Task.replaceDB(db),
+		TaskComment: q.TaskComment.replaceDB(db),
+		TaskTag:     q.TaskTag.replaceDB(db),
+		User:        q.User.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	User IUserDo
+	Project     IProjectDo
+	Tag         ITagDo
+	Task        ITaskDo
+	TaskComment ITaskCommentDo
+	TaskTag     ITaskTagDo
+	User        IUserDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		User: q.User.WithContext(ctx),
+		Project:     q.Project.WithContext(ctx),
+		Tag:         q.Tag.WithContext(ctx),
+		Task:        q.Task.WithContext(ctx),
+		TaskComment: q.TaskComment.WithContext(ctx),
+		TaskTag:     q.TaskTag.WithContext(ctx),
+		User:        q.User.WithContext(ctx),
 	}
 }
 

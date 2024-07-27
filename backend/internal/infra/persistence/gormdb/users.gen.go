@@ -17,7 +17,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/lighttiger2505/WakabaTasks/backend/internal/model"
+	"github.com/lighttiger2505/WakabaTasks/backend/internal/infra/persistence/model"
 )
 
 func newUser(db *gorm.DB, opts ...gen.DOOption) user {
@@ -29,12 +29,11 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 	tableName := _user.userDo.TableName()
 	_user.ALL = field.NewAsterisk(tableName)
 	_user.ID = field.NewString(tableName, "id")
-	_user.CreatedAt = field.NewTime(tableName, "created_at")
-	_user.UpdatedAt = field.NewTime(tableName, "updated_at")
-	_user.DeletedAt = field.NewField(tableName, "deleted_at")
 	_user.Username = field.NewString(tableName, "username")
 	_user.Email = field.NewString(tableName, "email")
 	_user.PasswordHash = field.NewString(tableName, "password_hash")
+	_user.CreatedAt = field.NewTime(tableName, "created_at")
+	_user.UpdatedAt = field.NewTime(tableName, "updated_at")
 
 	_user.fillFieldMap()
 
@@ -46,12 +45,11 @@ type user struct {
 
 	ALL          field.Asterisk
 	ID           field.String
-	CreatedAt    field.Time
-	UpdatedAt    field.Time
-	DeletedAt    field.Field
 	Username     field.String
 	Email        field.String
 	PasswordHash field.String
+	CreatedAt    field.Time
+	UpdatedAt    field.Time
 
 	fieldMap map[string]field.Expr
 }
@@ -69,12 +67,11 @@ func (u user) As(alias string) *user {
 func (u *user) updateTableName(table string) *user {
 	u.ALL = field.NewAsterisk(table)
 	u.ID = field.NewString(table, "id")
-	u.CreatedAt = field.NewTime(table, "created_at")
-	u.UpdatedAt = field.NewTime(table, "updated_at")
-	u.DeletedAt = field.NewField(table, "deleted_at")
 	u.Username = field.NewString(table, "username")
 	u.Email = field.NewString(table, "email")
 	u.PasswordHash = field.NewString(table, "password_hash")
+	u.CreatedAt = field.NewTime(table, "created_at")
+	u.UpdatedAt = field.NewTime(table, "updated_at")
 
 	u.fillFieldMap()
 
@@ -91,14 +88,13 @@ func (u *user) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (u *user) fillFieldMap() {
-	u.fieldMap = make(map[string]field.Expr, 7)
+	u.fieldMap = make(map[string]field.Expr, 6)
 	u.fieldMap["id"] = u.ID
-	u.fieldMap["created_at"] = u.CreatedAt
-	u.fieldMap["updated_at"] = u.UpdatedAt
-	u.fieldMap["deleted_at"] = u.DeletedAt
 	u.fieldMap["username"] = u.Username
 	u.fieldMap["email"] = u.Email
 	u.fieldMap["password_hash"] = u.PasswordHash
+	u.fieldMap["created_at"] = u.CreatedAt
+	u.fieldMap["updated_at"] = u.UpdatedAt
 }
 
 func (u user) clone(db *gorm.DB) user {

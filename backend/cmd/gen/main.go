@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/lighttiger2505/WakabaTasks/backend/internal/infra/persistence/postgres"
-	"github.com/lighttiger2505/WakabaTasks/backend/internal/model"
 	"gorm.io/gen"
 )
 
@@ -28,11 +27,25 @@ func main() {
 	// gormdb, _ := gorm.Open(mysql.Open("root:@(127.0.0.1:3306)/demo?charset=utf8mb4&parseTime=True&loc=Local"))
 	g.UseDB(gormdb) // reuse your gorm db
 
-	// Generate basic type-safe DAO API for struct `model.User` following conventions
-	g.ApplyBasic(model.User{})
+	models := []interface{}{
+		g.GenerateModel("users"),
+		g.GenerateModel("projects"),
+		g.GenerateModel("tasks"),
+		g.GenerateModel("task_comments"),
+		g.GenerateModel("tags"),
+		g.GenerateModel("task_tags"),
+	}
 
-	// // Generate Type Safe API with Dynamic SQL defined on Querier interface for `model.User` and `model.Company`
-	g.ApplyInterface(func(Querier) {}, model.User{})
+	// Generate basic type-safe DAO API for struct `model.User` following conventions
+	g.ApplyBasic(
+		models...,
+	)
+
+	// Generate Type Safe API with Dynamic SQL defined on Querier interface for `model.User` and `model.Company`
+	g.ApplyInterface(
+		func(Querier) {},
+		models...,
+	)
 
 	// Generate the code
 	g.Execute()
