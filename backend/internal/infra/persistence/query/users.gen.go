@@ -17,7 +17,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/lighttiger2505/WakabaTasks/backend/internal/domain/model"
+	"github.com/lighttiger2505/wakabata/backend/internal/domain/model"
 )
 
 func newUser(db *gorm.DB, opts ...gen.DOOption) user {

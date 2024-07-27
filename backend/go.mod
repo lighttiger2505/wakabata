@@ -1,4 +1,4 @@
-module github.com/lighttiger2505/WakabaTasks/backend
+module github.com/lighttiger2505/wakabata/backend
 
 go 1.22.5
 

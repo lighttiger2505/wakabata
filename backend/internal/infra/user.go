@@ -3,8 +3,8 @@ package infra
 import (
 	"context"
 
-	"github.com/lighttiger2505/WakabaTasks/backend/internal/domain/model"
-	"github.com/lighttiger2505/WakabaTasks/backend/internal/infra/persistence/query"
+	"github.com/lighttiger2505/wakabata/backend/internal/domain/model"
+	"github.com/lighttiger2505/wakabata/backend/internal/infra/persistence/query"
 )
 
 type UserInfra struct {
