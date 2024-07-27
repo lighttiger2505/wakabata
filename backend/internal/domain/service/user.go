@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/lighttiger2505/wakabata/backend/internal/domain/model"
-	"github.com/lighttiger2505/wakabata/backend/internal/infra"
+	"github.com/lighttiger2505/wakabata/internal/domain/model"
+	"github.com/lighttiger2505/wakabata/internal/infra"
 )
 
 type UserService struct {

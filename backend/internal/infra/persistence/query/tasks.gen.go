@@ -17,7 +17,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/lighttiger2505/wakabata/backend/internal/domain/model"
+	"github.com/lighttiger2505/wakabata/internal/domain/model"
 )
 
 func newTask(db *gorm.DB, opts ...gen.DOOption) task {

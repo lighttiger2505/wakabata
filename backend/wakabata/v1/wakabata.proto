@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package wakabata.v1;
 
-option go_package = "example/gen/wakabata/v1;wakabata.v1";
+option go_package = "github.com/lighttiger2505/wakabata/internal/app/v1;wakabatav1";
 
 message WakabataRequest {
   string name = 1;

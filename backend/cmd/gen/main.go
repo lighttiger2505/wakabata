@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/lighttiger2505/wakabata/backend/internal/infra/persistence/postgres"
+	"github.com/lighttiger2505/wakabata/internal/infra/persistence/postgres"
 	"gorm.io/gen"
 )
 

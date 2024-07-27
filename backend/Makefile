@@ -36,3 +36,11 @@ gormgen:
 .PHONY: lint
 lint:
 	golangci-lint run
+
+.PHONY: buf-lint
+buf-lint:
+	buf lint ./wakabata
+
+.PHONY: buf-generate
+buf-generate:
+	buf generate ./wakabata
