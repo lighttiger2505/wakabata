@@ -10,6 +10,7 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
+	"github.com/lighttiger2505/wakabata/internal/app"
 	wakabatav1 "github.com/lighttiger2505/wakabata/internal/app/v1"
 	"github.com/lighttiger2505/wakabata/internal/app/v1/wakabatav1connect"
 )
@@ -29,10 +30,20 @@ func (s *WakabataServer) Wakabata(
 }
 
 func main() {
-	server := &WakabataServer{}
 	mux := http.NewServeMux()
-	path, handler := wakabatav1connect.NewWakabataServiceHandler(server)
-	mux.Handle(path, handler)
+
+	{
+		svc := &WakabataServer{}
+		path, handler := wakabatav1connect.NewWakabataServiceHandler(svc)
+		mux.Handle(path, handler)
+	}
+
+	{
+		svc := app.NewUserHandler()
+		path, handler := wakabatav1connect.NewUserServiceHandler(svc)
+		mux.Handle(path, handler)
+	}
+
 	err := http.ListenAndServe(
 		"localhost:8080",
 		// Use h2c so we can serve HTTP/2 without TLS.
