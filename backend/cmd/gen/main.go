@@ -16,7 +16,7 @@ type Querier interface {
 
 func main() {
 	g := gen.NewGenerator(gen.Config{
-		OutPath: "../query",
+		OutPath: "./internal/infra/persistence/gormdb",
 		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface, // generate mode
 	})
 
@@ -32,7 +32,7 @@ func main() {
 	g.ApplyBasic(model.User{})
 
 	// // Generate Type Safe API with Dynamic SQL defined on Querier interface for `model.User` and `model.Company`
-	// g.ApplyInterface(func(Querier) {}, model.User{}, model.Company{})
+	g.ApplyInterface(func(Querier) {}, model.User{})
 
 	// Generate the code
 	g.Execute()
