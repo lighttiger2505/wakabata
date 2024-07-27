@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package wakabata.v1;
+
+option go_package = "example/gen/wakabata/v1;wakabata.v1";
+
+message WakabataRequest {
+  string name = 1;
+}
+
+message WakabataResponse {
+  string greeting = 1;
+}
+
+service WakabataService {
+  rpc Wakabata(WakabataRequest) returns (WakabataResponse) {}
+}
