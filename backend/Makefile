@@ -32,3 +32,7 @@ server:
 .PHONY: gormgen
 gormgen:
 	go run ./cmd/gen/main.go
+
+.PHONY: lint
+lint:
+	golangci-lint run
