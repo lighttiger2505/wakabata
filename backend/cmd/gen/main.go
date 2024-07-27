@@ -15,8 +15,9 @@ type Querier interface {
 
 func main() {
 	g := gen.NewGenerator(gen.Config{
-		OutPath: "./internal/infra/persistence/gormdb",
-		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface, // generate mode
+		OutPath:      "./internal/infra/persistence/query",
+		ModelPkgPath: "./internal/domain/model",
+		Mode:         gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface, // generate mode
 	})
 
 	gormdb, err := postgres.OpenGormDB()
