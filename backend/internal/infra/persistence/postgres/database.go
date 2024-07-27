@@ -3,8 +3,6 @@ package postgres
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-
-	_ "github.com/jackc/pgx/v5"
 )
 
 func OpenGormDB() (db *gorm.DB, err error) {
