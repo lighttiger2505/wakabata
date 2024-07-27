@@ -1,17 +1,39 @@
 package service
 
+import (
+	"context"
+
+	"github.com/lighttiger2505/WakabaTasks/backend/internal/domain/model"
+	"github.com/lighttiger2505/WakabaTasks/backend/internal/infra"
+	"gorm.io/gorm"
+)
+
 type UserService struct {
+	UserInfra *infra.UserInfra
 }
 
 func NewUserService() *UserService {
 	return &UserService{}
 }
 
-func (s *UserService) Create() error {
+func (s *UserService) Create(ctx context.Context) error {
+	user := &model.User{}
+	if err := s.UserInfra.CreateUser(ctx, user); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (s *UserService) Update() error {
+	user := model.User{
+		Model:        gorm.Model{},
+		Username:     "",
+		Email:        "",
+		PasswordHash: "",
+	}
+	if err := s.UserInfra.CreateUser(ctx, user); err != nil {
+		return err
+	}
 	return nil
 }
 
