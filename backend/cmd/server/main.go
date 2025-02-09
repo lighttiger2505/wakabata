@@ -18,7 +18,16 @@ func main() {
 	}
 	query.SetDefault(gormdb)
 
-	server := fuego.NewServer()
+	server := fuego.NewServer(
+		fuego.WithAddr("localhost:8088"),
+		fuego.WithEngineOptions(
+			fuego.WithOpenAPIConfig(
+				fuego.OpenAPIConfig{
+					PrettyFormatJSON: true,
+				},
+			),
+		),
+	)
 
 	userInfra := infra.NewUserInfra()
 	userService := service.NewUserService(userInfra)
