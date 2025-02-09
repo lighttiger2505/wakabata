@@ -1,10 +1,10 @@
 package app
 
 import (
-	"context"
+	"strconv"
 
-	"connectrpc.com/connect"
-	wakabatav1 "github.com/lighttiger2505/wakabata/internal/app/v1"
+	"github.com/go-fuego/fuego"
+	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/domain/service"
 )
 
@@ -16,50 +16,59 @@ func NewUserHandler(s *service.UserService) *UserHandler {
 	return &UserHandler{s}
 }
 
-func (h *UserHandler) CreateUser(ctx context.Context, req *connect.Request[wakabatav1.CreateUserRequest]) (*connect.Response[wakabatav1.CreateUserResponse], error) {
-	user, err := h.Service.Create(ctx, req.Msg)
-	if err != nil {
-		return nil, err
-	}
-
-	res := connect.NewResponse(&wakabatav1.CreateUserResponse{
-		User: user,
-	})
-	return res, nil
+type UserToCreate struct {
+	Username     string `json:"name" validate:"required"`
+	Email        string `json:"email" validate:"required"`
+	PasswordHash string `json:"password_hash" validate:"required"`
 }
 
-func (h *UserHandler) UpdateUser(ctx context.Context, req *connect.Request[wakabatav1.UpdateUserRequest]) (*connect.Response[wakabatav1.UpdateUserResponse], error) {
-	user, err := h.Service.Update(ctx, req.Msg)
+func (h *UserHandler) CreateUser(c fuego.ContextWithBody[*UserToCreate]) (*model.User, error) {
+	input, err := c.Body()
 	if err != nil {
 		return nil, err
 	}
 
-	res := connect.NewResponse(&wakabatav1.UpdateUserResponse{
-		User: user,
-	})
-	return res, nil
+	user := &model.User{
+		Username:     input.Username,
+		Email:        input.Email,
+		PasswordHash: input.PasswordHash,
+	}
+
+	return h.Service.Create(c.Context(), user)
 }
 
-func (h *UserHandler) SearchUsers(ctx context.Context, req *connect.Request[wakabatav1.SearchUsersRequest]) (*connect.Response[wakabatav1.SearchUsersResponse], error) {
-	users, err := h.Service.Search(ctx, req.Msg)
+func (h *UserHandler) UpdateUser(c fuego.ContextWithBody[*model.User]) (*model.User, error) {
+	ctx := c.Context()
+
+	id, err := strconv.Atoi(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Title:  "Invalid ID",
+			Detail: "The provided ID is not a valid integer.",
+			Err:    err,
+		}
+	}
+
+	input, err := c.Body()
 	if err != nil {
 		return nil, err
 	}
 
-	res := connect.NewResponse(&wakabatav1.SearchUsersResponse{
-		Users: users,
-	})
-	return res, nil
+	return h.Service.Update(ctx, id, input)
 }
 
-func (h *UserHandler) GetUser(ctx context.Context, req *connect.Request[wakabatav1.GetUserRequest]) (*connect.Response[wakabatav1.GetUserResponse], error) {
-	user, err := h.Service.Get(ctx, req.Msg)
-	if err != nil {
-		return nil, err
-	}
+func (h *UserHandler) SearchUsers(c fuego.ContextNoBody) ([]*model.User, error) {
+	return h.Service.Search(c.Context())
+}
 
-	res := connect.NewResponse(&wakabatav1.GetUserResponse{
-		User: user,
-	})
-	return res, nil
+func (h *UserHandler) GetUser(c fuego.ContextNoBody) (*model.User, error) {
+	id, err := strconv.Atoi(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Title:  "Invalid ID",
+			Detail: "The provided ID is not a valid integer.",
+			Err:    err,
+		}
+	}
+	return h.Service.Get(c.Context(), id)
 }

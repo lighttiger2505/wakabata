@@ -2,34 +2,36 @@ package main
 
 import (
 	"log"
-	"net/http"
 
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
-
+	"github.com/go-fuego/fuego"
+	"github.com/go-fuego/fuego/option"
 	"github.com/lighttiger2505/wakabata/internal/app"
-	"github.com/lighttiger2505/wakabata/internal/app/v1/wakabatav1connect"
 	"github.com/lighttiger2505/wakabata/internal/domain/service"
 	"github.com/lighttiger2505/wakabata/internal/infra"
+	"github.com/lighttiger2505/wakabata/internal/infra/persistence/postgres"
+	"github.com/lighttiger2505/wakabata/internal/infra/persistence/query"
 )
 
 func main() {
-	mux := http.NewServeMux()
-
-	{
-		i := infra.NewUserInfra()
-		s := service.NewUserService(i)
-		svc := app.NewUserHandler(s)
-		path, handler := wakabatav1connect.NewUserServiceHandler(svc)
-		mux.Handle(path, handler)
-	}
-
-	err := http.ListenAndServe(
-		"localhost:8080",
-		// Use h2c so we can serve HTTP/2 without TLS.
-		h2c.NewHandler(mux, &http2.Server{}),
-	)
+	gormdb, err := postgres.OpenGormDB()
 	if err != nil {
 		log.Fatal(err)
 	}
+	query.SetDefault(gormdb)
+
+	server := fuego.NewServer()
+
+	userInfra := infra.NewUserInfra()
+	userService := service.NewUserService(userInfra)
+	userHandler := app.NewUserHandler(userService)
+
+	fuego.Get(server, "/", func(c fuego.ContextNoBody) (string, error) {
+		return "Hello, World!", nil
+	})
+	fuego.Get(server, "/users", userHandler.SearchUsers)
+	fuego.Post(server, "/users", userHandler.CreateUser, option.DefaultStatusCode(201))
+	fuego.Get(server, "/users/{id}", userHandler.GetUser)
+	fuego.Put(server, "/users/{id}", userHandler.UpdateUser)
+
+	server.Run()
 }
