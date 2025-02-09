@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/go-fuego/fuego"
+	"github.com/go-fuego/fuego/option"
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/domain/service"
 )
@@ -14,6 +15,13 @@ type UserHandler struct {
 
 func NewUserHandler(s *service.UserService) *UserHandler {
 	return &UserHandler{s}
+}
+
+func (h *UserHandler) SetHandler(server *fuego.Server) {
+	fuego.Get(server, "/users", h.SearchUsers)
+	fuego.Post(server, "/users", h.CreateUser, option.DefaultStatusCode(201))
+	fuego.Get(server, "/users/{id}", h.GetUser)
+	fuego.Put(server, "/users/{id}", h.UpdateUser)
 }
 
 type UserToCreate struct {
