@@ -18,10 +18,12 @@ func NewUserHandler(s *service.UserService) *UserHandler {
 }
 
 func (h *UserHandler) SetHandler(server *fuego.Server) {
-	fuego.Get(server, "/users", h.SearchUsers)
-	fuego.Post(server, "/users", h.CreateUser, option.DefaultStatusCode(201))
-	fuego.Get(server, "/users/{id}", h.GetUser)
-	fuego.Put(server, "/users/{id}", h.UpdateUser)
+
+	tagName := "user"
+	fuego.Get(server, "/users", h.SearchUsers, option.Tags(tagName))
+	fuego.Post(server, "/users", h.CreateUser, option.Tags(tagName), option.DefaultStatusCode(201))
+	fuego.Get(server, "/users/{id}", h.GetUser, option.Tags(tagName))
+	fuego.Put(server, "/users/{id}", h.UpdateUser, option.Tags(tagName))
 }
 
 type UserToCreate struct {

@@ -34,5 +34,10 @@ func main() {
 	userHandler := app.NewUserHandler(userService)
 	userHandler.SetHandler(server)
 
+	taskInfra := infra.NewTaskInfra()
+	taskService := service.NewTaskService(taskInfra)
+	taskHandler := app.NewTaskHandler(taskService)
+	taskHandler.SetHandler(server)
+
 	server.Run()
 }

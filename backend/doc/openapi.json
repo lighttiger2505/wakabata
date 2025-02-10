@@ -51,6 +51,69 @@
 				},
 				"type": "object"
 			},
+			"Task": {
+				"description": "Task schema",
+				"properties": {
+					"created_at": {
+						"format": "date-time",
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"due_date": {
+						"format": "date-time",
+						"type": "string"
+					},
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"priority": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"project_id": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"updated_at": {
+						"format": "date-time",
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"TaskToCreate": {
+				"description": "TaskToCreate schema",
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"due_date": {
+						"format": "date-time",
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"priority": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"project_id": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
 			"User": {
 				"description": "User schema",
 				"properties": {
@@ -109,6 +172,322 @@
 	},
 	"openapi": "3.1.0",
 	"paths": {
+		"/tasks": {
+			"get": {
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).SearchTasks`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "GET_/tasks",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Task"
+									},
+									"type": "array"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Task"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "search tasks",
+				"tags": [
+					"task"
+				]
+			},
+			"post": {
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).CreateTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "POST_/tasks",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"*/*": {
+							"schema": {
+								"$ref": "#/components/schemas/TaskToCreate"
+							}
+						}
+					},
+					"description": "Request body for *app.TaskToCreate",
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Task"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/Task"
+								}
+							}
+						},
+						"description": "Created"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "create task",
+				"tags": [
+					"task"
+				]
+			}
+		},
+		"/tasks/{id}": {
+			"get": {
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).GetTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "GET_/tasks/:id",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Task"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/Task"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "get task",
+				"tags": [
+					"task"
+				]
+			},
+			"put": {
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).UpdateTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "PUT_/tasks/:id",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"*/*": {
+							"schema": {
+								"$ref": "#/components/schemas/Task"
+							}
+						}
+					},
+					"description": "Request body for *model.Task",
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Task"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/Task"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "update task",
+				"tags": [
+					"task"
+				]
+			}
+		},
 		"/users": {
 			"get": {
 				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).SearchUsers`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
@@ -178,7 +557,10 @@
 						"description": ""
 					}
 				},
-				"summary": "search users"
+				"summary": "search users",
+				"tags": [
+					"user"
+				]
 			},
 			"post": {
 				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).CreateUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
@@ -253,7 +635,10 @@
 						"description": ""
 					}
 				},
-				"summary": "create user"
+				"summary": "create user",
+				"tags": [
+					"user"
+				]
 			}
 		},
 		"/users/{id}": {
@@ -327,7 +712,10 @@
 						"description": ""
 					}
 				},
-				"summary": "get user"
+				"summary": "get user",
+				"tags": [
+					"user"
+				]
 			},
 			"put": {
 				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).UpdateUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
@@ -410,7 +798,10 @@
 						"description": ""
 					}
 				},
-				"summary": "update user"
+				"summary": "update user",
+				"tags": [
+					"user"
+				]
 			}
 		}
 	},
@@ -418,6 +809,14 @@
 		{
 			"description": "local server",
 			"url": "http://localhost:8088"
+		}
+	],
+	"tags": [
+		{
+			"name": "task"
+		},
+		{
+			"name": "user"
 		}
 	]
 }
