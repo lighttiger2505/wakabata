@@ -27,9 +27,9 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 p-4 rounded-lg shadow-lg border-l-4 border-wakaba-green">
+    <form onSubmit={handleSubmit} className="rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
       <div className="mb-4">
-        <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="title" className="mb-2 block font-medium text-gray-300 text-sm">
           Task
         </label>
         <input
@@ -38,11 +38,11 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="tags" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="tags" className="mb-2 block font-medium text-gray-300 text-sm">
           Tags (comma-separated)
         </label>
         <input
@@ -50,11 +50,11 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
           id="tags"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="deadline" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="deadline" className="mb-2 block font-medium text-gray-300 text-sm">
           Deadline
         </label>
         <input
@@ -62,11 +62,11 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
           id="deadline"
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="project" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="project" className="mb-2 block font-medium text-gray-300 text-sm">
           Project
         </label>
         <input
@@ -74,20 +74,20 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
           id="project"
           value={project}
           onChange={(e) => setProject(e.target.value)}
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
         />
       </div>
       <div className="flex justify-end space-x-2">
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          className="rounded-md bg-gray-600 px-4 py-2 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-wakaba-green text-gray-900 rounded-md hover:bg-wakaba-green-dark focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="rounded-md bg-wakaba-green px-4 py-2 text-gray-900 hover:bg-wakaba-green-dark focus:outline-none focus:ring-2 focus:ring-wakaba-green"
         >
           Save Changes
         </button>

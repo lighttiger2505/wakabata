@@ -9,16 +9,16 @@ interface TodoItemProps {
 
 export default function TodoItem({ todo, onToggle, onEdit }: TodoItemProps) {
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-lg border-l-4 border-wakaba-green">
+    <div className="rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
       <div className="flex items-center justify-between">
-        <div className="flex items-center flex-grow">
+        <div className="flex flex-grow items-center">
           <input
             type="checkbox"
             checked={todo.completed}
             onChange={() => onToggle(todo.id)}
             className="mr-4 h-5 w-5 rounded border-gray-300 text-wakaba-green focus:ring-wakaba-green"
           />
-          <span className={`flex-grow ${todo.completed ? "line-through text-gray-500" : "text-gray-100"}`}>
+          <span className={`flex-grow ${todo.completed ? "text-gray-500 line-through" : "text-gray-100"}`}>
             {todo.title}
           </span>
         </div>
@@ -33,14 +33,14 @@ export default function TodoItem({ todo, onToggle, onEdit }: TodoItemProps) {
         {todo.tags.map((tag) => (
           <span
             key={tag}
-            className="px-2 py-1 bg-gray-700 text-wakaba-green text-xs rounded-full border border-wakaba-green"
+            className="rounded-full border border-wakaba-green bg-gray-700 px-2 py-1 text-wakaba-green text-xs"
           >
             {tag}
           </span>
         ))}
       </div>
       {todo.deadline && <div className="mt-2 text-sm text-yellow-400">Deadline: {todo.deadline}</div>}
-      {todo.project && <div className="mt-1 text-sm text-purple-400">Project: {todo.project}</div>}
+      {todo.project && <div className="mt-1 text-purple-400 text-sm">Project: {todo.project}</div>}
     </div>
   )
 }
