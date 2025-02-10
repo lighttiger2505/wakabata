@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import TodoItem from "./TodoItem";
+import { useEffect, useState } from "react";
 import EditTodoForm from "./EditTodoForm";
+import TodoItem from "./TodoItem";
 
 export interface Todo {
   id: string;

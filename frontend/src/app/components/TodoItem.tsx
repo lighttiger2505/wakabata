@@ -1,5 +1,5 @@
-import type { Todo } from "./TodoList";
 import { Pencil } from "lucide-react";
+import type { Todo } from "./TodoList";
 
 interface TodoItemProps {
   todo: Todo;
