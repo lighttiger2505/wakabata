@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export default function Navigation() {
   return (
@@ -20,6 +20,5 @@ export default function Navigation() {
         </ul>
       </div>
     </nav>
-  )
+  );
 }
-

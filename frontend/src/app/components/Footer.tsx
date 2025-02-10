@@ -6,6 +6,5 @@ export default function Footer() {
         <p className="mt-2">Grow your productivity, one task at a time.</p>
       </div>
     </footer>
-  )
+  );
 }
-

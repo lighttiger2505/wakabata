@@ -1,5 +1,5 @@
-import TodoList from "./components/TodoList"
-import AddTodoForm from "./components/AddTodoForm"
+import TodoList from "./components/TodoList";
+import AddTodoForm from "./components/AddTodoForm";
 
 export default function Home() {
   return (
@@ -8,6 +8,5 @@ export default function Home() {
       <AddTodoForm />
       <TodoList />
     </div>
-  )
+  );
 }
-

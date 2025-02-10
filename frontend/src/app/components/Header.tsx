@@ -8,6 +8,5 @@ export default function Header() {
         <p className="text-gray-400">Nurture your tasks, grow your productivity</p>
       </div>
     </header>
-  )
+  );
 }
-

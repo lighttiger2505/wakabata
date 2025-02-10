@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
 export default function AddTodoForm() {
-  const [title, setTitle] = useState("")
-  const [tags, setTags] = useState("")
-  const [deadline, setDeadline] = useState("")
-  const [project, setProject] = useState("")
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [project, setProject] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // In a real app, you'd send this data to an API
     console.log({
       title,
       tags: tags.split(",").map((tag) => tag.trim()),
       deadline: deadline || undefined,
       project: project || undefined,
-    })
+    });
     // Reset form
-    setTitle("")
-    setTags("")
-    setDeadline("")
-    setProject("")
-  }
+    setTitle("");
+    setTags("");
+    setDeadline("");
+    setProject("");
+  };
 
   return (
     <form onSubmit={handleSubmit} className="mb-8 rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
@@ -85,6 +85,5 @@ export default function AddTodoForm() {
         Plant New Task 🌱
       </button>
     </form>
-  )
+  );
 }
-

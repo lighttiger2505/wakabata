@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import type { Todo } from "./TodoList"
+import { useState } from "react";
+import type { Todo } from "./TodoList";
 
 interface EditTodoFormProps {
-  todo: Todo
-  onSave: (updatedTodo: Todo) => void
-  onCancel: () => void
+  todo: Todo;
+  onSave: (updatedTodo: Todo) => void;
+  onCancel: () => void;
 }
 
 export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormProps) {
-  const [title, setTitle] = useState(todo.title)
-  const [tags, setTags] = useState(todo.tags.join(", "))
-  const [deadline, setDeadline] = useState(todo.deadline || "")
-  const [project, setProject] = useState(todo.project || "")
+  const [title, setTitle] = useState(todo.title);
+  const [tags, setTags] = useState(todo.tags.join(", "));
+  const [deadline, setDeadline] = useState(todo.deadline || "");
+  const [project, setProject] = useState(todo.project || "");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     onSave({
       ...todo,
       title,
       tags: tags.split(",").map((tag) => tag.trim()),
       deadline: deadline || undefined,
       project: project || undefined,
-    })
-  }
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit} className="rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
@@ -93,6 +93,5 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
         </button>
       </div>
     </form>
-  )
+  );
 }
-

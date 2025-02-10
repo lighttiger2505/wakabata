@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import TodoItem from "./TodoItem"
-import EditTodoForm from "./EditTodoForm"
+import { useState, useEffect } from "react";
+import TodoItem from "./TodoItem";
+import EditTodoForm from "./EditTodoForm";
 
 export interface Todo {
-  id: string
-  title: string
-  completed: boolean
-  tags: string[]
-  deadline?: string
-  project?: string
+  id: string;
+  title: string;
+  completed: boolean;
+  tags: string[];
+  deadline?: string;
+  project?: string;
 }
 
 export default function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [editingTodoId, setEditingTodoId] = useState<string | null>(null)
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
 
   useEffect(() => {
     // In a real app, you'd fetch todos from an API here
@@ -36,25 +36,25 @@ export default function TodoList() {
         deadline: "2023-07-15",
         project: "Portfolio",
       },
-    ])
-  }, [])
+    ]);
+  }, []);
 
   const toggleTodo = (id: string) => {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)))
-  }
+    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)));
+  };
 
   const editTodo = (id: string) => {
-    setEditingTodoId(id)
-  }
+    setEditingTodoId(id);
+  };
 
   const saveTodo = (updatedTodo: Todo) => {
-    setTodos(todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)))
-    setEditingTodoId(null)
-  }
+    setTodos(todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)));
+    setEditingTodoId(null);
+  };
 
   const cancelEdit = () => {
-    setEditingTodoId(null)
-  }
+    setEditingTodoId(null);
+  };
 
   return (
     <ul className="space-y-4">
@@ -68,6 +68,5 @@ export default function TodoList() {
         </li>
       ))}
     </ul>
-  )
+  );
 }
-
