@@ -20,7 +20,11 @@ export default function TodoItem({ todo, onToggle, onEdit }: TodoItemProps) {
           />
           <span className={`flex-grow ${todo.completed ? "text-gray-500 line-through" : "text-gray-100"}`}>{todo.title}</span>
         </div>
-        <button onClick={() => onEdit(todo.id)} className="ml-2 p-1 text-gray-400 hover:text-wakaba-green focus:outline-none">
+        <button
+          type="button"
+          onClick={() => onEdit(todo.id)}
+          className="ml-2 p-1 text-gray-400 hover:text-wakaba-green focus:outline-none"
+        >
           <Pencil size={16} />
         </button>
       </div>
