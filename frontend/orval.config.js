@@ -3,8 +3,8 @@ module.exports = {
     input: "../backend/doc/openapi.json",
     output: {
       mode: "single",
-      target: "./src/clients/client.ts",
-      schemas: "./src/clients/model",
+      target: "./src/api/generated/client.ts",
+      schemas: "./src/api/generated/model",
       client: "swr",
       mock: true,
     },
