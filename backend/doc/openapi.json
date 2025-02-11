@@ -125,6 +125,40 @@
 				],
 				"type": "object"
 			},
+			"TaskToUpdate": {
+				"description": "TaskToUpdate schema",
+				"properties": {
+					"description": {
+						"nullable": true,
+						"type": "string"
+					},
+					"due_date": {
+						"format": "date-time",
+						"nullable": true,
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"priority": {
+						"format": "int32",
+						"nullable": true,
+						"type": "integer"
+					},
+					"project_id": {
+						"nullable": true,
+						"type": "string"
+					},
+					"status": {
+						"nullable": true,
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object"
+			},
 			"User": {
 				"description": "User schema",
 				"properties": {
@@ -438,11 +472,11 @@
 					"content": {
 						"*/*": {
 							"schema": {
-								"$ref": "#/components/schemas/Task"
+								"$ref": "#/components/schemas/TaskToUpdate"
 							}
 						}
 					},
-					"description": "Request body for *model.Task",
+					"description": "Request body for *app.TaskToUpdate",
 					"required": true
 				},
 				"responses": {

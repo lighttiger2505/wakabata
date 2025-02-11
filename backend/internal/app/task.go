@@ -1,11 +1,11 @@
 package app
 
 import (
-	"strconv"
 	"time"
 
 	"github.com/go-fuego/fuego"
 	"github.com/go-fuego/fuego/option"
+	"github.com/google/uuid"
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/domain/service"
 )
@@ -51,16 +51,17 @@ func (h *TaskHandler) CreateTask(c fuego.ContextWithBody[*TaskToCreate]) (*model
 	return h.Service.Create(c.Context(), task)
 }
 
-func (h *TaskHandler) UpdateTask(c fuego.ContextWithBody[*model.Task]) (*model.Task, error) {
+type TaskToUpdate struct {
+	TaskToCreate
+	Status *bool `json:"status"`
+}
+
+func (h *TaskHandler) UpdateTask(c fuego.ContextWithBody[*TaskToUpdate]) (*model.Task, error) {
 	ctx := c.Context()
 
-	id, err := strconv.Atoi(c.PathParam("id"))
+	uUID, err := h.parseUUID(c.PathParam("id"))
 	if err != nil {
-		return nil, fuego.BadRequestError{
-			Title:  "Invalid ID",
-			Detail: "The provided ID is not a valid integer.",
-			Err:    err,
-		}
+		return nil, err
 	}
 
 	input, err := c.Body()
@@ -68,7 +69,17 @@ func (h *TaskHandler) UpdateTask(c fuego.ContextWithBody[*model.Task]) (*model.T
 		return nil, err
 	}
 
-	return h.Service.Update(ctx, id, input)
+	task := &model.Task{
+		ID:          uUID.String(),
+		ProjectID:   input.ProjectID,
+		Name:        input.Name,
+		Description: input.Description,
+		DueDate:     input.DueDate,
+		Priority:    input.Priority,
+		Status:      input.Status,
+	}
+
+	return h.Service.Update(ctx, task)
 }
 
 func (h *TaskHandler) SearchTasks(c fuego.ContextNoBody) ([]*model.Task, error) {
@@ -76,13 +87,20 @@ func (h *TaskHandler) SearchTasks(c fuego.ContextNoBody) ([]*model.Task, error) 
 }
 
 func (h *TaskHandler) GetTask(c fuego.ContextNoBody) (*model.Task, error) {
-	id, err := strconv.Atoi(c.PathParam("id"))
+	uUID, err := h.parseUUID(c.PathParam("id"))
+	if err != nil {
+		return nil, err
+	}
+	return h.Service.Get(c.Context(), uUID.String())
+}
+
+func (h *TaskHandler) parseUUID(id string) (*uuid.UUID, error) {
+	uUID, err := uuid.Parse(id)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Title:  "Invalid ID",
-			Detail: "The provided ID is not a valid integer.",
-			Err:    err,
+			Detail: "The provided ID is not a valid uuid.",
 		}
 	}
-	return h.Service.Get(c.Context(), id)
+	return &uUID, nil
 }

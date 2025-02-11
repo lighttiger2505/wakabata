@@ -2,7 +2,6 @@ package infra
 
 import (
 	"context"
-	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
@@ -40,8 +39,8 @@ func (i *TaskInfra) Search(ctx context.Context) ([]*model.Task, error) {
 	return db.Find()
 }
 
-func (i *TaskInfra) Get(ctx context.Context, id int) (*model.Task, error) {
+func (i *TaskInfra) Get(ctx context.Context, id string) (*model.Task, error) {
 	u := query.Task
 	db := query.Task.WithContext(ctx)
-	return db.Where(u.ID.Eq(strconv.Itoa(id))).First()
+	return db.Where(u.ID.Eq(id)).First()
 }
