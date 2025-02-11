@@ -10,8 +10,10 @@ export default function TodoList() {
   const { data, error, isValidating } = useGETTasks();
   const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
 
-  console.error(error);
-  if (error) return <p>Error</p>;
+  if (error) {
+    console.error(error);
+    return <p>Error</p>;
+  }
   if (!data || isValidating) return <p>Loading</p>;
 
   const todos: Task[] = data.data ?? [];
