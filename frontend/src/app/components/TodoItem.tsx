@@ -1,16 +1,18 @@
 import { usePUTApiV1TasksId } from "@/api/generated/client";
 import type { Task, TaskToUpdate } from "@/api/generated/model";
 import { Pencil } from "lucide-react";
+import type { KeyedMutator } from "swr";
 
 interface TodoItemProps {
   todo: Task;
   onEdit: (id: string) => void;
+  listMutate: KeyedMutator<Task[]>;
 }
 
-export default function TodoItem({ todo, onEdit }: TodoItemProps) {
+export default function TodoItem({ todo, onEdit, listMutate }: TodoItemProps) {
   const { trigger, isMutating } = usePUTApiV1TasksId(todo.id || "");
 
-  const toggleTodo = () => {
+  const toggleTodo = async() => {
     const body = {
       description: todo.description,
       due_date: todo.due_date,
@@ -19,7 +21,8 @@ export default function TodoItem({ todo, onEdit }: TodoItemProps) {
       project_id: todo.project_id,
       status: !todo.status,
     } satisfies TaskToUpdate;
-    trigger(body);
+    await trigger(body);
+    await listMutate();
   };
 
   const completed = todo.status || false;

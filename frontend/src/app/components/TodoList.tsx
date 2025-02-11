@@ -7,21 +7,11 @@ import EditTodoForm from "./EditTodoForm";
 import TodoItem from "./TodoItem";
 
 export default function TodoList() {
-  const { data, error, isValidating } = useGETApiV1Tasks();
+  const { data, isLoading, mutate } = useGETApiV1Tasks();
   const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
 
-  if (error) {
-    console.error(error);
-    return <p>Error</p>;
-  }
-  if (!data || isValidating) return <p>Loading</p>;
-
-  const todos: Task[] = data ?? [];
-  if (!todos.length) return <p>Nop</p>;
-
-  const toggleTodo = (_id: string) => {
-    // setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)));
-  };
+  if (!data || isLoading) return <p>Loading</p>;
+  if (!data.length) return <p>Nop</p>;
 
   const editTodo = (id: string) => {
     setEditingTodoId(id);
@@ -38,12 +28,12 @@ export default function TodoList() {
 
   return (
     <ul className="space-y-4">
-      {todos.map((todo) => (
+      {data.map((todo) => (
         <li key={todo.id}>
           {editingTodoId === todo.id ? (
             <EditTodoForm todo={todo} onSave={saveTodo} onCancel={cancelEdit} />
           ) : (
-            <TodoItem todo={todo} onToggle={toggleTodo} onEdit={editTodo} />
+            <TodoItem todo={todo} onEdit={editTodo} listMutate={mutate} />
           )}
         </li>
       ))}
