@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/infra/persistence/query"
 )
@@ -16,6 +17,11 @@ func NewTaskInfra() *TaskInfra {
 }
 
 func (i *TaskInfra) Create(ctx context.Context, task *model.Task) (*model.Task, error) {
+	uUID, err := uuid.NewV7()
+	if err != nil {
+		return nil, err
+	}
+	task.ID = uUID.String()
 	if err := query.Task.WithContext(ctx).Create(task); err != nil {
 		return nil, err
 	}

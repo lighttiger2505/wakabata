@@ -56,13 +56,16 @@
 				"properties": {
 					"created_at": {
 						"format": "date-time",
+						"nullable": true,
 						"type": "string"
 					},
 					"description": {
+						"nullable": true,
 						"type": "string"
 					},
 					"due_date": {
 						"format": "date-time",
+						"nullable": true,
 						"type": "string"
 					},
 					"id": {
@@ -73,16 +76,20 @@
 					},
 					"priority": {
 						"format": "int32",
+						"nullable": true,
 						"type": "integer"
 					},
 					"project_id": {
+						"nullable": true,
 						"type": "string"
 					},
 					"status": {
-						"type": "string"
+						"nullable": true,
+						"type": "boolean"
 					},
 					"updated_at": {
 						"format": "date-time",
+						"nullable": true,
 						"type": "string"
 					}
 				},
@@ -92,10 +99,12 @@
 				"description": "TaskToCreate schema",
 				"properties": {
 					"description": {
+						"nullable": true,
 						"type": "string"
 					},
 					"due_date": {
 						"format": "date-time",
+						"nullable": true,
 						"type": "string"
 					},
 					"name": {
@@ -103,15 +112,17 @@
 					},
 					"priority": {
 						"format": "int32",
+						"nullable": true,
 						"type": "integer"
 					},
 					"project_id": {
-						"type": "string"
-					},
-					"status": {
+						"nullable": true,
 						"type": "string"
 					}
 				},
+				"required": [
+					"name"
+				],
 				"type": "object"
 			},
 			"User": {
@@ -119,6 +130,7 @@
 				"properties": {
 					"created_at": {
 						"format": "date-time",
+						"nullable": true,
 						"type": "string"
 					},
 					"email": {
@@ -132,6 +144,7 @@
 					},
 					"updated_at": {
 						"format": "date-time",
+						"nullable": true,
 						"type": "string"
 					},
 					"username": {

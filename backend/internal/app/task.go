@@ -27,12 +27,11 @@ func (h *TaskHandler) SetHandler(server *fuego.Server) {
 }
 
 type TaskToCreate struct {
-	ProjectID   string    `json:"project_id"`
-	Name        string    `json:"name" validate:"required"`
-	Description string    `json:"description"`
-	DueDate     time.Time `json:"due_date"`
-	Priority    int32     `json:"priority"`
-	Status      string    `json:"status"`
+	ProjectID   *string    `json:"project_id"`
+	Name        string     `json:"name" validate:"required"`
+	Description *string    `json:"description"`
+	DueDate     *time.Time `json:"due_date"`
+	Priority    *int32     `json:"priority"`
 }
 
 func (h *TaskHandler) CreateTask(c fuego.ContextWithBody[*TaskToCreate]) (*model.Task, error) {

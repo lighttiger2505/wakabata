@@ -29,6 +29,10 @@ flyway-validate:
 flyway-repair:
 	docker-compose run --rm flyway -url=jdbc:postgresql://db:5432/exampledb -user=exampleuser -password=examplepass repair
 
+.PHONY: build
+build:
+	go build ./cmd/server/main.go
+
 .PHONY: server
 server:
 	go run ./cmd/server/main.go
