@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE projects (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     user_id UUID REFERENCES Users(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -17,19 +17,19 @@ CREATE TABLE projects (
 );
 
 CREATE TABLE tasks (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     project_id UUID REFERENCES Projects(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     due_date DATE,
     priority INTEGER,
-    status VARCHAR(50) DEFAULT 'pending',
+    status BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE task_comments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     task_id UUID REFERENCES Tasks(id) ON DELETE CASCADE,
     user_id UUID REFERENCES Users(id) ON DELETE CASCADE,
     comment TEXT NOT NULL,
@@ -38,14 +38,14 @@ CREATE TABLE task_comments (
 );
 
 CREATE TABLE tags (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE task_tags (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     task_id UUID REFERENCES Tasks(id) ON DELETE CASCADE,
     tag_id UUID REFERENCES Tags(id) ON DELETE CASCADE
 );

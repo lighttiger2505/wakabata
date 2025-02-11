@@ -34,7 +34,7 @@ func newTask(db *gorm.DB, opts ...gen.DOOption) task {
 	_task.Description = field.NewString(tableName, "description")
 	_task.DueDate = field.NewTime(tableName, "due_date")
 	_task.Priority = field.NewInt32(tableName, "priority")
-	_task.Status = field.NewString(tableName, "status")
+	_task.Status = field.NewBool(tableName, "status")
 	_task.CreatedAt = field.NewTime(tableName, "created_at")
 	_task.UpdatedAt = field.NewTime(tableName, "updated_at")
 
@@ -53,7 +53,7 @@ type task struct {
 	Description field.String
 	DueDate     field.Time
 	Priority    field.Int32
-	Status      field.String
+	Status      field.Bool
 	CreatedAt   field.Time
 	UpdatedAt   field.Time
 
@@ -78,7 +78,7 @@ func (t *task) updateTableName(table string) *task {
 	t.Description = field.NewString(table, "description")
 	t.DueDate = field.NewTime(table, "due_date")
 	t.Priority = field.NewInt32(table, "priority")
-	t.Status = field.NewString(table, "status")
+	t.Status = field.NewBool(table, "status")
 	t.CreatedAt = field.NewTime(table, "created_at")
 	t.UpdatedAt = field.NewTime(table, "updated_at")
 

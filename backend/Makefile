@@ -17,6 +17,10 @@ logs:
 flyway-migrate:
 	docker-compose run --rm flyway -url=jdbc:postgresql://db:5432/wakabatasks -user=exampleuser -password=examplepass migrate
 
+.PHONY: flyway-clean
+flyway-clean:
+	docker-compose run --rm flyway -url=jdbc:postgresql://db:5432/wakabatasks -user=exampleuser -password=examplepass -cleanDisabled=false clean
+
 .PHONY: flyway-validate
 flyway-validate:
 	docker-compose run --rm flyway -url=jdbc:postgresql://db:5432/wakabatasks -user=exampleuser -password=examplepass validate

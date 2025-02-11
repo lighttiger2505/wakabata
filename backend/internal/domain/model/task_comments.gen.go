@@ -12,12 +12,12 @@ const TableNameTaskComment = "task_comments"
 
 // TaskComment mapped from table <task_comments>
 type TaskComment struct {
-	ID        string    `gorm:"column:id;primaryKey" json:"id"`
-	TaskID    string    `gorm:"column:task_id" json:"task_id"`
-	UserID    string    `gorm:"column:user_id" json:"user_id"`
-	Comment   string    `gorm:"column:comment;not null" json:"comment"`
-	CreatedAt time.Time `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID        string     `gorm:"column:id;primaryKey" json:"id"`
+	TaskID    *string    `gorm:"column:task_id" json:"task_id"`
+	UserID    *string    `gorm:"column:user_id" json:"user_id"`
+	Comment   string     `gorm:"column:comment;not null" json:"comment"`
+	CreatedAt *time.Time `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt *time.Time `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
 // TableName TaskComment's table name

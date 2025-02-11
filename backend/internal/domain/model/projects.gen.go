@@ -12,12 +12,12 @@ const TableNameProject = "projects"
 
 // Project mapped from table <projects>
 type Project struct {
-	ID          string    `gorm:"column:id;primaryKey" json:"id"`
-	UserID      string    `gorm:"column:user_id" json:"user_id"`
-	Name        string    `gorm:"column:name;not null" json:"name"`
-	Description string    `gorm:"column:description" json:"description"`
-	CreatedAt   time.Time `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt   time.Time `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID          string     `gorm:"column:id;primaryKey" json:"id"`
+	UserID      *string    `gorm:"column:user_id" json:"user_id"`
+	Name        string     `gorm:"column:name;not null" json:"name"`
+	Description *string    `gorm:"column:description" json:"description"`
+	CreatedAt   *time.Time `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt   *time.Time `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
 // TableName Project's table name
