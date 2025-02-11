@@ -7,6 +7,12 @@ module.exports = {
       schemas: "./src/api/generated/model",
       client: "swr",
       mock: true,
+      override: {
+        mutator: {
+          path: "./src/lib/custom-instance.ts",
+          name: "customInstance",
+        },
+      },
     },
   },
 };

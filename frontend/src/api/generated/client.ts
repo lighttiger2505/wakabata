@@ -108,12 +108,6 @@ func getAllPets(ctx fuego.ContextNoBody) (*MyResponse, error) {
 
  * OpenAPI spec version: 0.0.1
  */
-import axios from 'axios'
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios'
 import useSwr from 'swr'
 import type {
   Key,
@@ -140,11 +134,15 @@ import type {
   Task,
   User
 } from './model'
+import { customInstance } from '../../lib/custom-instance';
+import type { ErrorType, BodyType } from '../../lib/custom-instance';
 
 
 
   
-  /**
+  type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+/**
  * #### Controller: 
 
 `github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).SearchTasks`
@@ -159,11 +157,12 @@ import type {
  * @summary search tasks
  */
 export const gETTasks = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Task[]>> => {
-    return axios.get(
-      `/tasks`,options
-    );
+    
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<Task[]>(
+    {url: `/tasks`, method: 'GET'
+    },
+    options);
   }
 
 
@@ -171,19 +170,19 @@ export const gETTasks = (
 export const getGETTasksKey = () => [`/tasks`] as const;
 
 export type GETTasksQueryResult = NonNullable<Awaited<ReturnType<typeof gETTasks>>>
-export type GETTasksQueryError = AxiosError<HTTPError | void>
+export type GETTasksQueryError = ErrorType<HTTPError | void>
 
 /**
  * @summary search tasks
  */
-export const useGETTasks = <TError = AxiosError<HTTPError | void>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETTasks>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+export const useGETTasks = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETTasks>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
 ) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETTasksKey() : null);
-  const swrFn = () => gETTasks(axiosOptions)
+  const swrFn = () => gETTasks(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -208,37 +207,39 @@ export const useGETTasks = <TError = AxiosError<HTTPError | void>>(
  * @summary create task
  */
 export const pOSTTasks = (
-    taskToCreate: TaskToCreate, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Task>> => {
-    return axios.post(
-      `/tasks`,
-      taskToCreate,options
-    );
+    taskToCreate: BodyType<TaskToCreate>,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<Task>(
+    {url: `/tasks`, method: 'POST',
+      headers: {'Content-Type': '*/*', },
+      data: taskToCreate
+    },
+    options);
   }
 
 
 
-export const getPOSTTasksMutationFetcher = ( options?: AxiosRequestConfig) => {
-  return (_: Key, { arg }: { arg: TaskToCreate }): Promise<AxiosResponse<Task>> => {
+export const getPOSTTasksMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, { arg }: { arg: TaskToCreate }): Promise<Task> => {
     return pOSTTasks(arg, options);
   }
 }
 export const getPOSTTasksMutationKey = () => [`/tasks`] as const;
 
 export type POSTTasksMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTTasks>>>
-export type POSTTasksMutationError = AxiosError<HTTPError | void>
+export type POSTTasksMutationError = ErrorType<HTTPError | void>
 
 /**
  * @summary create task
  */
-export const usePOSTTasks = <TError = AxiosError<HTTPError | void>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTTasks>>, TError, Key, TaskToCreate, Awaited<ReturnType<typeof pOSTTasks>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+export const usePOSTTasks = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTTasks>>, TError, Key, TaskToCreate, Awaited<ReturnType<typeof pOSTTasks>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPOSTTasksMutationKey();
-  const swrFn = getPOSTTasksMutationFetcher(axiosOptions);
+  const swrFn = getPOSTTasksMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -263,11 +264,12 @@ export const usePOSTTasks = <TError = AxiosError<HTTPError | void>>(
  * @summary get task
  */
 export const gETTasksId = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Task>> => {
-    return axios.get(
-      `/tasks/${id}`,options
-    );
+    id: string,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<Task>(
+    {url: `/tasks/${id}`, method: 'GET'
+    },
+    options);
   }
 
 
@@ -275,19 +277,19 @@ export const gETTasksId = (
 export const getGETTasksIdKey = (id: string,) => [`/tasks/${id}`] as const;
 
 export type GETTasksIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETTasksId>>>
-export type GETTasksIdQueryError = AxiosError<HTTPError | void>
+export type GETTasksIdQueryError = ErrorType<HTTPError | void>
 
 /**
  * @summary get task
  */
-export const useGETTasksId = <TError = AxiosError<HTTPError | void>>(
-  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETTasksId>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+export const useGETTasksId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETTasksId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
 ) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false && !!(id)
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETTasksIdKey(id) : null);
-  const swrFn = () => gETTasksId(id, axiosOptions)
+  const swrFn = () => gETTasksId(id, requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -313,37 +315,39 @@ export const useGETTasksId = <TError = AxiosError<HTTPError | void>>(
  */
 export const pUTTasksId = (
     id: string,
-    task: Task, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Task>> => {
-    return axios.put(
-      `/tasks/${id}`,
-      task,options
-    );
+    task: BodyType<Task>,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<Task>(
+    {url: `/tasks/${id}`, method: 'PUT',
+      headers: {'Content-Type': '*/*', },
+      data: task
+    },
+    options);
   }
 
 
 
-export const getPUTTasksIdMutationFetcher = (id: string, options?: AxiosRequestConfig) => {
-  return (_: Key, { arg }: { arg: Task }): Promise<AxiosResponse<Task>> => {
+export const getPUTTasksIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, { arg }: { arg: Task }): Promise<Task> => {
     return pUTTasksId(id, arg, options);
   }
 }
 export const getPUTTasksIdMutationKey = (id: string,) => [`/tasks/${id}`] as const;
 
 export type PUTTasksIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTTasksId>>>
-export type PUTTasksIdMutationError = AxiosError<HTTPError | void>
+export type PUTTasksIdMutationError = ErrorType<HTTPError | void>
 
 /**
  * @summary update task
  */
-export const usePUTTasksId = <TError = AxiosError<HTTPError | void>>(
-  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTTasksId>>, TError, Key, Task, Awaited<ReturnType<typeof pUTTasksId>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+export const usePUTTasksId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTTasksId>>, TError, Key, Task, Awaited<ReturnType<typeof pUTTasksId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPUTTasksIdMutationKey(id);
-  const swrFn = getPUTTasksIdMutationFetcher(id, axiosOptions);
+  const swrFn = getPUTTasksIdMutationFetcher(id, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -368,11 +372,12 @@ export const usePUTTasksId = <TError = AxiosError<HTTPError | void>>(
  * @summary search users
  */
 export const gETUsers = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<User[]>> => {
-    return axios.get(
-      `/users`,options
-    );
+    
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<User[]>(
+    {url: `/users`, method: 'GET'
+    },
+    options);
   }
 
 
@@ -380,19 +385,19 @@ export const gETUsers = (
 export const getGETUsersKey = () => [`/users`] as const;
 
 export type GETUsersQueryResult = NonNullable<Awaited<ReturnType<typeof gETUsers>>>
-export type GETUsersQueryError = AxiosError<HTTPError | void>
+export type GETUsersQueryError = ErrorType<HTTPError | void>
 
 /**
  * @summary search users
  */
-export const useGETUsers = <TError = AxiosError<HTTPError | void>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETUsers>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+export const useGETUsers = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETUsers>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
 ) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETUsersKey() : null);
-  const swrFn = () => gETUsers(axiosOptions)
+  const swrFn = () => gETUsers(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -417,37 +422,39 @@ export const useGETUsers = <TError = AxiosError<HTTPError | void>>(
  * @summary create user
  */
 export const pOSTUsers = (
-    userToCreate: UserToCreate, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<User>> => {
-    return axios.post(
-      `/users`,
-      userToCreate,options
-    );
+    userToCreate: BodyType<UserToCreate>,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<User>(
+    {url: `/users`, method: 'POST',
+      headers: {'Content-Type': '*/*', },
+      data: userToCreate
+    },
+    options);
   }
 
 
 
-export const getPOSTUsersMutationFetcher = ( options?: AxiosRequestConfig) => {
-  return (_: Key, { arg }: { arg: UserToCreate }): Promise<AxiosResponse<User>> => {
+export const getPOSTUsersMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, { arg }: { arg: UserToCreate }): Promise<User> => {
     return pOSTUsers(arg, options);
   }
 }
 export const getPOSTUsersMutationKey = () => [`/users`] as const;
 
 export type POSTUsersMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTUsers>>>
-export type POSTUsersMutationError = AxiosError<HTTPError | void>
+export type POSTUsersMutationError = ErrorType<HTTPError | void>
 
 /**
  * @summary create user
  */
-export const usePOSTUsers = <TError = AxiosError<HTTPError | void>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTUsers>>, TError, Key, UserToCreate, Awaited<ReturnType<typeof pOSTUsers>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+export const usePOSTUsers = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTUsers>>, TError, Key, UserToCreate, Awaited<ReturnType<typeof pOSTUsers>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPOSTUsersMutationKey();
-  const swrFn = getPOSTUsersMutationFetcher(axiosOptions);
+  const swrFn = getPOSTUsersMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -472,11 +479,12 @@ export const usePOSTUsers = <TError = AxiosError<HTTPError | void>>(
  * @summary get user
  */
 export const gETUsersId = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<User>> => {
-    return axios.get(
-      `/users/${id}`,options
-    );
+    id: string,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<User>(
+    {url: `/users/${id}`, method: 'GET'
+    },
+    options);
   }
 
 
@@ -484,19 +492,19 @@ export const gETUsersId = (
 export const getGETUsersIdKey = (id: string,) => [`/users/${id}`] as const;
 
 export type GETUsersIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETUsersId>>>
-export type GETUsersIdQueryError = AxiosError<HTTPError | void>
+export type GETUsersIdQueryError = ErrorType<HTTPError | void>
 
 /**
  * @summary get user
  */
-export const useGETUsersId = <TError = AxiosError<HTTPError | void>>(
-  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETUsersId>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+export const useGETUsersId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETUsersId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
 ) => {
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false && !!(id)
   const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETUsersIdKey(id) : null);
-  const swrFn = () => gETUsersId(id, axiosOptions)
+  const swrFn = () => gETUsersId(id, requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -522,37 +530,39 @@ export const useGETUsersId = <TError = AxiosError<HTTPError | void>>(
  */
 export const pUTUsersId = (
     id: string,
-    user: User, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<User>> => {
-    return axios.put(
-      `/users/${id}`,
-      user,options
-    );
+    user: BodyType<User>,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<User>(
+    {url: `/users/${id}`, method: 'PUT',
+      headers: {'Content-Type': '*/*', },
+      data: user
+    },
+    options);
   }
 
 
 
-export const getPUTUsersIdMutationFetcher = (id: string, options?: AxiosRequestConfig) => {
-  return (_: Key, { arg }: { arg: User }): Promise<AxiosResponse<User>> => {
+export const getPUTUsersIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, { arg }: { arg: User }): Promise<User> => {
     return pUTUsersId(id, arg, options);
   }
 }
 export const getPUTUsersIdMutationKey = (id: string,) => [`/users/${id}`] as const;
 
 export type PUTUsersIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTUsersId>>>
-export type PUTUsersIdMutationError = AxiosError<HTTPError | void>
+export type PUTUsersIdMutationError = ErrorType<HTTPError | void>
 
 /**
  * @summary update user
  */
-export const usePUTUsersId = <TError = AxiosError<HTTPError | void>>(
-  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTUsersId>>, TError, Key, User, Awaited<ReturnType<typeof pUTUsersId>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+export const usePUTUsersId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTUsersId>>, TError, Key, User, Awaited<ReturnType<typeof pUTUsersId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const swrKey = swrOptions?.swrKey ?? getPUTUsersIdMutationKey(id);
-  const swrFn = getPUTUsersIdMutationFetcher(id, axiosOptions);
+  const swrFn = getPUTUsersIdMutationFetcher(id, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 

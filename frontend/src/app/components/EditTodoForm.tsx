@@ -1,28 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import type { Todo } from "./TodoList";
+// import type { Todo } from "./TodoList";
+import type { Task } from "@/api/generated/model";
 
 interface EditTodoFormProps {
-  todo: Todo;
-  onSave: (updatedTodo: Todo) => void;
+  todo: Task;
+  onSave: (updatedTodo: Task) => void;
   onCancel: () => void;
 }
 
 export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormProps) {
-  const [title, setTitle] = useState(todo.title);
-  const [tags, setTags] = useState(todo.tags.join(", "));
-  const [deadline, setDeadline] = useState(todo.deadline || "");
-  const [project, setProject] = useState(todo.project || "");
+  const [title, setTitle] = useState(todo.name);
+  // const [tags, setTags] = useState(todo.tags.join(", "));
+  const [deadline, setDeadline] = useState(todo.due_date || "");
+  const [project, setProject] = useState(todo.project_id || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
       ...todo,
-      title,
-      tags: tags.split(",").map((tag) => tag.trim()),
-      deadline: deadline || undefined,
-      project: project || undefined,
+      // title,
+      // tags: tags.split(",").map((tag) => tag.trim()),
+      due_date: deadline || undefined,
+      project_id: project || undefined,
     });
   };
 
@@ -45,13 +46,13 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
         <label htmlFor="tags" className="mb-2 block font-medium text-gray-300 text-sm">
           Tags (comma-separated)
         </label>
-        <input
-          type="text"
-          id="tags"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
-        />
+        {/* <input */}
+        {/*   type="text" */}
+        {/*   id="tags" */}
+        {/*   value={tags} */}
+        {/*   onChange={(e) => setTags(e.target.value)} */}
+        {/*   className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green" */}
+        {/* /> */}
       </div>
       <div className="mb-4">
         <label htmlFor="deadline" className="mb-2 block font-medium text-gray-300 text-sm">

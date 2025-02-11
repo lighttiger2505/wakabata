@@ -1,54 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EditTodoForm from "./EditTodoForm";
 import TodoItem from "./TodoItem";
-
-export interface Todo {
-  id: string;
-  title: string;
-  completed: boolean;
-  tags: string[];
-  deadline?: string;
-  project?: string;
-}
+import { useGETTasks } from "@/api/generated/client";
+import type { Task } from "@/api/generated/model";
 
 export default function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { data, error, isValidating } = useGETTasks();
   const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
 
-  useEffect(() => {
-    // In a real app, you'd fetch todos from an API here
-    setTodos([
-      {
-        id: "1",
-        title: "Learn Next.js",
-        completed: false,
-        tags: ["learning", "web"],
-        deadline: "2023-06-30",
-        project: "Self-improvement",
-      },
-      {
-        id: "2",
-        title: "Build a TODO app",
-        completed: false,
-        tags: ["project", "web"],
-        deadline: "2023-07-15",
-        project: "Portfolio",
-      },
-    ]);
-  }, []);
+  console.error(error);
+  if (error) return <p>Error</p>;
+  if (!data || isValidating) return <p>Loading</p>;
 
-  const toggleTodo = (id: string) => {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)));
+  const todos: Task[] = data.data ?? [];
+  if (!todos.length) return <p>Nop</p>;
+
+  const toggleTodo = (_id: string) => {
+    // setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)));
   };
 
   const editTodo = (id: string) => {
     setEditingTodoId(id);
   };
 
-  const saveTodo = (updatedTodo: Todo) => {
-    setTodos(todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)));
+  const saveTodo = (_updatedTodo: Task) => {
+    // setTodos(todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)));
     setEditingTodoId(null);
   };
 
