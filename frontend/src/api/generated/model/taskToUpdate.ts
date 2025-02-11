@@ -109,12 +109,19 @@ func getAllPets(ctx fuego.ContextNoBody) (*MyResponse, error) {
  * OpenAPI spec version: 0.0.1
  */
 
-export * from './hTTPError';
-export * from './hTTPErrorErrorsItem';
-export * from './hTTPErrorErrorsItemMore';
-export * from './task';
-export * from './taskToCreate';
-export * from './taskToUpdate';
-export * from './unknownInterface';
-export * from './user';
-export * from './userToCreate';
+/**
+ * TaskToUpdate schema
+ */
+export interface TaskToUpdate {
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  due_date?: string | null;
+  name: string;
+  /** @nullable */
+  priority?: number | null;
+  /** @nullable */
+  project_id?: string | null;
+  /** @nullable */
+  status?: boolean | null;
+}

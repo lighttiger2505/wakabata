@@ -13,14 +13,8 @@ export default function AddTodoForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you'd send this data to an API
-    console.log({
-      title,
-      tags: tags.split(",").map((tag) => tag.trim()),
-      deadline: deadline || undefined,
-      project: project || undefined,
-    });
     trigger({ name: title });
+
     // Reset form
     setTitle("");
     setTags("");

@@ -1,13 +1,27 @@
-import type { Task } from "@/api/generated/model";
+import { usePUTApiV1TasksId } from "@/api/generated/client";
+import type { Task, TaskToUpdate } from "@/api/generated/model";
 import { Pencil } from "lucide-react";
 
 interface TodoItemProps {
   todo: Task;
-  onToggle: (id: string) => void;
   onEdit: (id: string) => void;
 }
 
-export default function TodoItem({ todo, onToggle, onEdit }: TodoItemProps) {
+export default function TodoItem({ todo, onEdit }: TodoItemProps) {
+  const { trigger, isMutating } = usePUTApiV1TasksId(todo.id || "");
+
+  const toggleTodo = () => {
+    const body = {
+      description: todo.description,
+      due_date: todo.due_date,
+      name: todo.name || "",
+      priority: todo.priority,
+      project_id: todo.project_id,
+      status: !todo.status,
+    } satisfies TaskToUpdate;
+    trigger(body);
+  };
+
   const completed = todo.status || false;
   return (
     <div className="rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
@@ -16,7 +30,8 @@ export default function TodoItem({ todo, onToggle, onEdit }: TodoItemProps) {
           <input
             type="checkbox"
             checked={completed}
-            onChange={() => onToggle(todo.id || "")}
+            disabled={isMutating}
+            onChange={() => toggleTodo()}
             className="mr-4 h-5 w-5 rounded border-gray-300 text-wakaba-green focus:ring-wakaba-green"
           />
           <span className={`flex-grow ${completed ? "text-gray-500 line-through" : "text-gray-100"}`}>{todo.name}</span>

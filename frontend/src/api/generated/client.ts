@@ -120,6 +120,7 @@ import type {
 import type {
   HTTPError,
   TaskToCreate,
+  TaskToUpdate,
   UserToCreate
 } from './model'
 import {
@@ -150,7 +151,6 @@ import type { ErrorType, BodyType } from '../../lib/custom-instance';
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
-- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
@@ -201,7 +201,6 @@ export const useGETApiV1Tasks = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
-- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
@@ -259,7 +258,6 @@ export const usePOSTApiV1Tasks = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
-- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
@@ -310,7 +308,6 @@ export const useGETApiV1TasksId = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
-- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
@@ -319,12 +316,12 @@ export const useGETApiV1TasksId = <TError = ErrorType<HTTPError | void>>(
  */
 export const pUTApiV1TasksId = (
     id: string,
-    task: BodyType<Task>,
+    taskToUpdate: BodyType<TaskToUpdate>,
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<Task>(
     {url: `/api/v1/tasks/${id}`, method: 'PUT',
       headers: {'Content-Type': '*/*', },
-      data: task
+      data: taskToUpdate
     },
     options);
   }
@@ -332,7 +329,7 @@ export const pUTApiV1TasksId = (
 
 
 export const getPUTApiV1TasksIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
-  return (_: Key, { arg }: { arg: Task }): Promise<Task> => {
+  return (_: Key, { arg }: { arg: TaskToUpdate }): Promise<Task> => {
     return pUTApiV1TasksId(id, arg, options);
   }
 }
@@ -345,7 +342,7 @@ export type PUTApiV1TasksIdMutationError = ErrorType<HTTPError | void>
  * @summary update task
  */
 export const usePUTApiV1TasksId = <TError = ErrorType<HTTPError | void>>(
-  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTApiV1TasksId>>, TError, Key, Task, Awaited<ReturnType<typeof pUTApiV1TasksId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTApiV1TasksId>>, TError, Key, TaskToUpdate, Awaited<ReturnType<typeof pUTApiV1TasksId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
   const {swr: swrOptions, request: requestOptions} = options ?? {}
@@ -369,7 +366,6 @@ export const usePUTApiV1TasksId = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
-- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
@@ -420,7 +416,6 @@ export const useGETApiV1Users = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
-- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
@@ -478,7 +473,6 @@ export const usePOSTApiV1Users = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
-- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
@@ -529,7 +523,6 @@ export const useGETApiV1UsersId = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
-- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 

@@ -21,17 +21,21 @@ func (i *TaskInfra) Create(ctx context.Context, task *model.Task) (*model.Task, 
 		return nil, err
 	}
 	task.ID = uUID.String()
-	if err := query.Task.WithContext(ctx).Create(task); err != nil {
+
+	db := query.Task.WithContext(ctx)
+	if err := db.Create(task); err != nil {
 		return nil, err
 	}
 	return task, nil
 }
 
-func (i *TaskInfra) Update(ctx context.Context, user *model.Task) (*model.Task, error) {
-	if err := query.Task.WithContext(ctx).Create(user); err != nil {
+func (i *TaskInfra) Update(ctx context.Context, task *model.Task) (*model.Task, error) {
+	u := query.Task
+	db := query.Task.WithContext(ctx)
+	if _, err := db.Where(u.ID.Eq(task.ID)).Updates(task); err != nil {
 		return nil, err
 	}
-	return user, nil
+	return task, nil
 }
 
 func (i *TaskInfra) Search(ctx context.Context) ([]*model.Task, error) {
