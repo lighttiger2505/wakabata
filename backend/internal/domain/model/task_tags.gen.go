@@ -8,7 +8,7 @@ const TableNameTaskTag = "task_tags"
 
 // TaskTag mapped from table <task_tags>
 type TaskTag struct {
-	ID     string `gorm:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`
+	ID     string `gorm:"column:id;primaryKey" json:"id"`
 	TaskID string `gorm:"column:task_id" json:"task_id"`
 	TagID  string `gorm:"column:tag_id" json:"tag_id"`
 }

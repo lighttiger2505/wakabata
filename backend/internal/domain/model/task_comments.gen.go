@@ -12,7 +12,7 @@ const TableNameTaskComment = "task_comments"
 
 // TaskComment mapped from table <task_comments>
 type TaskComment struct {
-	ID        string    `gorm:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`
+	ID        string    `gorm:"column:id;primaryKey" json:"id"`
 	TaskID    string    `gorm:"column:task_id" json:"task_id"`
 	UserID    string    `gorm:"column:user_id" json:"user_id"`
 	Comment   string    `gorm:"column:comment;not null" json:"comment"`

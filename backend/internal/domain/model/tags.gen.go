@@ -12,7 +12,7 @@ const TableNameTag = "tags"
 
 // Tag mapped from table <tags>
 type Tag struct {
-	ID        string    `gorm:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`
+	ID        string    `gorm:"column:id;primaryKey" json:"id"`
 	Name      string    `gorm:"column:name;not null" json:"name"`
 	CreatedAt time.Time `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at;default:CURRENT_TIMESTAMP" json:"updated_at"`
