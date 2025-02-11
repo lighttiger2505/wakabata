@@ -150,39 +150,40 @@ import type { ErrorType, BodyType } from '../../lib/custom-instance';
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
+- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
 
  * @summary search tasks
  */
-export const gETTasks = (
+export const gETApiV1Tasks = (
     
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<Task[]>(
-    {url: `/tasks`, method: 'GET'
+    {url: `/api/v1/tasks`, method: 'GET'
     },
     options);
   }
 
 
 
-export const getGETTasksKey = () => [`/tasks`] as const;
+export const getGETApiV1TasksKey = () => [`/api/v1/tasks`] as const;
 
-export type GETTasksQueryResult = NonNullable<Awaited<ReturnType<typeof gETTasks>>>
-export type GETTasksQueryError = ErrorType<HTTPError | void>
+export type GETApiV1TasksQueryResult = NonNullable<Awaited<ReturnType<typeof gETApiV1Tasks>>>
+export type GETApiV1TasksQueryError = ErrorType<HTTPError | void>
 
 /**
  * @summary search tasks
  */
-export const useGETTasks = <TError = ErrorType<HTTPError | void>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETTasks>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
+export const useGETApiV1Tasks = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETApiV1Tasks>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
 ) => {
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETTasksKey() : null);
-  const swrFn = () => gETTasks(requestOptions)
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETApiV1TasksKey() : null);
+  const swrFn = () => gETApiV1Tasks(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -200,17 +201,18 @@ export const useGETTasks = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
+- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
 
  * @summary create task
  */
-export const pOSTTasks = (
+export const pOSTApiV1Tasks = (
     taskToCreate: BodyType<TaskToCreate>,
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<Task>(
-    {url: `/tasks`, method: 'POST',
+    {url: `/api/v1/tasks`, method: 'POST',
       headers: {'Content-Type': '*/*', },
       data: taskToCreate
     },
@@ -219,27 +221,27 @@ export const pOSTTasks = (
 
 
 
-export const getPOSTTasksMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
+export const getPOSTApiV1TasksMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
   return (_: Key, { arg }: { arg: TaskToCreate }): Promise<Task> => {
-    return pOSTTasks(arg, options);
+    return pOSTApiV1Tasks(arg, options);
   }
 }
-export const getPOSTTasksMutationKey = () => [`/tasks`] as const;
+export const getPOSTApiV1TasksMutationKey = () => [`/api/v1/tasks`] as const;
 
-export type POSTTasksMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTTasks>>>
-export type POSTTasksMutationError = ErrorType<HTTPError | void>
+export type POSTApiV1TasksMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTApiV1Tasks>>>
+export type POSTApiV1TasksMutationError = ErrorType<HTTPError | void>
 
 /**
  * @summary create task
  */
-export const usePOSTTasks = <TError = ErrorType<HTTPError | void>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTTasks>>, TError, Key, TaskToCreate, Awaited<ReturnType<typeof pOSTTasks>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+export const usePOSTApiV1Tasks = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTApiV1Tasks>>, TError, Key, TaskToCreate, Awaited<ReturnType<typeof pOSTApiV1Tasks>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
-  const swrKey = swrOptions?.swrKey ?? getPOSTTasksMutationKey();
-  const swrFn = getPOSTTasksMutationFetcher(requestOptions);
+  const swrKey = swrOptions?.swrKey ?? getPOSTApiV1TasksMutationKey();
+  const swrFn = getPOSTApiV1TasksMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -257,39 +259,40 @@ export const usePOSTTasks = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
+- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
 
  * @summary get task
  */
-export const gETTasksId = (
+export const gETApiV1TasksId = (
     id: string,
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<Task>(
-    {url: `/tasks/${id}`, method: 'GET'
+    {url: `/api/v1/tasks/${id}`, method: 'GET'
     },
     options);
   }
 
 
 
-export const getGETTasksIdKey = (id: string,) => [`/tasks/${id}`] as const;
+export const getGETApiV1TasksIdKey = (id: string,) => [`/api/v1/tasks/${id}`] as const;
 
-export type GETTasksIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETTasksId>>>
-export type GETTasksIdQueryError = ErrorType<HTTPError | void>
+export type GETApiV1TasksIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETApiV1TasksId>>>
+export type GETApiV1TasksIdQueryError = ErrorType<HTTPError | void>
 
 /**
  * @summary get task
  */
-export const useGETTasksId = <TError = ErrorType<HTTPError | void>>(
-  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETTasksId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
+export const useGETApiV1TasksId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETApiV1TasksId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
 ) => {
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false && !!(id)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETTasksIdKey(id) : null);
-  const swrFn = () => gETTasksId(id, requestOptions)
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETApiV1TasksIdKey(id) : null);
+  const swrFn = () => gETApiV1TasksId(id, requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -307,18 +310,19 @@ export const useGETTasksId = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
+- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
 
  * @summary update task
  */
-export const pUTTasksId = (
+export const pUTApiV1TasksId = (
     id: string,
     task: BodyType<Task>,
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<Task>(
-    {url: `/tasks/${id}`, method: 'PUT',
+    {url: `/api/v1/tasks/${id}`, method: 'PUT',
       headers: {'Content-Type': '*/*', },
       data: task
     },
@@ -327,27 +331,27 @@ export const pUTTasksId = (
 
 
 
-export const getPUTTasksIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
+export const getPUTApiV1TasksIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
   return (_: Key, { arg }: { arg: Task }): Promise<Task> => {
-    return pUTTasksId(id, arg, options);
+    return pUTApiV1TasksId(id, arg, options);
   }
 }
-export const getPUTTasksIdMutationKey = (id: string,) => [`/tasks/${id}`] as const;
+export const getPUTApiV1TasksIdMutationKey = (id: string,) => [`/api/v1/tasks/${id}`] as const;
 
-export type PUTTasksIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTTasksId>>>
-export type PUTTasksIdMutationError = ErrorType<HTTPError | void>
+export type PUTApiV1TasksIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTApiV1TasksId>>>
+export type PUTApiV1TasksIdMutationError = ErrorType<HTTPError | void>
 
 /**
  * @summary update task
  */
-export const usePUTTasksId = <TError = ErrorType<HTTPError | void>>(
-  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTTasksId>>, TError, Key, Task, Awaited<ReturnType<typeof pUTTasksId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+export const usePUTApiV1TasksId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTApiV1TasksId>>, TError, Key, Task, Awaited<ReturnType<typeof pUTApiV1TasksId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
-  const swrKey = swrOptions?.swrKey ?? getPUTTasksIdMutationKey(id);
-  const swrFn = getPUTTasksIdMutationFetcher(id, requestOptions);
+  const swrKey = swrOptions?.swrKey ?? getPUTApiV1TasksIdMutationKey(id);
+  const swrFn = getPUTApiV1TasksIdMutationFetcher(id, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -365,39 +369,40 @@ export const usePUTTasksId = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
+- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
 
  * @summary search users
  */
-export const gETUsers = (
+export const gETApiV1Users = (
     
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<User[]>(
-    {url: `/users`, method: 'GET'
+    {url: `/api/v1/users`, method: 'GET'
     },
     options);
   }
 
 
 
-export const getGETUsersKey = () => [`/users`] as const;
+export const getGETApiV1UsersKey = () => [`/api/v1/users`] as const;
 
-export type GETUsersQueryResult = NonNullable<Awaited<ReturnType<typeof gETUsers>>>
-export type GETUsersQueryError = ErrorType<HTTPError | void>
+export type GETApiV1UsersQueryResult = NonNullable<Awaited<ReturnType<typeof gETApiV1Users>>>
+export type GETApiV1UsersQueryError = ErrorType<HTTPError | void>
 
 /**
  * @summary search users
  */
-export const useGETUsers = <TError = ErrorType<HTTPError | void>>(
-   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETUsers>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
+export const useGETApiV1Users = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETApiV1Users>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
 ) => {
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETUsersKey() : null);
-  const swrFn = () => gETUsers(requestOptions)
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETApiV1UsersKey() : null);
+  const swrFn = () => gETApiV1Users(requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -415,17 +420,18 @@ export const useGETUsers = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
+- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
 
  * @summary create user
  */
-export const pOSTUsers = (
+export const pOSTApiV1Users = (
     userToCreate: BodyType<UserToCreate>,
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<User>(
-    {url: `/users`, method: 'POST',
+    {url: `/api/v1/users`, method: 'POST',
       headers: {'Content-Type': '*/*', },
       data: userToCreate
     },
@@ -434,27 +440,27 @@ export const pOSTUsers = (
 
 
 
-export const getPOSTUsersMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
+export const getPOSTApiV1UsersMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
   return (_: Key, { arg }: { arg: UserToCreate }): Promise<User> => {
-    return pOSTUsers(arg, options);
+    return pOSTApiV1Users(arg, options);
   }
 }
-export const getPOSTUsersMutationKey = () => [`/users`] as const;
+export const getPOSTApiV1UsersMutationKey = () => [`/api/v1/users`] as const;
 
-export type POSTUsersMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTUsers>>>
-export type POSTUsersMutationError = ErrorType<HTTPError | void>
+export type POSTApiV1UsersMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTApiV1Users>>>
+export type POSTApiV1UsersMutationError = ErrorType<HTTPError | void>
 
 /**
  * @summary create user
  */
-export const usePOSTUsers = <TError = ErrorType<HTTPError | void>>(
-   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTUsers>>, TError, Key, UserToCreate, Awaited<ReturnType<typeof pOSTUsers>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+export const usePOSTApiV1Users = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTApiV1Users>>, TError, Key, UserToCreate, Awaited<ReturnType<typeof pOSTApiV1Users>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
-  const swrKey = swrOptions?.swrKey ?? getPOSTUsersMutationKey();
-  const swrFn = getPOSTUsersMutationFetcher(requestOptions);
+  const swrKey = swrOptions?.swrKey ?? getPOSTApiV1UsersMutationKey();
+  const swrFn = getPOSTApiV1UsersMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -472,39 +478,40 @@ export const usePOSTUsers = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
+- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
 
  * @summary get user
  */
-export const gETUsersId = (
+export const gETApiV1UsersId = (
     id: string,
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<User>(
-    {url: `/users/${id}`, method: 'GET'
+    {url: `/api/v1/users/${id}`, method: 'GET'
     },
     options);
   }
 
 
 
-export const getGETUsersIdKey = (id: string,) => [`/users/${id}`] as const;
+export const getGETApiV1UsersIdKey = (id: string,) => [`/api/v1/users/${id}`] as const;
 
-export type GETUsersIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETUsersId>>>
-export type GETUsersIdQueryError = ErrorType<HTTPError | void>
+export type GETApiV1UsersIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETApiV1UsersId>>>
+export type GETApiV1UsersIdQueryError = ErrorType<HTTPError | void>
 
 /**
  * @summary get user
  */
-export const useGETUsersId = <TError = ErrorType<HTTPError | void>>(
-  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETUsersId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
+export const useGETApiV1UsersId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETApiV1UsersId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
 ) => {
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
   const isEnabled = swrOptions?.enabled !== false && !!(id)
-  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETUsersIdKey(id) : null);
-  const swrFn = () => gETUsersId(id, requestOptions)
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETApiV1UsersIdKey(id) : null);
+  const swrFn = () => gETApiV1UsersId(id, requestOptions)
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
@@ -522,18 +529,19 @@ export const useGETUsersId = <TError = ErrorType<HTTPError | void>>(
 #### Middlewares:
 
 - `github.com/go-fuego/fuego.defaultLogger.middleware`
+- `github.com/rs/cors.(*Cors).Handler`
 
 ---
 
 
  * @summary update user
  */
-export const pUTUsersId = (
+export const pUTApiV1UsersId = (
     id: string,
     user: BodyType<User>,
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<User>(
-    {url: `/users/${id}`, method: 'PUT',
+    {url: `/api/v1/users/${id}`, method: 'PUT',
       headers: {'Content-Type': '*/*', },
       data: user
     },
@@ -542,27 +550,27 @@ export const pUTUsersId = (
 
 
 
-export const getPUTUsersIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
+export const getPUTApiV1UsersIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
   return (_: Key, { arg }: { arg: User }): Promise<User> => {
-    return pUTUsersId(id, arg, options);
+    return pUTApiV1UsersId(id, arg, options);
   }
 }
-export const getPUTUsersIdMutationKey = (id: string,) => [`/users/${id}`] as const;
+export const getPUTApiV1UsersIdMutationKey = (id: string,) => [`/api/v1/users/${id}`] as const;
 
-export type PUTUsersIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTUsersId>>>
-export type PUTUsersIdMutationError = ErrorType<HTTPError | void>
+export type PUTApiV1UsersIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTApiV1UsersId>>>
+export type PUTApiV1UsersIdMutationError = ErrorType<HTTPError | void>
 
 /**
  * @summary update user
  */
-export const usePUTUsersId = <TError = ErrorType<HTTPError | void>>(
-  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTUsersId>>, TError, Key, User, Awaited<ReturnType<typeof pUTUsersId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+export const usePUTApiV1UsersId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTApiV1UsersId>>, TError, Key, User, Awaited<ReturnType<typeof pUTApiV1UsersId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
 ) => {
 
   const {swr: swrOptions, request: requestOptions} = options ?? {}
 
-  const swrKey = swrOptions?.swrKey ?? getPUTUsersIdMutationKey(id);
-  const swrFn = getPUTUsersIdMutationFetcher(id, requestOptions);
+  const swrKey = swrOptions?.swrKey ?? getPUTApiV1UsersIdMutationKey(id);
+  const swrFn = getPUTApiV1UsersIdMutationFetcher(id, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -574,125 +582,125 @@ export const usePUTUsersId = <TError = ErrorType<HTTPError | void>>(
 
 
 
-export const getGETTasksResponseMock = (): Task[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined])})))
+export const getGETApiV1TasksResponseMock = (): Task[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined])})))
 
-export const getPOSTTasksResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), ...overrideResponse})
+export const getPOSTApiV1TasksResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), ...overrideResponse})
 
-export const getGETTasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), ...overrideResponse})
+export const getGETApiV1TasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), ...overrideResponse})
 
-export const getPUTTasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), ...overrideResponse})
+export const getPUTApiV1TasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), ...overrideResponse})
 
-export const getGETUsersResponseMock = (): User[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined])})))
+export const getGETApiV1UsersResponseMock = (): User[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined])})))
 
-export const getPOSTUsersResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+export const getPOSTApiV1UsersResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
 
-export const getGETUsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+export const getGETApiV1UsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
 
-export const getPUTUsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+export const getPUTApiV1UsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
 
 
-export const getGETTasksMockHandler = (overrideResponse?: Task[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Task[]> | Task[])) => {
-  return http.get('*/tasks', async (info) => {await delay(1000);
+export const getGETApiV1TasksMockHandler = (overrideResponse?: Task[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Task[]> | Task[])) => {
+  return http.get('*/api/v1/tasks', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGETTasksResponseMock()),
+            : getGETApiV1TasksResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   })
 }
 
-export const getPOSTTasksMockHandler = (overrideResponse?: Task | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Task> | Task)) => {
-  return http.post('*/tasks', async (info) => {await delay(1000);
+export const getPOSTApiV1TasksMockHandler = (overrideResponse?: Task | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Task> | Task)) => {
+  return http.post('*/api/v1/tasks', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getPOSTTasksResponseMock()),
+            : getPOSTApiV1TasksResponseMock()),
       { status: 201,
         headers: { 'Content-Type': 'application/json' }
       })
   })
 }
 
-export const getGETTasksIdMockHandler = (overrideResponse?: Task | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Task> | Task)) => {
-  return http.get('*/tasks/:id', async (info) => {await delay(1000);
+export const getGETApiV1TasksIdMockHandler = (overrideResponse?: Task | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Task> | Task)) => {
+  return http.get('*/api/v1/tasks/:id', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGETTasksIdResponseMock()),
+            : getGETApiV1TasksIdResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   })
 }
 
-export const getPUTTasksIdMockHandler = (overrideResponse?: Task | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<Task> | Task)) => {
-  return http.put('*/tasks/:id', async (info) => {await delay(1000);
+export const getPUTApiV1TasksIdMockHandler = (overrideResponse?: Task | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<Task> | Task)) => {
+  return http.put('*/api/v1/tasks/:id', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getPUTTasksIdResponseMock()),
+            : getPUTApiV1TasksIdResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   })
 }
 
-export const getGETUsersMockHandler = (overrideResponse?: User[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<User[]> | User[])) => {
-  return http.get('*/users', async (info) => {await delay(1000);
+export const getGETApiV1UsersMockHandler = (overrideResponse?: User[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<User[]> | User[])) => {
+  return http.get('*/api/v1/users', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGETUsersResponseMock()),
+            : getGETApiV1UsersResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   })
 }
 
-export const getPOSTUsersMockHandler = (overrideResponse?: User | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<User> | User)) => {
-  return http.post('*/users', async (info) => {await delay(1000);
+export const getPOSTApiV1UsersMockHandler = (overrideResponse?: User | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<User> | User)) => {
+  return http.post('*/api/v1/users', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getPOSTUsersResponseMock()),
+            : getPOSTApiV1UsersResponseMock()),
       { status: 201,
         headers: { 'Content-Type': 'application/json' }
       })
   })
 }
 
-export const getGETUsersIdMockHandler = (overrideResponse?: User | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<User> | User)) => {
-  return http.get('*/users/:id', async (info) => {await delay(1000);
+export const getGETApiV1UsersIdMockHandler = (overrideResponse?: User | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<User> | User)) => {
+  return http.get('*/api/v1/users/:id', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGETUsersIdResponseMock()),
+            : getGETApiV1UsersIdResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   })
 }
 
-export const getPUTUsersIdMockHandler = (overrideResponse?: User | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<User> | User)) => {
-  return http.put('*/users/:id', async (info) => {await delay(1000);
+export const getPUTApiV1UsersIdMockHandler = (overrideResponse?: User | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<User> | User)) => {
+  return http.put('*/api/v1/users/:id', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getPUTUsersIdResponseMock()),
+            : getPUTApiV1UsersIdResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   })
 }
 export const getOpenAPIMock = () => [
-  getGETTasksMockHandler(),
-  getPOSTTasksMockHandler(),
-  getGETTasksIdMockHandler(),
-  getPUTTasksIdMockHandler(),
-  getGETUsersMockHandler(),
-  getPOSTUsersMockHandler(),
-  getGETUsersIdMockHandler(),
-  getPUTUsersIdMockHandler()
+  getGETApiV1TasksMockHandler(),
+  getPOSTApiV1TasksMockHandler(),
+  getGETApiV1TasksIdMockHandler(),
+  getPUTApiV1TasksIdMockHandler(),
+  getGETApiV1UsersMockHandler(),
+  getPOSTApiV1UsersMockHandler(),
+  getGETApiV1UsersIdMockHandler(),
+  getPUTApiV1UsersIdMockHandler()
 ]

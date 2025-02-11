@@ -3,11 +3,11 @@
 import { useState } from "react";
 import EditTodoForm from "./EditTodoForm";
 import TodoItem from "./TodoItem";
-import { useGETTasks } from "@/api/generated/client";
+import { useGETApiV1Tasks } from "@/api/generated/client";
 import type { Task } from "@/api/generated/model";
 
 export default function TodoList() {
-  const { data, error, isValidating } = useGETTasks();
+  const { data, error, isValidating } = useGETApiV1Tasks();
   const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
 
   if (error) {
@@ -16,7 +16,7 @@ export default function TodoList() {
   }
   if (!data || isValidating) return <p>Loading</p>;
 
-  const todos: Task[] = data.data ?? [];
+  const todos: Task[] = data ?? [];
   if (!todos.length) return <p>Nop</p>;
 
   const toggleTodo = (_id: string) => {

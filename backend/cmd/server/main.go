@@ -29,8 +29,8 @@ func main() {
 				},
 			),
 		),
+		fuego.WithBasePath("/api/v1"),
 	)
-
 	fuego.Use(server, cors.AllowAll().Handler)
 
 	userInfra := infra.NewUserInfra()
