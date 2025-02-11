@@ -9,6 +9,8 @@ import (
 	"github.com/lighttiger2505/wakabata/internal/infra"
 	"github.com/lighttiger2505/wakabata/internal/infra/persistence/postgres"
 	"github.com/lighttiger2505/wakabata/internal/infra/persistence/query"
+
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -28,6 +30,8 @@ func main() {
 			),
 		),
 	)
+
+	fuego.Use(server, cors.AllowAll().Handler)
 
 	userInfra := infra.NewUserInfra()
 	userService := service.NewUserService(userInfra)
