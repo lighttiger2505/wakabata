@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/go-fuego/fuego"
 	"github.com/lighttiger2505/wakabata/internal/app"
@@ -29,9 +30,21 @@ func main() {
 				},
 			),
 		),
+		fuego.WithGlobalMiddlewares(cors.New(cors.Options{
+			AllowedOrigins: []string{"*"},
+			AllowedMethods: []string{
+				http.MethodHead,
+				http.MethodGet,
+				http.MethodPost,
+				http.MethodPut,
+				http.MethodPatch,
+				http.MethodDelete,
+			},
+			AllowedHeaders:   []string{"*"},
+			AllowCredentials: true,
+		}).Handler),
 		fuego.WithBasePath("/api/v1"),
 	)
-	fuego.Use(server, cors.AllowAll().Handler)
 
 	userInfra := infra.NewUserInfra()
 	userService := service.NewUserService(userInfra)

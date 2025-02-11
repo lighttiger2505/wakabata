@@ -8,7 +8,7 @@ interface TodoItemProps {
 }
 
 export default function TodoItem({ todo, onToggle, onEdit }: TodoItemProps) {
-  const completed = todo.status !== "pending";
+  const completed = todo.status || false;
   return (
     <div className="rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
       <div className="flex items-center justify-between">

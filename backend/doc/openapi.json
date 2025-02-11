@@ -187,7 +187,7 @@
 	"paths": {
 		"/api/v1/tasks": {
 			"get": {
-				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).SearchTasks`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n- `github.com/rs/cors.(*Cors).Handler`\n\n---\n\n",
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).SearchTasks`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
 				"operationId": "GET_/api/v1/tasks",
 				"parameters": [
 					{
@@ -260,7 +260,7 @@
 				]
 			},
 			"post": {
-				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).CreateTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n- `github.com/rs/cors.(*Cors).Handler`\n\n---\n\n",
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).CreateTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
 				"operationId": "POST_/api/v1/tasks",
 				"parameters": [
 					{
@@ -340,7 +340,7 @@
 		},
 		"/api/v1/tasks/{id}": {
 			"get": {
-				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).GetTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n- `github.com/rs/cors.(*Cors).Handler`\n\n---\n\n",
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).GetTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
 				"operationId": "GET_/api/v1/tasks/:id",
 				"parameters": [
 					{
@@ -415,7 +415,7 @@
 				]
 			},
 			"put": {
-				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).UpdateTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n- `github.com/rs/cors.(*Cors).Handler`\n\n---\n\n",
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).UpdateTask`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
 				"operationId": "PUT_/api/v1/tasks/:id",
 				"parameters": [
 					{
@@ -503,7 +503,7 @@
 		},
 		"/api/v1/users": {
 			"get": {
-				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).SearchUsers`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n- `github.com/rs/cors.(*Cors).Handler`\n\n---\n\n",
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).SearchUsers`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
 				"operationId": "GET_/api/v1/users",
 				"parameters": [
 					{
@@ -576,7 +576,7 @@
 				]
 			},
 			"post": {
-				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).CreateUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n- `github.com/rs/cors.(*Cors).Handler`\n\n---\n\n",
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).CreateUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
 				"operationId": "POST_/api/v1/users",
 				"parameters": [
 					{
@@ -656,7 +656,7 @@
 		},
 		"/api/v1/users/{id}": {
 			"get": {
-				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).GetUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n- `github.com/rs/cors.(*Cors).Handler`\n\n---\n\n",
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).GetUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
 				"operationId": "GET_/api/v1/users/:id",
 				"parameters": [
 					{
@@ -731,7 +731,7 @@
 				]
 			},
 			"put": {
-				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).UpdateUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n- `github.com/rs/cors.(*Cors).Handler`\n\n---\n\n",
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).UpdateUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
 				"operationId": "PUT_/api/v1/users/:id",
 				"parameters": [
 					{
