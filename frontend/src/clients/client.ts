@@ -110,10 +110,21 @@ func getAllPets(ctx fuego.ContextNoBody) (*MyResponse, error) {
  */
 import axios from 'axios'
 import type {
+  AxiosError,
   AxiosRequestConfig,
   AxiosResponse
 } from 'axios'
+import useSwr from 'swr'
 import type {
+  Key,
+  SWRConfiguration
+} from 'swr'
+import useSWRMutation from 'swr/mutation'
+import type {
+  SWRMutationConfiguration
+} from 'swr/mutation'
+import type {
+  HTTPError,
   TaskToCreate,
   UserToCreate
 } from './model'
@@ -132,7 +143,7 @@ import type {
 
 
 
-
+  
   /**
  * #### Controller: 
 
@@ -147,13 +158,40 @@ import type {
 
  * @summary search tasks
  */
-export const gETTasks = <TData = AxiosResponse<Task[]>>(
+export const gETTasks = (
      options?: AxiosRequestConfig
- ): Promise<TData> => {
+ ): Promise<AxiosResponse<Task[]>> => {
     return axios.get(
       `/tasks`,options
     );
   }
+
+
+
+export const getGETTasksKey = () => [`/tasks`] as const;
+
+export type GETTasksQueryResult = NonNullable<Awaited<ReturnType<typeof gETTasks>>>
+export type GETTasksQueryError = AxiosError<HTTPError | void>
+
+/**
+ * @summary search tasks
+ */
+export const useGETTasks = <TError = AxiosError<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETTasks>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+) => {
+  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+
+  const isEnabled = swrOptions?.enabled !== false
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETTasksKey() : null);
+  const swrFn = () => gETTasks(axiosOptions)
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -169,14 +207,46 @@ export const gETTasks = <TData = AxiosResponse<Task[]>>(
 
  * @summary create task
  */
-export const pOSTTasks = <TData = AxiosResponse<Task>>(
+export const pOSTTasks = (
     taskToCreate: TaskToCreate, options?: AxiosRequestConfig
- ): Promise<TData> => {
+ ): Promise<AxiosResponse<Task>> => {
     return axios.post(
       `/tasks`,
       taskToCreate,options
     );
   }
+
+
+
+export const getPOSTTasksMutationFetcher = ( options?: AxiosRequestConfig) => {
+  return (_: Key, { arg }: { arg: TaskToCreate }): Promise<AxiosResponse<Task>> => {
+    return pOSTTasks(arg, options);
+  }
+}
+export const getPOSTTasksMutationKey = () => [`/tasks`] as const;
+
+export type POSTTasksMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTTasks>>>
+export type POSTTasksMutationError = AxiosError<HTTPError | void>
+
+/**
+ * @summary create task
+ */
+export const usePOSTTasks = <TError = AxiosError<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTTasks>>, TError, Key, TaskToCreate, Awaited<ReturnType<typeof pOSTTasks>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+) => {
+
+  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPOSTTasksMutationKey();
+  const swrFn = getPOSTTasksMutationFetcher(axiosOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -192,13 +262,40 @@ export const pOSTTasks = <TData = AxiosResponse<Task>>(
 
  * @summary get task
  */
-export const gETTasksId = <TData = AxiosResponse<Task>>(
+export const gETTasksId = (
     id: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
+ ): Promise<AxiosResponse<Task>> => {
     return axios.get(
       `/tasks/${id}`,options
     );
   }
+
+
+
+export const getGETTasksIdKey = (id: string,) => [`/tasks/${id}`] as const;
+
+export type GETTasksIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETTasksId>>>
+export type GETTasksIdQueryError = AxiosError<HTTPError | void>
+
+/**
+ * @summary get task
+ */
+export const useGETTasksId = <TError = AxiosError<HTTPError | void>>(
+  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETTasksId>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+) => {
+  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+
+  const isEnabled = swrOptions?.enabled !== false && !!(id)
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETTasksIdKey(id) : null);
+  const swrFn = () => gETTasksId(id, axiosOptions)
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -214,15 +311,47 @@ export const gETTasksId = <TData = AxiosResponse<Task>>(
 
  * @summary update task
  */
-export const pUTTasksId = <TData = AxiosResponse<Task>>(
+export const pUTTasksId = (
     id: string,
     task: Task, options?: AxiosRequestConfig
- ): Promise<TData> => {
+ ): Promise<AxiosResponse<Task>> => {
     return axios.put(
       `/tasks/${id}`,
       task,options
     );
   }
+
+
+
+export const getPUTTasksIdMutationFetcher = (id: string, options?: AxiosRequestConfig) => {
+  return (_: Key, { arg }: { arg: Task }): Promise<AxiosResponse<Task>> => {
+    return pUTTasksId(id, arg, options);
+  }
+}
+export const getPUTTasksIdMutationKey = (id: string,) => [`/tasks/${id}`] as const;
+
+export type PUTTasksIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTTasksId>>>
+export type PUTTasksIdMutationError = AxiosError<HTTPError | void>
+
+/**
+ * @summary update task
+ */
+export const usePUTTasksId = <TError = AxiosError<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTTasksId>>, TError, Key, Task, Awaited<ReturnType<typeof pUTTasksId>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+) => {
+
+  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPUTTasksIdMutationKey(id);
+  const swrFn = getPUTTasksIdMutationFetcher(id, axiosOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -238,13 +367,40 @@ export const pUTTasksId = <TData = AxiosResponse<Task>>(
 
  * @summary search users
  */
-export const gETUsers = <TData = AxiosResponse<User[]>>(
+export const gETUsers = (
      options?: AxiosRequestConfig
- ): Promise<TData> => {
+ ): Promise<AxiosResponse<User[]>> => {
     return axios.get(
       `/users`,options
     );
   }
+
+
+
+export const getGETUsersKey = () => [`/users`] as const;
+
+export type GETUsersQueryResult = NonNullable<Awaited<ReturnType<typeof gETUsers>>>
+export type GETUsersQueryError = AxiosError<HTTPError | void>
+
+/**
+ * @summary search users
+ */
+export const useGETUsers = <TError = AxiosError<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETUsers>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+) => {
+  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+
+  const isEnabled = swrOptions?.enabled !== false
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETUsersKey() : null);
+  const swrFn = () => gETUsers(axiosOptions)
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -260,14 +416,46 @@ export const gETUsers = <TData = AxiosResponse<User[]>>(
 
  * @summary create user
  */
-export const pOSTUsers = <TData = AxiosResponse<User>>(
+export const pOSTUsers = (
     userToCreate: UserToCreate, options?: AxiosRequestConfig
- ): Promise<TData> => {
+ ): Promise<AxiosResponse<User>> => {
     return axios.post(
       `/users`,
       userToCreate,options
     );
   }
+
+
+
+export const getPOSTUsersMutationFetcher = ( options?: AxiosRequestConfig) => {
+  return (_: Key, { arg }: { arg: UserToCreate }): Promise<AxiosResponse<User>> => {
+    return pOSTUsers(arg, options);
+  }
+}
+export const getPOSTUsersMutationKey = () => [`/users`] as const;
+
+export type POSTUsersMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTUsers>>>
+export type POSTUsersMutationError = AxiosError<HTTPError | void>
+
+/**
+ * @summary create user
+ */
+export const usePOSTUsers = <TError = AxiosError<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTUsers>>, TError, Key, UserToCreate, Awaited<ReturnType<typeof pOSTUsers>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+) => {
+
+  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPOSTUsersMutationKey();
+  const swrFn = getPOSTUsersMutationFetcher(axiosOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -283,13 +471,40 @@ export const pOSTUsers = <TData = AxiosResponse<User>>(
 
  * @summary get user
  */
-export const gETUsersId = <TData = AxiosResponse<User>>(
+export const gETUsersId = (
     id: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
+ ): Promise<AxiosResponse<User>> => {
     return axios.get(
       `/users/${id}`,options
     );
   }
+
+
+
+export const getGETUsersIdKey = (id: string,) => [`/users/${id}`] as const;
+
+export type GETUsersIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETUsersId>>>
+export type GETUsersIdQueryError = AxiosError<HTTPError | void>
+
+/**
+ * @summary get user
+ */
+export const useGETUsersId = <TError = AxiosError<HTTPError | void>>(
+  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETUsersId>>, TError> & { swrKey?: Key, enabled?: boolean }, axios?: AxiosRequestConfig }
+) => {
+  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+
+  const isEnabled = swrOptions?.enabled !== false && !!(id)
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETUsersIdKey(id) : null);
+  const swrFn = () => gETUsersId(id, axiosOptions)
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -305,24 +520,48 @@ export const gETUsersId = <TData = AxiosResponse<User>>(
 
  * @summary update user
  */
-export const pUTUsersId = <TData = AxiosResponse<User>>(
+export const pUTUsersId = (
     id: string,
     user: User, options?: AxiosRequestConfig
- ): Promise<TData> => {
+ ): Promise<AxiosResponse<User>> => {
     return axios.put(
       `/users/${id}`,
       user,options
     );
   }
 
-export type GETTasksResult = AxiosResponse<Task[]>
-export type POSTTasksResult = AxiosResponse<Task>
-export type GETTasksIdResult = AxiosResponse<Task>
-export type PUTTasksIdResult = AxiosResponse<Task>
-export type GETUsersResult = AxiosResponse<User[]>
-export type POSTUsersResult = AxiosResponse<User>
-export type GETUsersIdResult = AxiosResponse<User>
-export type PUTUsersIdResult = AxiosResponse<User>
+
+
+export const getPUTUsersIdMutationFetcher = (id: string, options?: AxiosRequestConfig) => {
+  return (_: Key, { arg }: { arg: User }): Promise<AxiosResponse<User>> => {
+    return pUTUsersId(id, arg, options);
+  }
+}
+export const getPUTUsersIdMutationKey = (id: string,) => [`/users/${id}`] as const;
+
+export type PUTUsersIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTUsersId>>>
+export type PUTUsersIdMutationError = AxiosError<HTTPError | void>
+
+/**
+ * @summary update user
+ */
+export const usePUTUsersId = <TError = AxiosError<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTUsersId>>, TError, Key, User, Awaited<ReturnType<typeof pUTUsersId>>> & { swrKey?: string }, axios?: AxiosRequestConfig}
+) => {
+
+  const {swr: swrOptions, axios: axiosOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPUTUsersIdMutationKey(id);
+  const swrFn = getPUTUsersIdMutationFetcher(id, axiosOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
 
 
 export const getGETTasksResponseMock = (): Task[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, undefined])})))
@@ -445,4 +684,5 @@ export const getOpenAPIMock = () => [
   getGETUsersMockHandler(),
   getPOSTUsersMockHandler(),
   getGETUsersIdMockHandler(),
-  getPUTUsersIdMockHandler()]
+  getPUTUsersIdMockHandler()
+]

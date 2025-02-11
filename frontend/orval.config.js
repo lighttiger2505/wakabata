@@ -5,6 +5,7 @@ module.exports = {
       mode: "single",
       target: "./src/clients/client.ts",
       schemas: "./src/clients/model",
+      client: "swr",
       mock: true,
     },
   },
