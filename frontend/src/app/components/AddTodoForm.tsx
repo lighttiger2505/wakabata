@@ -1,5 +1,6 @@
 "use client";
 
+import { usePOSTApiV1Tasks } from "@/api/generated/client";
 import { useState } from "react";
 
 export default function AddTodoForm() {
@@ -7,6 +8,8 @@ export default function AddTodoForm() {
   const [tags, setTags] = useState("");
   const [deadline, setDeadline] = useState("");
   const [project, setProject] = useState("");
+
+  const { trigger, error, isMutating } = usePOSTApiV1Tasks();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,12 +20,17 @@ export default function AddTodoForm() {
       deadline: deadline || undefined,
       project: project || undefined,
     });
+    trigger({ name: title });
     // Reset form
     setTitle("");
     setTags("");
     setDeadline("");
     setProject("");
   };
+
+  if (error) {
+    console.error(error);
+  }
 
   return (
     <form onSubmit={handleSubmit} className="mb-8 rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
@@ -80,6 +88,7 @@ export default function AddTodoForm() {
       </div>
       <button
         type="submit"
+        disabled={isMutating}
         className="w-full rounded-md bg-wakaba-green px-4 py-2 text-gray-900 hover:bg-wakaba-green-dark focus:outline-none focus:ring-2 focus:ring-wakaba-green focus:ring-offset-2 focus:ring-offset-gray-800"
       >
         Plant New Task 🌱

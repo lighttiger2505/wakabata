@@ -113,10 +113,12 @@ func getAllPets(ctx fuego.ContextNoBody) (*MyResponse, error) {
  * User schema
  */
 export interface User {
-  created_at?: string;
+  /** @nullable */
+  created_at?: string | null;
   email?: string;
   id?: string;
   password_hash?: string;
-  updated_at?: string;
+  /** @nullable */
+  updated_at?: string | null;
   username?: string;
 }

@@ -113,13 +113,20 @@ func getAllPets(ctx fuego.ContextNoBody) (*MyResponse, error) {
  * Task schema
  */
 export interface Task {
-  created_at?: string;
-  description?: string;
-  due_date?: string;
+  /** @nullable */
+  created_at?: string | null;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  due_date?: string | null;
   id?: string;
   name?: string;
-  priority?: number;
-  project_id?: string;
-  status?: string;
-  updated_at?: string;
+  /** @nullable */
+  priority?: number | null;
+  /** @nullable */
+  project_id?: string | null;
+  /** @nullable */
+  status?: boolean | null;
+  /** @nullable */
+  updated_at?: string | null;
 }

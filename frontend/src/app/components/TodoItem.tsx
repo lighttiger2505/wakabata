@@ -1,5 +1,5 @@
-import { Pencil } from "lucide-react";
 import type { Task } from "@/api/generated/model";
+import { Pencil } from "lucide-react";
 
 interface TodoItemProps {
   todo: Task;
