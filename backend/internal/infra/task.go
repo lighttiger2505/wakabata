@@ -39,7 +39,8 @@ func (i *TaskInfra) Update(ctx context.Context, task *model.Task) (*model.Task, 
 }
 
 func (i *TaskInfra) Search(ctx context.Context) ([]*model.Task, error) {
-	db := query.Task.WithContext(ctx)
+	u := query.Task
+	db := query.Task.WithContext(ctx).Order(u.CreatedAt.Desc())
 	return db.Find()
 }
 
