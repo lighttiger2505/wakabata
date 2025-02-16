@@ -45,6 +45,7 @@ func main() {
 		}).Handler),
 		fuego.WithBasePath("/api/v1"),
 	)
+	server.OpenAPI.Description().Info.Description = "wakabata API"
 
 	userInfra := infra.NewUserInfra()
 	userService := service.NewUserService(userInfra)
