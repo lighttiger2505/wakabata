@@ -1,26 +1,25 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SelectProps } from "@radix-ui/react-select";
 
 export type SelectItemValue = {
-  value: string;
+  value: number;
   label: string;
 };
 
-type Props = {
-  value: string;
-  setValue: (v: string) => void;
+type Props = SelectProps & {
   items: SelectItemValue[];
   placeholder?: string;
 };
 
-const SelectBox: React.FC<Props> = ({ value, setValue, items, placeholder }) => {
+const SelectBox: React.FC<Props> = ({ value, onValueChange, items, placeholder }) => {
   return (
-    <Select value={value} onValueChange={setValue}>
+    <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className="w-[280px]">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {items.map((item) => (
-          <SelectItem key={item.value} value={item.value}>
+          <SelectItem key={item.value} value={String(item.value)}>
             {item.label}
           </SelectItem>
         ))}

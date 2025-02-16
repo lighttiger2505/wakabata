@@ -17,26 +17,25 @@ import { z } from "zod";
 export default function AddTodoForm() {
   const [tags, setTags] = useState("");
   const [dueDate, setDueDate] = useState<Date>();
-  const [project, setProject] = useState("");
   const projects = [
     {
-      value: "p1",
+      value: 1,
       label: "Project Alpha",
     },
     {
-      value: "p2",
+      value: 2,
       label: "Project Beta",
     },
     {
-      value: "p3",
+      value: 3,
       label: "Project Gamma",
     },
     {
-      value: "p4",
+      value: 4,
       label: "Project Delta",
     },
     {
-      value: "p5",
+      value: 5,
       label: "Project Epsilon",
     },
   ] as SelectItemValue[];
@@ -70,6 +69,7 @@ export default function AddTodoForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mb-8 rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg"
       >
+        {/* Input title */}
         <FormField
           control={form.control}
           name="name"
@@ -89,6 +89,8 @@ export default function AddTodoForm() {
             </FormItem>
           )}
         />
+
+        {/* Input tag */}
         <div className="mb-4">
           <Label
             htmlFor="tags"
@@ -105,6 +107,8 @@ export default function AddTodoForm() {
             placeholder="e.g., urgent, project, learning"
           />
         </div>
+
+        {/* Input dueDate */}
         <div className="mb-4">
           <Label
             htmlFor="dueDate"
@@ -114,12 +118,27 @@ export default function AddTodoForm() {
           </Label>
           <DatePicker date={dueDate} setDate={handleDueDate} />
         </div>
-        <div className="mb-4">
-          <label htmlFor="project" className="mb-2 block font-medium text-gray-300 text-sm">
-            Project
-          </label>
-          <SelectBox value={project} setValue={setProject} items={projects} placeholder={"Select your project."} />
-        </div>
+
+        {/* Input project */}
+        <FormField
+          control={form.control}
+          name="project_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="project">Project</FormLabel>
+              <FormControl>
+                <SelectBox
+                  value={field.value || ""}
+                  onValueChange={field.onChange}
+                  items={projects}
+                  placeholder="Select your project."
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        {/* Submit button */}
         <button
           type="submit"
           disabled={isMutating}
