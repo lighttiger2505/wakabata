@@ -29,6 +29,18 @@ export default defineConfig({
       mode: "tags-split",
       target: `${outputDir}/zod`,
       fileExtension: ".zod.ts",
+      override: {
+        zod: {
+          generate: {
+            param: true,
+            query: true,
+            header: false,
+            body: true,
+            response: false,
+          },
+          generateEachHttpStatus: false,
+        },
+      },
     },
   },
 });

@@ -115,34 +115,6 @@ import {
 /**
  * #### Controller: 
 
-`github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).SearchUsers`
-
-#### Middlewares:
-
-- `github.com/go-fuego/fuego.defaultLogger.middleware`
-
----
-
-
- * @summary search users
- */
-export const gETApiV1UsersHeader = zod.object({
-  "Accept": zod.string().optional()
-})
-
-export const gETApiV1UsersResponseItem = zod.object({
-  "created_at": zod.string().datetime().nullish(),
-  "email": zod.string().optional(),
-  "id": zod.string().optional(),
-  "password_hash": zod.string().optional(),
-  "updated_at": zod.string().datetime().nullish(),
-  "username": zod.string().optional()
-})
-export const gETApiV1UsersResponse = zod.array(gETApiV1UsersResponseItem)
-
-/**
- * #### Controller: 
-
 `github.com/lighttiger2505/wakabata/internal/app.(*UserHandler).CreateUser`
 
 #### Middlewares:
@@ -154,8 +126,10 @@ export const gETApiV1UsersResponse = zod.array(gETApiV1UsersResponseItem)
 
  * @summary create user
  */
-export const pOSTApiV1UsersHeader = zod.object({
-  "Accept": zod.string().optional()
+export const pOSTApiV1UsersBody = zod.object({
+  "email": zod.string(),
+  "name": zod.string(),
+  "password_hash": zod.string()
 })
 
 /**
@@ -176,19 +150,6 @@ export const gETApiV1UsersIdParams = zod.object({
   "id": zod.string()
 })
 
-export const gETApiV1UsersIdHeader = zod.object({
-  "Accept": zod.string().optional()
-})
-
-export const gETApiV1UsersIdResponse = zod.object({
-  "created_at": zod.string().datetime().nullish(),
-  "email": zod.string().optional(),
-  "id": zod.string().optional(),
-  "password_hash": zod.string().optional(),
-  "updated_at": zod.string().datetime().nullish(),
-  "username": zod.string().optional()
-})
-
 /**
  * #### Controller: 
 
@@ -207,11 +168,7 @@ export const pUTApiV1UsersIdParams = zod.object({
   "id": zod.string()
 })
 
-export const pUTApiV1UsersIdHeader = zod.object({
-  "Accept": zod.string().optional()
-})
-
-export const pUTApiV1UsersIdResponse = zod.object({
+export const pUTApiV1UsersIdBody = zod.object({
   "created_at": zod.string().datetime().nullish(),
   "email": zod.string().optional(),
   "id": zod.string().optional(),

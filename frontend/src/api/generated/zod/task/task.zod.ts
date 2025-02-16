@@ -115,37 +115,6 @@ import {
 /**
  * #### Controller: 
 
-`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).SearchTasks`
-
-#### Middlewares:
-
-- `github.com/go-fuego/fuego.defaultLogger.middleware`
-
----
-
-
- * @summary search tasks
- */
-export const gETApiV1TasksHeader = zod.object({
-  "Accept": zod.string().optional()
-})
-
-export const gETApiV1TasksResponseItem = zod.object({
-  "created_at": zod.string().datetime().nullish(),
-  "description": zod.string().nullish(),
-  "due_date": zod.string().datetime().nullish(),
-  "id": zod.string().optional(),
-  "name": zod.string().optional(),
-  "priority": zod.number().nullish(),
-  "project_id": zod.string().nullish(),
-  "status": zod.boolean().nullish(),
-  "updated_at": zod.string().datetime().nullish()
-})
-export const gETApiV1TasksResponse = zod.array(gETApiV1TasksResponseItem)
-
-/**
- * #### Controller: 
-
 `github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).CreateTask`
 
 #### Middlewares:
@@ -157,8 +126,12 @@ export const gETApiV1TasksResponse = zod.array(gETApiV1TasksResponseItem)
 
  * @summary create task
  */
-export const pOSTApiV1TasksHeader = zod.object({
-  "Accept": zod.string().optional()
+export const pOSTApiV1TasksBody = zod.object({
+  "description": zod.string().nullish(),
+  "due_date": zod.string().datetime().nullish(),
+  "name": zod.string(),
+  "priority": zod.number().nullish(),
+  "project_id": zod.string().nullish()
 })
 
 /**
@@ -179,22 +152,6 @@ export const gETApiV1TasksIdParams = zod.object({
   "id": zod.string()
 })
 
-export const gETApiV1TasksIdHeader = zod.object({
-  "Accept": zod.string().optional()
-})
-
-export const gETApiV1TasksIdResponse = zod.object({
-  "created_at": zod.string().datetime().nullish(),
-  "description": zod.string().nullish(),
-  "due_date": zod.string().datetime().nullish(),
-  "id": zod.string().optional(),
-  "name": zod.string().optional(),
-  "priority": zod.number().nullish(),
-  "project_id": zod.string().nullish(),
-  "status": zod.boolean().nullish(),
-  "updated_at": zod.string().datetime().nullish()
-})
-
 /**
  * #### Controller: 
 
@@ -213,19 +170,12 @@ export const pUTApiV1TasksIdParams = zod.object({
   "id": zod.string()
 })
 
-export const pUTApiV1TasksIdHeader = zod.object({
-  "Accept": zod.string().optional()
-})
-
-export const pUTApiV1TasksIdResponse = zod.object({
-  "created_at": zod.string().datetime().nullish(),
+export const pUTApiV1TasksIdBody = zod.object({
   "description": zod.string().nullish(),
   "due_date": zod.string().datetime().nullish(),
-  "id": zod.string().optional(),
-  "name": zod.string().optional(),
+  "name": zod.string(),
   "priority": zod.number().nullish(),
   "project_id": zod.string().nullish(),
-  "status": zod.boolean().nullish(),
-  "updated_at": zod.string().datetime().nullish()
+  "status": zod.boolean().nullish()
 })
 

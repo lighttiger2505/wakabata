@@ -212,7 +212,7 @@ export const pOSTApiV1Tasks = (
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<Task>(
     {url: `/api/v1/tasks`, method: 'POST',
-      headers: {'Content-Type': '*/*', },
+      headers: {'Content-Type': 'application/json', },
       data: taskToCreate
     },
     options);
@@ -320,7 +320,7 @@ export const pUTApiV1TasksId = (
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<Task>(
     {url: `/api/v1/tasks/${id}`, method: 'PUT',
-      headers: {'Content-Type': '*/*', },
+      headers: {'Content-Type': 'application/json', },
       data: taskToUpdate
     },
     options);
@@ -427,7 +427,7 @@ export const pOSTApiV1Users = (
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<User>(
     {url: `/api/v1/users`, method: 'POST',
-      headers: {'Content-Type': '*/*', },
+      headers: {'Content-Type': 'application/json', },
       data: userToCreate
     },
     options);
@@ -535,7 +535,7 @@ export const pUTApiV1UsersId = (
  options?: SecondParameter<typeof customInstance>) => {
     return customInstance<User>(
     {url: `/api/v1/users/${id}`, method: 'PUT',
-      headers: {'Content-Type': '*/*', },
+      headers: {'Content-Type': 'application/json', },
       data: user
     },
     options);
