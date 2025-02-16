@@ -1,3 +1,6 @@
+SERVER_MAIN_FILE="./cmd/server/main.go"
+SERVER_BIN_FILE="./bin/server"
+
 .PHONY: up
 up:
 	docker-compose up -d
@@ -31,11 +34,16 @@ flyway-repair:
 
 .PHONY: build
 build:
-	go build ./cmd/server/main.go
+	go build -o $(SERVER_BIN_FILE) $(SERVER_MAIN_FILE)
 
 .PHONY: server
 server:
-	go run ./cmd/server/main.go
+	go run $(SERVER_MAIN_FILE)
+
+.PHONY: watch
+watch:
+	air --build.cmd "go build -o $(SERVER_BIN_FILE) $(SERVER_MAIN_FILE)" --build.bin $(SERVER_BIN_FILE)
+
 
 .PHONY: gormgen
 gormgen:
@@ -44,11 +52,3 @@ gormgen:
 .PHONY: lint
 lint:
 	golangci-lint run
-
-.PHONY: buf-lint
-buf-lint:
-	buf lint ./wakabata
-
-.PHONY: buf-generate
-buf-generate:
-	buf generate ./wakabata
