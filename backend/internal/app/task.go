@@ -21,9 +21,9 @@ func NewTaskHandler(s *service.TaskService) *TaskHandler {
 func (h *TaskHandler) SetHandler(server *fuego.Server) {
 	tagName := "task"
 	fuego.Get(server, "/tasks", h.SearchTasks, option.Tags(tagName))
-	fuego.Post(server, "/tasks", h.CreateTask, option.Tags(tagName), option.DefaultStatusCode(201))
+	fuego.Post(server, "/tasks", h.CreateTask, option.Tags(tagName), option.DefaultStatusCode(201), fuego.OptionRequestContentType("application/json"))
 	fuego.Get(server, "/tasks/{id}", h.GetTask, option.Tags(tagName))
-	fuego.Put(server, "/tasks/{id}", h.UpdateTask, option.Tags(tagName))
+	fuego.Put(server, "/tasks/{id}", h.UpdateTask, option.Tags(tagName), fuego.OptionRequestContentType("application/json"))
 }
 
 type TaskToCreate struct {

@@ -307,7 +307,7 @@
 				],
 				"requestBody": {
 					"content": {
-						"*/*": {
+						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/TaskToCreate"
 							}
@@ -470,7 +470,7 @@
 				],
 				"requestBody": {
 					"content": {
-						"*/*": {
+						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/TaskToUpdate"
 							}
@@ -623,7 +623,7 @@
 				],
 				"requestBody": {
 					"content": {
-						"*/*": {
+						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UserToCreate"
 							}
@@ -786,7 +786,7 @@
 				],
 				"requestBody": {
 					"content": {
-						"*/*": {
+						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/User"
 							}

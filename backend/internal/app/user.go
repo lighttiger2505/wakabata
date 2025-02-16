@@ -21,9 +21,9 @@ func (h *UserHandler) SetHandler(server *fuego.Server) {
 
 	tagName := "user"
 	fuego.Get(server, "/users", h.SearchUsers, option.Tags(tagName))
-	fuego.Post(server, "/users", h.CreateUser, option.Tags(tagName), option.DefaultStatusCode(201))
+	fuego.Post(server, "/users", h.CreateUser, option.Tags(tagName), option.DefaultStatusCode(201), fuego.OptionRequestContentType("application/json"))
 	fuego.Get(server, "/users/{id}", h.GetUser, option.Tags(tagName))
-	fuego.Put(server, "/users/{id}", h.UpdateUser, option.Tags(tagName))
+	fuego.Put(server, "/users/{id}", h.UpdateUser, option.Tags(tagName), fuego.OptionRequestContentType("application/json"))
 }
 
 type UserToCreate struct {
