@@ -2,17 +2,20 @@
 
 import { usePOSTApiV1Tasks } from "@/api/generated/client";
 import { Input } from "@/components/ui/input";
-import DatePicker from "./DatePicker";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import SelectBox from "./SelectBox";
 import { SelectItemValue } from "./SelectBox";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { pOSTApiV1TasksBody } from "@/api/generated/zod/task/task.zod";
 import { z } from "zod";
-import { formatISO } from "date-fns";
+import { format, formatISO } from "date-fns";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const dateToRFC3339 = (date: Date | null) => {
   return date ? formatISO(date) : null;
@@ -57,6 +60,7 @@ export default function AddTodoForm() {
   function onSubmit(values: TaskSchema) {
     trigger({
       name: values.name,
+      description: values.description,
       due_date: dateToRFC3339(values.due_date),
     });
   }
@@ -79,7 +83,6 @@ export default function AddTodoForm() {
             <FormItem>
               <div className="mb-4">
                 <FormLabel
-                  htmlFor="title"
                 // className="mb-2 block font-medium text-gray-300 text-sm"
                 >
                   Title
@@ -92,23 +95,51 @@ export default function AddTodoForm() {
           )}
         />
 
+        {/* Input description */}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <div className="mb-4">
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || undefined} placeholder="" />
+                </FormControl>
+              </div>
+            </FormItem>
+          )}
+        />
+
         {/* Input dueDate */}
         <FormField
           control={form.control}
           name="due_date"
           render={({ field }) => (
-            <FormItem>
-              <div className="mb-4">
-                <FormLabel
-                  htmlFor="title"
-                // className="mb-2 block font-medium text-gray-300 text-sm"
-                >
-                  Title
-                </FormLabel>
-                <FormControl>
-                  <DatePicker value={field.value || undefined} onValueChange={field.onChange} />
-                </FormControl>
-              </div>
+            <FormItem className="flex flex-col">
+              <FormLabel>Date of birth</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                    >
+                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value || undefined}
+                    onSelect={field.onChange}
+                    disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </FormItem>
           )}
         />
@@ -119,7 +150,7 @@ export default function AddTodoForm() {
           name="project_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="project">Project</FormLabel>
+              <FormLabel>Project</FormLabel>
               <FormControl>
                 <SelectBox
                   value={field.value || ""}
