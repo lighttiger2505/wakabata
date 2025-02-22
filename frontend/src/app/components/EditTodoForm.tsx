@@ -28,7 +28,7 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
+    <form onSubmit={handleSubmit} className="rounded-lg border-green-400 border-l-4 bg-gray-800 p-4 shadow-lg">
       <div className="mb-4">
         <label htmlFor="title" className="mb-2 block font-medium text-gray-300 text-sm">
           Task
@@ -39,20 +39,13 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-600"
         />
       </div>
       <div className="mb-4">
         <label htmlFor="tags" className="mb-2 block font-medium text-gray-300 text-sm">
           Tags (comma-separated)
         </label>
-        {/* <input */}
-        {/*   type="text" */}
-        {/*   id="tags" */}
-        {/*   value={tags} */}
-        {/*   onChange={(e) => setTags(e.target.value)} */}
-        {/*   className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green" */}
-        {/* /> */}
       </div>
       <div className="mb-4">
         <label htmlFor="deadline" className="mb-2 block font-medium text-gray-300 text-sm">
@@ -63,7 +56,7 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
           id="deadline"
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
-          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-600"
         />
       </div>
       <div className="mb-4">
@@ -75,7 +68,7 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
           id="project"
           value={project}
           onChange={(e) => setProject(e.target.value)}
-          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-600"
         />
       </div>
       <div className="flex justify-end space-x-2">
@@ -88,7 +81,7 @@ export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormPro
         </button>
         <button
           type="submit"
-          className="rounded-md bg-wakaba-green px-4 py-2 text-gray-900 hover:bg-wakaba-green-dark focus:outline-none focus:ring-2 focus:ring-wakaba-green"
+          className="rounded-md bg-green-400 px-4 py-2 text-gray-900 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600"
         >
           Save Changes
         </button>

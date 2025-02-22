@@ -12,7 +12,7 @@ interface TodoItemProps {
 export default function TodoItem({ todo, onEdit, listMutate }: TodoItemProps) {
   const { trigger, isMutating } = usePUTApiV1TasksId(todo.id || "");
 
-  const toggleTodo = async() => {
+  const toggleTodo = async () => {
     const body = {
       description: todo.description,
       due_date: todo.due_date,
@@ -27,7 +27,7 @@ export default function TodoItem({ todo, onEdit, listMutate }: TodoItemProps) {
 
   const completed = todo.status || false;
   return (
-    <div className="rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg">
+    <div className="rounded-lg border-green-400 border-l-4 bg-gray-800 p-4 shadow-lg">
       <div className="flex items-center justify-between">
         <div className="flex flex-grow items-center">
           <input
@@ -35,14 +35,14 @@ export default function TodoItem({ todo, onEdit, listMutate }: TodoItemProps) {
             checked={completed}
             disabled={isMutating}
             onChange={() => toggleTodo()}
-            className="mr-4 h-5 w-5 rounded border-gray-300 text-wakaba-green focus:ring-wakaba-green"
+            className="mr-4 h-5 w-5 rounded border-gray-300 text-green-400 focus:ring-green-600"
           />
           <span className={`flex-grow ${completed ? "text-gray-500 line-through" : "text-gray-100"}`}>{todo.name}</span>
         </div>
         <button
           type="button"
           onClick={() => onEdit(todo.id || "")}
-          className="ml-2 p-1 text-gray-400 hover:text-wakaba-green focus:outline-none"
+          className="ml-2 p-1 text-gray-400 hover:text-green-400 focus:outline-none"
         >
           <Pencil size={16} />
         </button>

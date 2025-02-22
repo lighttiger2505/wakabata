@@ -73,7 +73,7 @@ export default function AddTodoForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mb-8 rounded-lg border-wakaba-green border-l-4 bg-gray-800 p-4 shadow-lg"
+        className="mb-8 rounded-lg border-green-400 border-l-4 bg-gray-800 p-4 shadow-lg"
       >
         {/* Input title */}
         <FormField
@@ -167,7 +167,7 @@ export default function AddTodoForm() {
         <Button
           type="submit"
           disabled={isMutating}
-          className="w-full rounded-md bg-wakaba-green px-4 py-2 text-gray-900 hover:bg-wakaba-green-dark focus:outline-none focus:ring-2 focus:ring-wakaba-green focus:ring-offset-2 focus:ring-offset-gray-800"
+          className="w-full rounded-md bg-green-400 px-4 py-2 text-gray-900 hover:bg-bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-gray-800"
         >
           Plant New Task 🌱
         </Button>
