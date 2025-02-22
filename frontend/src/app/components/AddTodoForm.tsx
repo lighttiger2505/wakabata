@@ -2,8 +2,6 @@
 
 import { usePOSTApiV1Tasks } from "@/api/generated/client";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import DatePicker from "./DatePicker";
 import SelectBox from "./SelectBox";
 import { SelectItemValue } from "./SelectBox";
@@ -21,7 +19,6 @@ const dateToRFC3339 = (date: Date | null) => {
 };
 
 export default function AddTodoForm() {
-  const [tags, setTags] = useState("");
   const projects = [
     {
       value: 1,
@@ -83,7 +80,7 @@ export default function AddTodoForm() {
               <div className="mb-4">
                 <FormLabel
                   htmlFor="title"
-                  // className="mb-2 block font-medium text-gray-300 text-sm"
+                // className="mb-2 block font-medium text-gray-300 text-sm"
                 >
                   Title
                 </FormLabel>
@@ -95,24 +92,6 @@ export default function AddTodoForm() {
           )}
         />
 
-        {/* Input tag */}
-        <div className="mb-4">
-          <Label
-            htmlFor="tags"
-            // className="mb-2 block font-medium text-gray-300 text-sm"
-          >
-            Tags (comma-separated)
-          </Label>
-          <Input
-            type="text"
-            id="tags"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            // className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-wakaba-green"
-            placeholder="e.g., urgent, project, learning"
-          />
-        </div>
-
         {/* Input dueDate */}
         <FormField
           control={form.control}
@@ -122,7 +101,7 @@ export default function AddTodoForm() {
               <div className="mb-4">
                 <FormLabel
                   htmlFor="title"
-                  // className="mb-2 block font-medium text-gray-300 text-sm"
+                // className="mb-2 block font-medium text-gray-300 text-sm"
                 >
                   Title
                 </FormLabel>
