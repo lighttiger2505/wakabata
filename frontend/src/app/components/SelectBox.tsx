@@ -14,7 +14,7 @@ type Props = SelectProps & {
 const SelectBox: React.FC<Props> = ({ value, onValueChange, items, placeholder }) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="w-[280px]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

@@ -81,7 +81,7 @@ export default function AddTodoForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <div className="mb-4">
+              <div className="mb=4">
                 <FormLabel
                 // className="mb-2 block font-medium text-gray-300 text-sm"
                 >
@@ -101,7 +101,7 @@ export default function AddTodoForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <div className="mb-4">
+              <div className="mb=4">
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Input {...field} value={field.value || undefined} placeholder="" />
@@ -117,29 +117,31 @@ export default function AddTodoForm() {
           name="due_date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
-                    >
-                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value || undefined}
-                    onSelect={field.onChange}
-                    disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <div className="mb=4">
+                <FormLabel>Date of birth</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                      >
+                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value || undefined}
+                      onSelect={field.onChange}
+                      disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
             </FormItem>
           )}
         />
@@ -150,15 +152,17 @@ export default function AddTodoForm() {
           name="project_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Project</FormLabel>
-              <FormControl>
-                <SelectBox
-                  value={field.value || ""}
-                  onValueChange={field.onChange}
-                  items={projects}
-                  placeholder="Select your project."
-                />
-              </FormControl>
+              <div className="mb=4">
+                <FormLabel>Project</FormLabel>
+                <FormControl>
+                  <SelectBox
+                    value={field.value || ""}
+                    onValueChange={field.onChange}
+                    items={projects}
+                    placeholder="Select your project."
+                  />
+                </FormControl>
+              </div>
             </FormItem>
           )}
         />
@@ -169,7 +173,7 @@ export default function AddTodoForm() {
           disabled={isMutating}
           className="w-full rounded-md bg-green-400 px-4 py-2 text-gray-900 hover:bg-bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-gray-800"
         >
-          Plant New Task 🌱
+          Create New Task 🌱
         </Button>
       </form>
     </Form>
