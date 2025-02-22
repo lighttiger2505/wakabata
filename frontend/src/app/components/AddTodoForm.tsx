@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { pOSTApiV1TasksBody } from "@/api/generated/zod/task/task.zod";
 import { z } from "zod";
 import { formatISO } from "date-fns";
+import { Button } from "@/components/ui/button";
 
 const dateToRFC3339 = (date: Date | null) => {
   return date ? formatISO(date) : null;
@@ -153,13 +154,13 @@ export default function AddTodoForm() {
         />
 
         {/* Submit button */}
-        <button
+        <Button
           type="submit"
           disabled={isMutating}
           className="w-full rounded-md bg-wakaba-green px-4 py-2 text-gray-900 hover:bg-wakaba-green-dark focus:outline-none focus:ring-2 focus:ring-wakaba-green focus:ring-offset-2 focus:ring-offset-gray-800"
         >
           Plant New Task 🌱
-        </button>
+        </Button>
       </form>
     </Form>
   );
