@@ -13,10 +13,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { pOSTApiV1TasksBody } from "@/api/generated/zod/task/task.zod";
 import { z } from "zod";
+import { formatISO } from "date-fns";
+
+const dateToRFC3339 = (date: Date | null) => {
+  return date ? formatISO(date) : null;
+};
 
 export default function AddTodoForm() {
   const [tags, setTags] = useState("");
-  const [dueDate, setDueDate] = useState<Date>();
   const projects = [
     {
       value: 1,
@@ -40,13 +44,13 @@ export default function AddTodoForm() {
     },
   ] as SelectItemValue[];
 
-  const handleDueDate = (d: Date | undefined) => setDueDate(d);
-
   const { trigger, error, isMutating } = usePOSTApiV1Tasks();
 
-  type TaskSchema = z.infer<typeof pOSTApiV1TasksBody>;
+  const model = pOSTApiV1TasksBody.omit({ due_date: true }).extend({ due_date: z.date().nullable() });
+  type TaskSchema = z.infer<typeof model>;
+
   const form = useForm<TaskSchema>({
-    resolver: zodResolver(pOSTApiV1TasksBody),
+    resolver: zodResolver(model),
     defaultValues: {
       name: "",
     },
@@ -55,7 +59,7 @@ export default function AddTodoForm() {
   function onSubmit(values: TaskSchema) {
     trigger({
       name: values.name,
-      due_date: values.due_date,
+      due_date: dateToRFC3339(values.due_date),
     });
   }
 
@@ -109,15 +113,25 @@ export default function AddTodoForm() {
         </div>
 
         {/* Input dueDate */}
-        <div className="mb-4">
-          <Label
-            htmlFor="dueDate"
-            // className="mb-2 block font-medium text-gray-300 text-sm"
-          >
-            Duedate
-          </Label>
-          <DatePicker date={dueDate} setDate={handleDueDate} />
-        </div>
+        <FormField
+          control={form.control}
+          name="due_date"
+          render={({ field }) => (
+            <FormItem>
+              <div className="mb-4">
+                <FormLabel
+                  htmlFor="title"
+                  // className="mb-2 block font-medium text-gray-300 text-sm"
+                >
+                  Title
+                </FormLabel>
+                <FormControl>
+                  <DatePicker value={field.value || undefined} onValueChange={field.onChange} />
+                </FormControl>
+              </div>
+            </FormItem>
+          )}
+        />
 
         {/* Input project */}
         <FormField

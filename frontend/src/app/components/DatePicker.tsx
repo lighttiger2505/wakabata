@@ -7,26 +7,27 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { SelectSingleEventHandler } from "react-day-picker";
 
 type Props = {
-  date: Date | undefined;
-  setDate: (date: Date) => void;
+  value: Date | undefined;
+  onValueChange: SelectSingleEventHandler | undefined;
 };
 
-const DatePicker: React.FC<Props> = ({ date, setDate }) => {
+const DatePicker: React.FC<Props> = ({ value, onValueChange }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
-          className={cn("w-[240px] justify-start text-left font-normal", !date && "text-muted-foreground")}
+          className={cn("w-[240px] justify-start text-left font-normal", !value && "text-muted-foreground")}
         >
           <CalendarIcon />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {value ? format(value, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+        <Calendar mode="single" selected={value} onSelect={onValueChange} initialFocus />
       </PopoverContent>
     </Popover>
   );
