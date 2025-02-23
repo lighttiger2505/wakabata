@@ -29,17 +29,10 @@ func (s *TaskService) Create(ctx context.Context, user *model.Task) (*model.Task
 }
 
 func (s *TaskService) Update(ctx context.Context, task *model.Task) (*model.Task, error) {
-	existingTask, err := s.Get(ctx, task.ID)
-	if err != nil {
+	if _, err := s.Get(ctx, task.ID); err != nil {
 		return nil, err
 	}
 
-	existingTask.ProjectID = task.ProjectID
-	existingTask.Name = task.Name
-	existingTask.Description = task.Description
-	existingTask.DueDate = task.DueDate
-	existingTask.Priority = task.Priority
-	existingTask.Status = task.Status
 	updatedTask, err := s.TaskInfra.Update(ctx, task)
 	if err != nil {
 		return nil, err
