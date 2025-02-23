@@ -34,6 +34,24 @@ export const pOSTApiV1TasksBody = zod.object({
 /**
  * #### Controller: 
 
+`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).DeleteTask`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary delete task
+ */
+export const dELETEApiV1TasksIdParams = zod.object({
+  "id": zod.string()
+})
+
+/**
+ * #### Controller: 
+
 `github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).GetTask`
 
 #### Middlewares:

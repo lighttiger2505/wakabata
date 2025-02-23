@@ -47,6 +47,17 @@ func (s *TaskService) Update(ctx context.Context, task *model.Task) (*model.Task
 	return updatedTask, nil
 }
 
+func (s *TaskService) Delete(ctx context.Context, id string) error {
+	existingTask, err := s.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	if err := s.TaskInfra.Delete(ctx, existingTask); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *TaskService) Search(ctx context.Context) ([]*model.Task, error) {
 	users, err := s.TaskInfra.Search(ctx)
 	if err != nil {

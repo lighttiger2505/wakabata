@@ -7,6 +7,7 @@
  */
 import useSwr from 'swr'
 import type {
+  Arguments,
   Key,
   SWRConfiguration
 } from 'swr'
@@ -30,6 +31,7 @@ import {
 } from 'msw'
 import type {
   Task,
+  UnknownInterface,
   User
 } from './model'
 import { customInstance } from '../../lib/custom-instance';
@@ -138,6 +140,61 @@ export const usePOSTApiV1Tasks = <TError = ErrorType<HTTPError | void>>(
 
   const swrKey = swrOptions?.swrKey ?? getPOSTApiV1TasksMutationKey();
   const swrFn = getPOSTApiV1TasksMutationFetcher(requestOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*TaskHandler).DeleteTask`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary delete task
+ */
+export const dELETEApiV1TasksId = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<UnknownInterface>(
+    {url: `/api/v1/tasks/${id}`, method: 'DELETE'
+    },
+    options);
+  }
+
+
+
+export const getDELETEApiV1TasksIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, __: { arg: Arguments }): Promise<UnknownInterface> => {
+    return dELETEApiV1TasksId(id, options);
+  }
+}
+export const getDELETEApiV1TasksIdMutationKey = (id: string,) => [`/api/v1/tasks/${id}`] as const;
+
+export type DELETEApiV1TasksIdMutationResult = NonNullable<Awaited<ReturnType<typeof dELETEApiV1TasksId>>>
+export type DELETEApiV1TasksIdMutationError = ErrorType<HTTPError | void>
+
+/**
+ * @summary delete task
+ */
+export const useDELETEApiV1TasksId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof dELETEApiV1TasksId>>, TError, Key, Arguments, Awaited<ReturnType<typeof dELETEApiV1TasksId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+) => {
+
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getDELETEApiV1TasksIdMutationKey(id);
+  const swrFn = getDELETEApiV1TasksIdMutationFetcher(id, requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
 
@@ -476,6 +533,8 @@ export const getGETApiV1TasksResponseMock = (): Task[] => (Array.from({ length: 
 
 export const getPOSTApiV1TasksResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
 
+export const getDELETEApiV1TasksIdResponseMock = (): UnknownInterface => ({})
+
 export const getGETApiV1TasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
 
 export const getPUTApiV1TasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
@@ -508,6 +567,18 @@ export const getPOSTApiV1TasksMockHandler = (overrideResponse?: Task | ((info: P
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
             : getPOSTApiV1TasksResponseMock()),
       { status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getDELETEApiV1TasksIdMockHandler = (overrideResponse?: UnknownInterface | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<UnknownInterface> | UnknownInterface)) => {
+  return http.delete('*/api/v1/tasks/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getDELETEApiV1TasksIdResponseMock()),
+      { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   })
@@ -587,6 +658,7 @@ export const getPUTApiV1UsersIdMockHandler = (overrideResponse?: User | ((info: 
 export const getOpenAPIMock = () => [
   getGETApiV1TasksMockHandler(),
   getPOSTApiV1TasksMockHandler(),
+  getDELETEApiV1TasksIdMockHandler(),
   getGETApiV1TasksIdMockHandler(),
   getPUTApiV1TasksIdMockHandler(),
   getGETApiV1UsersMockHandler(),

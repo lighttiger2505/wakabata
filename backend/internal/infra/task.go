@@ -38,6 +38,14 @@ func (i *TaskInfra) Update(ctx context.Context, task *model.Task) (*model.Task, 
 	return task, nil
 }
 
+func (i *TaskInfra) Delete(ctx context.Context, task *model.Task) error {
+	db := query.Task.WithContext(ctx)
+	if _, err := db.Delete(task); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (i *TaskInfra) Search(ctx context.Context) ([]*model.Task, error) {
 	u := query.Task
 	db := query.Task.WithContext(ctx).Order(u.CreatedAt.Desc())

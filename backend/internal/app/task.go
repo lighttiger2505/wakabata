@@ -24,6 +24,7 @@ func (h *TaskHandler) SetHandler(server *fuego.Server) {
 	fuego.Post(server, "/tasks", h.CreateTask, option.Tags(tagName), option.DefaultStatusCode(201), fuego.OptionRequestContentType("application/json"))
 	fuego.Get(server, "/tasks/{id}", h.GetTask, option.Tags(tagName))
 	fuego.Put(server, "/tasks/{id}", h.UpdateTask, option.Tags(tagName), fuego.OptionRequestContentType("application/json"))
+	fuego.Delete(server, "/tasks/{id}", h.DeleteTask, option.Tags(tagName), fuego.OptionRequestContentType("application/json"))
 }
 
 type TaskToCreate struct {
@@ -80,6 +81,19 @@ func (h *TaskHandler) UpdateTask(c fuego.ContextWithBody[*TaskToUpdate]) (*model
 	}
 
 	return h.Service.Update(ctx, task)
+}
+
+func (h *TaskHandler) DeleteTask(c fuego.ContextNoBody) (interface{}, error) {
+	ctx := c.Context()
+
+	uUID, err := h.parseUUID(c.PathParam("id"))
+	if err != nil {
+		return nil, err
+	}
+	if err := h.Service.Delete(ctx, uUID.String()); err != nil {
+		return nil, err
+	}
+	return nil, nil
 }
 
 func (h *TaskHandler) SearchTasks(c fuego.ContextNoBody) ([]*model.Task, error) {
