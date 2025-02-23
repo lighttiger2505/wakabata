@@ -57,5 +57,10 @@ func main() {
 	taskHandler := app.NewTaskHandler(taskService)
 	taskHandler.SetHandler(server)
 
+	projectInfra := infra.NewProjectInfra()
+	projectService := service.NewProjectService(projectInfra)
+	projectHandler := app.NewProjectHandler(projectService)
+	projectHandler.SetHandler(server)
+
 	server.Run()
 }
