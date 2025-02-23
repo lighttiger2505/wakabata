@@ -1,7 +1,6 @@
 "use client";
 
 import { useGETApiV1Tasks } from "@/api/generated/client";
-import type { Task } from "@/api/generated/model";
 import { useState } from "react";
 import EditTodoForm from "./EditTodoForm";
 import TodoItem from "./TodoItem";
@@ -17,8 +16,7 @@ export default function TodoList() {
     setEditingTodoId(id);
   };
 
-  const saveTodo = (_updatedTodo: Task) => {
-    // setTodos(todos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)));
+  const saveTodo = () => {
     setEditingTodoId(null);
   };
 
@@ -31,7 +29,7 @@ export default function TodoList() {
       {data.map((todo) => (
         <li key={todo.id}>
           {editingTodoId === todo.id ? (
-            <EditTodoForm todo={todo} onSave={saveTodo} onCancel={cancelEdit} />
+            <EditTodoForm todo={todo} onSaveAction={saveTodo} onCancelAction={cancelEdit} />
           ) : (
             <TodoItem todo={todo} onEdit={editTodo} listMutate={mutate} />
           )}

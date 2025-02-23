@@ -17,34 +17,34 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const dateToRFC3339 = (date: Date | null) => {
+export const dateToRFC3339 = (date: Date | null) => {
   return date ? formatISO(date) : null;
 };
 
-export default function AddTodoForm() {
-  const projects = [
-    {
-      value: 1,
-      label: "Project Alpha",
-    },
-    {
-      value: 2,
-      label: "Project Beta",
-    },
-    {
-      value: 3,
-      label: "Project Gamma",
-    },
-    {
-      value: 4,
-      label: "Project Delta",
-    },
-    {
-      value: 5,
-      label: "Project Epsilon",
-    },
-  ] as SelectItemValue[];
+export const projectItems = [
+  {
+    value: 1,
+    label: "Project Alpha",
+  },
+  {
+    value: 2,
+    label: "Project Beta",
+  },
+  {
+    value: 3,
+    label: "Project Gamma",
+  },
+  {
+    value: 4,
+    label: "Project Delta",
+  },
+  {
+    value: 5,
+    label: "Project Epsilon",
+  },
+] as SelectItemValue[];
 
+export default function AddTodoForm() {
   const { trigger, error, isMutating } = usePOSTApiV1Tasks();
 
   const model = pOSTApiV1TasksBody.omit({ due_date: true }).extend({ due_date: z.date().nullable() });
@@ -57,13 +57,13 @@ export default function AddTodoForm() {
     },
   });
 
-  function onSubmit(values: TaskSchema) {
+  const onSubmit = (values: TaskSchema) => {
     trigger({
       name: values.name,
       description: values.description,
       due_date: dateToRFC3339(values.due_date),
     });
-  }
+  };
 
   if (error) {
     console.error(error);
@@ -158,7 +158,7 @@ export default function AddTodoForm() {
                   <SelectBox
                     value={field.value || ""}
                     onValueChange={field.onChange}
-                    items={projects}
+                    items={projectItems}
                     placeholder="Select your project."
                   />
                 </FormControl>

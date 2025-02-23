@@ -1,91 +1,167 @@
 "use client";
 
-// import type { Todo } from "./TodoList";
-import type { Task } from "@/api/generated/model";
-import { useState } from "react";
+import { pUTApiV1TasksIdBody } from "@/api/generated/zod/task/task.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { usePUTApiV1TasksId } from "@/api/generated/client";
+import { Task } from "@/api/generated/model";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import SelectBox from "./SelectBox";
+import { dateToRFC3339, projectItems } from "./AddTodoForm";
 
-interface EditTodoFormProps {
+type EditTodoFormProps = {
   todo: Task;
-  onSave: (updatedTodo: Task) => void;
-  onCancel: () => void;
-}
+  onSaveAction: () => void;
+  onCancelAction: () => void;
+};
 
-export default function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormProps) {
-  const [title, setTitle] = useState(todo.name);
-  // const [tags, setTags] = useState(todo.tags.join(", "));
-  const [deadline, setDeadline] = useState(todo.due_date || "");
-  const [project, setProject] = useState(todo.project_id || "");
+export default function EditTodoForm({ todo, onSaveAction, onCancelAction }: EditTodoFormProps) {
+  const { trigger, error, isMutating } = usePUTApiV1TasksId(todo.id || "");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave({
-      ...todo,
-      // title,
-      // tags: tags.split(",").map((tag) => tag.trim()),
-      due_date: deadline || undefined,
-      project_id: project || undefined,
+  const model = pUTApiV1TasksIdBody.omit({ due_date: true }).extend({ due_date: z.date().nullable() });
+  type TaskSchema = z.infer<typeof model>;
+
+  const form = useForm<TaskSchema>({
+    resolver: zodResolver(model),
+    defaultValues: {
+      name: todo.name,
+      description: todo.description,
+      due_date: todo.due_date ? new Date(todo.due_date) : undefined,
+    },
+  });
+
+  const onSubmit = (values: TaskSchema) => {
+    onSaveAction();
+    trigger({
+      name: values.name,
+      description: values.description,
+      due_date: dateToRFC3339(values.due_date),
     });
   };
 
+  if (error) {
+    console.error(error);
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg border-green-400 border-l-4 bg-gray-800 p-4 shadow-lg">
-      <div className="mb-4">
-        <label htmlFor="title" className="mb-2 block font-medium text-gray-300 text-sm">
-          Task
-        </label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-600"
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="rounded-lg border-green-400 border-l-4 bg-gray-800 p-4 shadow-lg">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <div className="mb=4">
+                <FormLabel
+                // className="mb-2 block font-medium text-gray-300 text-sm"
+                >
+                  Title
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Draw the legendary sword from the pedestal." />
+                </FormControl>
+              </div>
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="tags" className="mb-2 block font-medium text-gray-300 text-sm">
-          Tags (comma-separated)
-        </label>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="deadline" className="mb-2 block font-medium text-gray-300 text-sm">
-          Deadline
-        </label>
-        <input
-          type="date"
-          id="deadline"
-          value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
-          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-600"
+
+        {/* Input description */}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <div className="mb=4">
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value || undefined} placeholder="" />
+                </FormControl>
+              </div>
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="project" className="mb-2 block font-medium text-gray-300 text-sm">
-          Project
-        </label>
-        <input
-          type="text"
-          id="project"
-          value={project}
-          onChange={(e) => setProject(e.target.value)}
-          className="w-full rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-600"
+
+        {/* Input dueDate */}
+        <FormField
+          control={form.control}
+          name="due_date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <div className="mb=4">
+                <FormLabel>Date of birth</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                      >
+                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value || undefined}
+                      onSelect={field.onChange}
+                      disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="flex justify-end space-x-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-md bg-gray-600 px-4 py-2 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="rounded-md bg-green-400 px-4 py-2 text-gray-900 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600"
-        >
-          Save Changes
-        </button>
-      </div>
-    </form>
+
+        {/* Input project */}
+        <FormField
+          control={form.control}
+          name="project_id"
+          render={({ field }) => (
+            <FormItem>
+              <div className="mb=4">
+                <FormLabel>Project</FormLabel>
+                <FormControl>
+                  <SelectBox
+                    value={field.value || ""}
+                    onValueChange={field.onChange}
+                    items={projectItems}
+                    placeholder="Select your project."
+                  />
+                </FormControl>
+              </div>
+            </FormItem>
+          )}
+        />
+
+        <div className="flex justify-end space-x-2">
+          <Button
+            type="button"
+            onClick={onCancelAction}
+            className="rounded-md bg-gray-600 px-4 py-2 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={isMutating}
+            className="rounded-md bg-green-400 px-4 py-2 text-gray-900 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600"
+          >
+            Save Changes
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
