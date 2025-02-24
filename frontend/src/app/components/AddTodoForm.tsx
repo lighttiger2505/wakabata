@@ -4,7 +4,7 @@ import { usePOSTApiV1Tasks } from "@/api/generated/client";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import SelectBox, { SelectItemValue } from "@/components/SelectBox";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,7 +16,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const dateToRFC3339 = (date: Date | null) => {
+export const dateToRFC3339 = (date: Date | null | undefined) => {
   return date ? formatISO(date) : null;
 };
 
@@ -46,7 +46,7 @@ export const projectItems = [
 export default function AddTodoForm() {
   const { trigger, error, isMutating } = usePOSTApiV1Tasks();
 
-  const model = pOSTApiV1TasksBody.omit({ due_date: true }).extend({ due_date: z.date().nullable() });
+  const model = pOSTApiV1TasksBody.omit({ due_date: true }).extend({ due_date: z.date().nullish() });
   type TaskSchema = z.infer<typeof model>;
 
   const form = useForm<TaskSchema>({
@@ -57,6 +57,7 @@ export default function AddTodoForm() {
   });
 
   const onSubmit = (values: TaskSchema) => {
+    form.reset();
     trigger({
       name: values.name,
       description: values.description,
@@ -114,7 +115,7 @@ export default function AddTodoForm() {
         <FormField
           control={form.control}
           name="due_date"
-          render={({ field }) => (
+          render={({ field, fieldState: { error } }) => (
             <FormItem className="flex flex-col">
               <div className="mb=4">
                 <FormLabel>Date of birth</FormLabel>
@@ -139,6 +140,7 @@ export default function AddTodoForm() {
                       initialFocus
                     />
                   </PopoverContent>
+                  {error && <FormDescription>{error.message}</FormDescription>}
                 </Popover>
               </div>
             </FormItem>
