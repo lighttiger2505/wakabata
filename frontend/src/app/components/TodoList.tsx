@@ -13,16 +13,25 @@ export default function TodoList() {
   if (!data || isLoading) return <p>Loading</p>;
   if (!data.length) return <p>Nop</p>;
 
-  const onEdit = (id: string) => {
+  const onStartEdit = (id: string) => {
     setEditingTodoId(id);
+  };
+
+  const onEditMutate = async (updatedTask: Task | undefined) => {
+    if (updatedTask) {
+      const updatedData = data.map((task: Task) => (task.id === updatedTask.id ? { ...task, ...updatedTask } : task));
+      await mutate(updatedData, false);
+    }
+  };
+
+  const onDeleteMutate = async (id: string) => {
+    const updatedData = data.filter((item: Task) => item.id !== id);
+    await mutate(updatedData, false);
   };
 
   const onCloseEdit = async (updatedTask: Task | undefined) => {
     setEditingTodoId(null);
-    if (updatedTask) {
-      const updatedData = data.map((item: Task) => (item.id === updatedTask.id ? { ...item, ...updatedTask } : item));
-      await mutate(updatedData, false);
-    }
+    await onEditMutate(updatedTask);
   };
 
   return (
@@ -32,7 +41,7 @@ export default function TodoList() {
           {editingTodoId === todo.id ? (
             <EditTodoForm todo={todo} onCloseAction={onCloseEdit} />
           ) : (
-            <TodoItem todo={todo} onEdit={onEdit} listMutate={mutate} />
+            <TodoItem todo={todo} onStartEdit={onStartEdit} onDeleteAction={onDeleteMutate} />
           )}
         </li>
       ))}

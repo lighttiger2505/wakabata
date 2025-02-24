@@ -1,15 +1,14 @@
 import { useDELETEApiV1TasksId, usePUTApiV1TasksId } from "@/api/generated/client";
 import type { Task, TaskToUpdate } from "@/api/generated/model";
 import { Pencil, Trash2 } from "lucide-react";
-import type { KeyedMutator } from "swr";
 
 interface TodoItemProps {
   todo: Task;
-  onEdit: (id: string) => void;
-  listMutate: KeyedMutator<Task[]>;
+  onStartEdit: (id: string) => void;
+  onDeleteAction: (id: string) => void;
 }
 
-export default function TodoItem({ todo, onEdit, listMutate }: TodoItemProps) {
+export default function TodoItem({ todo, onStartEdit, onDeleteAction }: TodoItemProps) {
   const { trigger: editTrigger } = usePUTApiV1TasksId(todo.id || "");
   const { trigger: deleteTrigger } = useDELETEApiV1TasksId(todo.id || "");
 
@@ -23,7 +22,6 @@ export default function TodoItem({ todo, onEdit, listMutate }: TodoItemProps) {
       status: !todo.status,
     } satisfies TaskToUpdate;
     await editTrigger(body);
-    await listMutate();
   };
 
   const completed = todo.status || false;
@@ -41,7 +39,7 @@ export default function TodoItem({ todo, onEdit, listMutate }: TodoItemProps) {
         </div>
         <button
           type="button"
-          onClick={() => onEdit(todo.id || "")}
+          onClick={() => onStartEdit(todo.id || "")}
           className="ml-2 p-1 text-gray-400 hover:text-green-400 focus:outline-none"
         >
           <Pencil size={16} />
@@ -50,7 +48,7 @@ export default function TodoItem({ todo, onEdit, listMutate }: TodoItemProps) {
           type="button"
           onClick={async () => {
             await deleteTrigger();
-            await listMutate();
+            onDeleteAction(todo.id || "");
           }}
           className="ml-2 p-1 text-red-400 hover:text-red-800 focus:outline-none"
         >
