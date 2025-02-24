@@ -19,11 +19,10 @@ import { dateToRFC3339, projectItems } from "./AddTodoForm";
 
 type EditTodoFormProps = {
   todo: Task;
-  onSaveAction: () => void;
-  onCancelAction: () => void;
+  onCloseAction: (updatedTask: Task | undefined) => void;
 };
 
-export default function EditTodoForm({ todo, onSaveAction, onCancelAction }: EditTodoFormProps) {
+export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps) {
   const { trigger, error, isMutating } = usePUTApiV1TasksId(todo.id || "");
 
   const model = pUTApiV1TasksIdBody.omit({ due_date: true }).extend({ due_date: z.date().nullable() });
@@ -38,13 +37,21 @@ export default function EditTodoForm({ todo, onSaveAction, onCancelAction }: Edi
     },
   });
 
-  const onSubmit = (values: TaskSchema) => {
-    onSaveAction();
-    trigger({
+  const onSubmit = async (values: TaskSchema) => {
+    // request to update the task
+    const editTask = {
       name: values.name,
       description: values.description,
       due_date: dateToRFC3339(values.due_date),
-    });
+    } satisfies Task;
+    await trigger(editTask);
+
+    // update the task in the list
+    const updatedTask = {
+      ...todo,
+      ...editTask,
+    } satisfies Task;
+    onCloseAction(updatedTask);
   };
 
   if (error) {
@@ -148,7 +155,8 @@ export default function EditTodoForm({ todo, onSaveAction, onCancelAction }: Edi
         <div className="flex justify-end space-x-2">
           <Button
             type="button"
-            onClick={onCancelAction}
+            onClick={() => onCloseAction(undefined)}
+            disabled={isMutating}
             className="rounded-md bg-gray-600 px-4 py-2 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
             Cancel

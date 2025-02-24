@@ -4,6 +4,7 @@ import { useGETApiV1Tasks } from "@/api/generated/client";
 import { useState } from "react";
 import EditTodoForm from "./EditTodoForm";
 import TodoItem from "./TodoItem";
+import { Task } from "@/api/generated/model";
 
 export default function TodoList() {
   const { data, isLoading, mutate } = useGETApiV1Tasks();
@@ -12,16 +13,16 @@ export default function TodoList() {
   if (!data || isLoading) return <p>Loading</p>;
   if (!data.length) return <p>Nop</p>;
 
-  const editTodo = (id: string) => {
+  const onEdit = (id: string) => {
     setEditingTodoId(id);
   };
 
-  const saveTodo = () => {
+  const onCloseEdit = async (updatedTask: Task | undefined) => {
     setEditingTodoId(null);
-  };
-
-  const cancelEdit = () => {
-    setEditingTodoId(null);
+    if (updatedTask) {
+      const updatedData = data.map((item: Task) => (item.id === updatedTask.id ? { ...item, ...updatedTask } : item));
+      await mutate(updatedData, false);
+    }
   };
 
   return (
@@ -29,9 +30,9 @@ export default function TodoList() {
       {data.map((todo) => (
         <li key={todo.id}>
           {editingTodoId === todo.id ? (
-            <EditTodoForm todo={todo} onSaveAction={saveTodo} onCancelAction={cancelEdit} />
+            <EditTodoForm todo={todo} onCloseAction={onCloseEdit} />
           ) : (
-            <TodoItem todo={todo} onEdit={editTodo} listMutate={mutate} />
+            <TodoItem todo={todo} onEdit={onEdit} listMutate={mutate} />
           )}
         </li>
       ))}
