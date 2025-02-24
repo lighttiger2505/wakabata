@@ -17,6 +17,8 @@ import type {
 } from 'swr/mutation'
 import type {
   HTTPError,
+  ProjectToCreate,
+  ProjectToUpdate,
   TaskToCreate,
   TaskToUpdate,
   UserToCreate
@@ -30,6 +32,7 @@ import {
   http
 } from 'msw'
 import type {
+  Project,
   Task,
   UnknownInterface,
   User
@@ -41,6 +44,276 @@ import type { ErrorType, BodyType } from '../../lib/custom-instance';
 
   
   type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*ProjectHandler).SearchProjects`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary search projects
+ */
+export const gETApiV1Projects = (
+    
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<Project[]>(
+    {url: `/api/v1/projects`, method: 'GET'
+    },
+    options);
+  }
+
+
+
+export const getGETApiV1ProjectsKey = () => [`/api/v1/projects`] as const;
+
+export type GETApiV1ProjectsQueryResult = NonNullable<Awaited<ReturnType<typeof gETApiV1Projects>>>
+export type GETApiV1ProjectsQueryError = ErrorType<HTTPError | void>
+
+/**
+ * @summary search projects
+ */
+export const useGETApiV1Projects = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETApiV1Projects>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
+) => {
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const isEnabled = swrOptions?.enabled !== false
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETApiV1ProjectsKey() : null);
+  const swrFn = () => gETApiV1Projects(requestOptions)
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*ProjectHandler).CreateProject`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary create project
+ */
+export const pOSTApiV1Projects = (
+    projectToCreate: BodyType<ProjectToCreate>,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<Project>(
+    {url: `/api/v1/projects`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: projectToCreate
+    },
+    options);
+  }
+
+
+
+export const getPOSTApiV1ProjectsMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, { arg }: { arg: ProjectToCreate }): Promise<Project> => {
+    return pOSTApiV1Projects(arg, options);
+  }
+}
+export const getPOSTApiV1ProjectsMutationKey = () => [`/api/v1/projects`] as const;
+
+export type POSTApiV1ProjectsMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTApiV1Projects>>>
+export type POSTApiV1ProjectsMutationError = ErrorType<HTTPError | void>
+
+/**
+ * @summary create project
+ */
+export const usePOSTApiV1Projects = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTApiV1Projects>>, TError, Key, ProjectToCreate, Awaited<ReturnType<typeof pOSTApiV1Projects>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+) => {
+
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPOSTApiV1ProjectsMutationKey();
+  const swrFn = getPOSTApiV1ProjectsMutationFetcher(requestOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*ProjectHandler).DeleteProject`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary delete project
+ */
+export const dELETEApiV1ProjectsId = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<UnknownInterface>(
+    {url: `/api/v1/projects/${id}`, method: 'DELETE'
+    },
+    options);
+  }
+
+
+
+export const getDELETEApiV1ProjectsIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, __: { arg: Arguments }): Promise<UnknownInterface> => {
+    return dELETEApiV1ProjectsId(id, options);
+  }
+}
+export const getDELETEApiV1ProjectsIdMutationKey = (id: string,) => [`/api/v1/projects/${id}`] as const;
+
+export type DELETEApiV1ProjectsIdMutationResult = NonNullable<Awaited<ReturnType<typeof dELETEApiV1ProjectsId>>>
+export type DELETEApiV1ProjectsIdMutationError = ErrorType<HTTPError | void>
+
+/**
+ * @summary delete project
+ */
+export const useDELETEApiV1ProjectsId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof dELETEApiV1ProjectsId>>, TError, Key, Arguments, Awaited<ReturnType<typeof dELETEApiV1ProjectsId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+) => {
+
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getDELETEApiV1ProjectsIdMutationKey(id);
+  const swrFn = getDELETEApiV1ProjectsIdMutationFetcher(id, requestOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*ProjectHandler).GetProject`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary get project
+ */
+export const gETApiV1ProjectsId = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<Project>(
+    {url: `/api/v1/projects/${id}`, method: 'GET'
+    },
+    options);
+  }
+
+
+
+export const getGETApiV1ProjectsIdKey = (id: string,) => [`/api/v1/projects/${id}`] as const;
+
+export type GETApiV1ProjectsIdQueryResult = NonNullable<Awaited<ReturnType<typeof gETApiV1ProjectsId>>>
+export type GETApiV1ProjectsIdQueryError = ErrorType<HTTPError | void>
+
+/**
+ * @summary get project
+ */
+export const useGETApiV1ProjectsId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETApiV1ProjectsId>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
+) => {
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const isEnabled = swrOptions?.enabled !== false && !!(id)
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETApiV1ProjectsIdKey(id) : null);
+  const swrFn = () => gETApiV1ProjectsId(id, requestOptions)
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*ProjectHandler).UpdateProject`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary update project
+ */
+export const pUTApiV1ProjectsId = (
+    id: string,
+    projectToUpdate: BodyType<ProjectToUpdate>,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<Project>(
+    {url: `/api/v1/projects/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: projectToUpdate
+    },
+    options);
+  }
+
+
+
+export const getPUTApiV1ProjectsIdMutationFetcher = (id: string, options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, { arg }: { arg: ProjectToUpdate }): Promise<Project> => {
+    return pUTApiV1ProjectsId(id, arg, options);
+  }
+}
+export const getPUTApiV1ProjectsIdMutationKey = (id: string,) => [`/api/v1/projects/${id}`] as const;
+
+export type PUTApiV1ProjectsIdMutationResult = NonNullable<Awaited<ReturnType<typeof pUTApiV1ProjectsId>>>
+export type PUTApiV1ProjectsIdMutationError = ErrorType<HTTPError | void>
+
+/**
+ * @summary update project
+ */
+export const usePUTApiV1ProjectsId = <TError = ErrorType<HTTPError | void>>(
+  id: string, options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pUTApiV1ProjectsId>>, TError, Key, ProjectToUpdate, Awaited<ReturnType<typeof pUTApiV1ProjectsId>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+) => {
+
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPUTApiV1ProjectsIdMutationKey(id);
+  const swrFn = getPUTApiV1ProjectsIdMutationFetcher(id, requestOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -529,6 +802,16 @@ export const usePUTApiV1UsersId = <TError = ErrorType<HTTPError | void>>(
 
 
 
+export const getGETApiV1ProjectsResponseMock = (): Project[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined])})))
+
+export const getPOSTApiV1ProjectsResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), ...overrideResponse})
+
+export const getDELETEApiV1ProjectsIdResponseMock = (): UnknownInterface => ({})
+
+export const getGETApiV1ProjectsIdResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), ...overrideResponse})
+
+export const getPUTApiV1ProjectsIdResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), ...overrideResponse})
+
 export const getGETApiV1TasksResponseMock = (): Task[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined])})))
 
 export const getPOSTApiV1TasksResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
@@ -547,6 +830,66 @@ export const getGETApiV1UsersIdResponseMock = (overrideResponse: Partial< User >
 
 export const getPUTApiV1UsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
 
+
+export const getGETApiV1ProjectsMockHandler = (overrideResponse?: Project[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Project[]> | Project[])) => {
+  return http.get('*/api/v1/projects', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGETApiV1ProjectsResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getPOSTApiV1ProjectsMockHandler = (overrideResponse?: Project | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Project> | Project)) => {
+  return http.post('*/api/v1/projects', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getPOSTApiV1ProjectsResponseMock()),
+      { status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getDELETEApiV1ProjectsIdMockHandler = (overrideResponse?: UnknownInterface | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<UnknownInterface> | UnknownInterface)) => {
+  return http.delete('*/api/v1/projects/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getDELETEApiV1ProjectsIdResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getGETApiV1ProjectsIdMockHandler = (overrideResponse?: Project | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Project> | Project)) => {
+  return http.get('*/api/v1/projects/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGETApiV1ProjectsIdResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getPUTApiV1ProjectsIdMockHandler = (overrideResponse?: Project | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<Project> | Project)) => {
+  return http.put('*/api/v1/projects/:id', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getPUTApiV1ProjectsIdResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
 
 export const getGETApiV1TasksMockHandler = (overrideResponse?: Task[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Task[]> | Task[])) => {
   return http.get('*/api/v1/tasks', async (info) => {await delay(1000);
@@ -656,6 +999,11 @@ export const getPUTApiV1UsersIdMockHandler = (overrideResponse?: User | ((info: 
   })
 }
 export const getOpenAPIMock = () => [
+  getGETApiV1ProjectsMockHandler(),
+  getPOSTApiV1ProjectsMockHandler(),
+  getDELETEApiV1ProjectsIdMockHandler(),
+  getGETApiV1ProjectsIdMockHandler(),
+  getPUTApiV1ProjectsIdMockHandler(),
   getGETApiV1TasksMockHandler(),
   getPOSTApiV1TasksMockHandler(),
   getDELETEApiV1TasksIdMockHandler(),

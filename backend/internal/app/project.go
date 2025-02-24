@@ -26,9 +26,9 @@ func (h *ProjectHandler) SetHandler(server *fuego.Server) {
 }
 
 type ProjectToCreate struct {
-	UserID      *string
-	Name        string
-	Description *string
+	Name        string  `json:"name"`
+	UserID      *string `json:"user_id"`
+	Description *string `json:"description"`
 }
 
 func (h *ProjectHandler) CreateProject(c fuego.ContextWithBody[*ProjectToCreate]) (*model.Project, error) {
