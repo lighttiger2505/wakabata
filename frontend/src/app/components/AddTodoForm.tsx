@@ -3,8 +3,7 @@
 import { usePOSTApiV1Tasks } from "@/api/generated/client";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import SelectBox from "./SelectBox";
-import { SelectItemValue } from "./SelectBox";
+import SelectBox, { SelectItemValue } from "@/components/SelectBox";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import SelectBox from "./SelectBox";
+import SelectBox from "@/components/SelectBox";
 import { dateToRFC3339, projectItems } from "./AddTodoForm";
 
 type EditTodoFormProps = {
