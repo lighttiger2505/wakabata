@@ -41,7 +41,7 @@ export default function TodoList() {
           {editingTodoId === todo.id ? (
             <EditTodoForm todo={todo} onCloseAction={onCloseEdit} />
           ) : (
-            <TodoItem todo={todo} onStartEdit={onStartEdit} onDeleteAction={onDeleteMutate} />
+            <TodoItem todo={todo} onStartEdit={onStartEdit} onDeleteAction={onDeleteMutate} onEditAction={onEditMutate} />
           )}
         </li>
       ))}

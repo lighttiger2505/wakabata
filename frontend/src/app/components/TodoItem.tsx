@@ -6,13 +6,15 @@ interface TodoItemProps {
   todo: Task;
   onStartEdit: (id: string) => void;
   onDeleteAction: (id: string) => void;
+  onEditAction: (updatedTask: Task | undefined) => void;
 }
 
-export default function TodoItem({ todo, onStartEdit, onDeleteAction }: TodoItemProps) {
+export default function TodoItem({ todo, onStartEdit, onDeleteAction, onEditAction }: TodoItemProps) {
   const { trigger: editTrigger } = usePUTApiV1TasksId(todo.id || "");
   const { trigger: deleteTrigger } = useDELETEApiV1TasksId(todo.id || "");
 
-  const toggleTodo = async () => {
+  const toggleCompleted = async () => {
+    // update the task status
     const body = {
       description: todo.description,
       due_date: todo.due_date,
@@ -22,6 +24,13 @@ export default function TodoItem({ todo, onStartEdit, onDeleteAction }: TodoItem
       status: !todo.status,
     } satisfies TaskToUpdate;
     await editTrigger(body);
+
+    // update the task in the list
+    const updatedTask = {
+      ...todo,
+      ...{ status: !todo.status },
+    } satisfies Task;
+    onEditAction(updatedTask);
   };
 
   const completed = todo.status || false;
@@ -32,7 +41,7 @@ export default function TodoItem({ todo, onStartEdit, onDeleteAction }: TodoItem
           <input
             type="checkbox"
             checked={completed}
-            onChange={() => toggleTodo()}
+            onChange={() => toggleCompleted()}
             className="mr-4 h-5 w-5 rounded border-gray-300 text-green-400 focus:ring-green-600"
           />
           <span className={`flex-grow ${completed ? "text-gray-500 line-through" : "text-gray-100"}`}>{todo.name}</span>
