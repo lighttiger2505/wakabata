@@ -1,6 +1,7 @@
 import { useDELETEApiV1TasksId, usePUTApiV1TasksId } from "@/api/generated/client";
 import type { Task, TaskToUpdate } from "@/api/generated/model";
 import { Pencil, Trash2 } from "lucide-react";
+import { parseISO, isPast } from "date-fns";
 
 interface TodoItemProps {
   todo: Task;
@@ -64,7 +65,11 @@ export default function TodoItem({ todo, onStartEdit, onDeleteAction, onEditActi
           <Trash2 size={16} />
         </button>
       </div>
-      {todo.due_date && <div className="mt-2 text-sm text-yellow-400">Deadline: {todo.due_date}</div>}
+      {todo.due_date && (
+        <div className={`mt-2 text-sm ${isPast(parseISO(todo.due_date)) ? "text-red-500 font-bold" : "text-yellow-400"}`}>
+          Deadline: {todo.due_date}
+        </div>
+      )}
       {todo.project_id && <div className="mt-1 text-purple-400 text-sm">Project: {todo.project_id}</div>}
     </div>
   );
