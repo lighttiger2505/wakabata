@@ -31,7 +31,7 @@ export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps)
     label: project.name || "",
   })) || [];
 
-  const model = pUTApiV1TasksIdBody.omit({ due_date: true }).extend({ due_date: z.date().nullable() });
+  const model = pUTApiV1TasksIdBody.omit({ due_date: true }).extend({ due_date: z.date().nullish() });
   type TaskSchema = z.infer<typeof model>;
 
   const form = useForm<TaskSchema>({
@@ -39,7 +39,7 @@ export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps)
     defaultValues: {
       name: todo.name,
       description: todo.description,
-      due_date: todo.due_date ? new Date(todo.due_date) : undefined,
+      due_date: todo.due_date ? new Date(todo.due_date) : null,
       project_id: todo.project_id,
     },
   });
