@@ -12,7 +12,7 @@ pre-push:
       root: "frontend/"
       glob: "*.{ts,tsx}"
       run: pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true <files>
-    check:
+    type-check:
       root: "frontend/"
       glob: "*.{ts,tsx}"
       run: pnpm type-check
