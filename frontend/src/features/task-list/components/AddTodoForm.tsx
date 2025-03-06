@@ -141,11 +141,12 @@ export default function AddTodoForm() {
                 <FormLabel>Project</FormLabel>
                 <FormControl>
                   <SelectBox
-                    value={field.value || ""}
-                    onValueChange={field.onChange}
+                    value={field.value || "" ? field.value || "" : "none"}
+                    onValueChange={(value) => field.onChange(value === "none" ? "" : value)}
                     items={projectItems}
                     placeholder={isLoadingProjects ? "Loading projects..." : "Select your project."}
                     disabled={isLoadingProjects}
+                    clearable
                   />
                 </FormControl>
               </div>
