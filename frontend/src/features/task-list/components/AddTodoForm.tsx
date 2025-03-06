@@ -1,6 +1,6 @@
 "use client";
 
-import { usePOSTApiV1Tasks } from "@/api/generated/client";
+import { useGETApiV1Projects, usePOSTApiV1Tasks } from "@/api/generated/client";
 import SelectBox, { SelectItemValue } from "@/components/SelectBox";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -20,31 +20,14 @@ export const dateToRFC3339 = (date: Date | null | undefined) => {
   return date ? formatISO(date) : null;
 };
 
-export const projectItems = [
-  {
-    value: 1,
-    label: "Project Alpha",
-  },
-  {
-    value: 2,
-    label: "Project Beta",
-  },
-  {
-    value: 3,
-    label: "Project Gamma",
-  },
-  {
-    value: 4,
-    label: "Project Delta",
-  },
-  {
-    value: 5,
-    label: "Project Epsilon",
-  },
-] as SelectItemValue[];
-
 export default function AddTodoForm() {
   const { trigger, error, isMutating } = usePOSTApiV1Tasks();
+  const { data: projects, isLoading: isLoadingProjects } = useGETApiV1Projects();
+
+  const projectItems: SelectItemValue<string>[] = projects?.map(project => ({
+    value: project.id || "",
+    label: project.name || "",
+  })) || [];
 
   const model = pOSTApiV1TasksBody.omit({ due_date: true }).extend({ due_date: z.date().nullish() });
   type TaskSchema = z.infer<typeof model>;
@@ -62,6 +45,7 @@ export default function AddTodoForm() {
       name: values.name,
       description: values.description,
       due_date: dateToRFC3339(values.due_date),
+      project_id: values.project_id,
     });
   };
 
@@ -160,7 +144,8 @@ export default function AddTodoForm() {
                     value={field.value || ""}
                     onValueChange={field.onChange}
                     items={projectItems}
-                    placeholder="Select your project."
+                    placeholder={isLoadingProjects ? "Loading projects..." : "Select your project."}
+                    disabled={isLoadingProjects}
                   />
                 </FormControl>
               </div>

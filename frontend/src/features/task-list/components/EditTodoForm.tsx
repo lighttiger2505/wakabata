@@ -1,9 +1,9 @@
 "use client";
 
-import { usePUTApiV1TasksId } from "@/api/generated/client";
+import { useGETApiV1Projects, usePUTApiV1TasksId } from "@/api/generated/client";
 import { Task } from "@/api/generated/model";
 import { pUTApiV1TasksIdBody } from "@/api/generated/zod/task/task.zod";
-import SelectBox from "@/components/SelectBox";
+import SelectBox, { SelectItemValue } from "@/components/SelectBox";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
@@ -15,7 +15,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { dateToRFC3339, projectItems } from "./AddTodoForm";
+import { dateToRFC3339 } from "./AddTodoForm";
 
 type EditTodoFormProps = {
   todo: Task;
@@ -24,6 +24,12 @@ type EditTodoFormProps = {
 
 export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps) {
   const { trigger, error, isMutating } = usePUTApiV1TasksId(todo.id || "");
+  const { data: projects, isLoading: isLoadingProjects } = useGETApiV1Projects();
+
+  const projectItems: SelectItemValue<string>[] = projects?.map(project => ({
+    value: project.id || "",
+    label: project.name || "",
+  })) || [];
 
   const model = pUTApiV1TasksIdBody.omit({ due_date: true }).extend({ due_date: z.date().nullable() });
   type TaskSchema = z.infer<typeof model>;
@@ -34,6 +40,7 @@ export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps)
       name: todo.name,
       description: todo.description,
       due_date: todo.due_date ? new Date(todo.due_date) : undefined,
+      project_id: todo.project_id,
     },
   });
 
@@ -43,6 +50,7 @@ export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps)
       name: values.name,
       description: values.description,
       due_date: dateToRFC3339(values.due_date),
+      project_id: values.project_id,
     } satisfies Task;
     await trigger(editTask);
 
@@ -140,11 +148,12 @@ export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps)
               <div className="mb=4">
                 <FormLabel>Project</FormLabel>
                 <FormControl>
-                  <SelectBox
+                  <SelectBox<string>
                     value={field.value || ""}
                     onValueChange={field.onChange}
                     items={projectItems}
-                    placeholder="Select your project."
+                    placeholder={isLoadingProjects ? "Loading projects..." : "Select your project."}
+                    disabled={isLoadingProjects}
                   />
                 </FormControl>
               </div>

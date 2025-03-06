@@ -1,17 +1,17 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SelectProps } from "@radix-ui/react-select";
 
-export type SelectItemValue = {
-  value: number;
+export type SelectItemValue<T = string> = {
+  value: T;
   label: string;
 };
 
-type Props = SelectProps & {
-  items: SelectItemValue[];
+type Props<T> = SelectProps & {
+  items: SelectItemValue<T>[];
   placeholder?: string;
 };
 
-const SelectBox: React.FC<Props> = ({ value, onValueChange, items, placeholder }) => {
+const SelectBox = <T extends string | number>({ value, onValueChange, items, placeholder }: Props<T>) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className="w-full">
@@ -19,7 +19,7 @@ const SelectBox: React.FC<Props> = ({ value, onValueChange, items, placeholder }
       </SelectTrigger>
       <SelectContent>
         {items.map((item) => (
-          <SelectItem key={item.value} value={String(item.value)}>
+          <SelectItem key={String(item.value)} value={String(item.value)}>
             {item.label}
           </SelectItem>
         ))}
