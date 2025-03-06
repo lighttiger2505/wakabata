@@ -52,7 +52,7 @@ func main() {
 	userHandler := app.NewUserHandler(userService)
 	userHandler.SetHandler(server)
 
-	taskInfra := infra.NewTaskInfra()
+	taskInfra := infra.NewTaskInfra(gormdb)
 	taskService := service.NewTaskService(taskInfra)
 	taskHandler := app.NewTaskHandler(taskService)
 	taskHandler.SetHandler(server)

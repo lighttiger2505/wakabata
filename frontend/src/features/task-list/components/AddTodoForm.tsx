@@ -24,10 +24,11 @@ export default function AddTodoForm() {
   const { trigger, error, isMutating } = usePOSTApiV1Tasks();
   const { data: projects, isLoading: isLoadingProjects } = useGETApiV1Projects();
 
-  const projectItems: SelectItemValue<string>[] = projects?.map(project => ({
-    value: project.id || "",
-    label: project.name || "",
-  })) || [];
+  const projectItems: SelectItemValue<string>[] =
+    projects?.map((project) => ({
+      value: project.id || "",
+      label: project.name || "",
+    })) || [];
 
   const model = pOSTApiV1TasksBody.omit({ due_date: true }).extend({ due_date: z.date().nullish() });
   type TaskSchema = z.infer<typeof model>;

@@ -26,10 +26,11 @@ export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps)
   const { trigger, error, isMutating } = usePUTApiV1TasksId(todo.id || "");
   const { data: projects, isLoading: isLoadingProjects } = useGETApiV1Projects();
 
-  const projectItems: SelectItemValue<string>[] = projects?.map(project => ({
-    value: project.id || "",
-    label: project.name || "",
-  })) || [];
+  const projectItems: SelectItemValue<string>[] =
+    projects?.map((project) => ({
+      value: project.id || "",
+      label: project.name || "",
+    })) || [];
 
   const model = pUTApiV1TasksIdBody.omit({ due_date: true }).extend({ due_date: z.date().nullish() });
   type TaskSchema = z.infer<typeof model>;

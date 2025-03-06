@@ -6,6 +6,7 @@ import (
 	"github.com/go-fuego/fuego"
 	"github.com/go-fuego/fuego/option"
 	"github.com/google/uuid"
+	"github.com/lighttiger2505/wakabata/internal/domain/entity"
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/domain/service"
 )
@@ -96,7 +97,7 @@ func (h *TaskHandler) DeleteTask(c fuego.ContextNoBody) (interface{}, error) {
 	return nil, nil
 }
 
-func (h *TaskHandler) SearchTasks(c fuego.ContextNoBody) ([]*model.Task, error) {
+func (h *TaskHandler) SearchTasks(c fuego.ContextNoBody) ([]*entity.Task, error) {
 	return h.Service.Search(c.Context())
 }
 

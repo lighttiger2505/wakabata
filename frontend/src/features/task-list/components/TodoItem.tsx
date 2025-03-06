@@ -40,7 +40,8 @@ export default function TodoItem({ todo, onStartEdit, onDeleteAction, onEditActi
     // update the task in the list
     const updatedTask = {
       ...todo,
-      ...{ status: !todo.status },
+      status: !todo.status,
+      project_name: todo.project_name,
     } satisfies Task;
     onEditAction(updatedTask);
   };
@@ -98,7 +99,7 @@ export default function TodoItem({ todo, onStartEdit, onDeleteAction, onEditActi
           Deadline: {todo.due_date}
         </div>
       )}
-      {todo.project_id && <div className="mt-1 text-purple-400 text-sm">Project: {todo.project_id}</div>}
+      {todo.project_name && <div className="mt-1 text-purple-400 text-sm">Project: {todo.project_name}</div>}
     </div>
   );
 }

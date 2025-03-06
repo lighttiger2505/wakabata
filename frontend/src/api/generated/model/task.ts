@@ -23,6 +23,8 @@ export interface Task {
   /** @nullable */
   project_id?: string | null;
   /** @nullable */
+  project_name?: string | null;
+  /** @nullable */
   status?: boolean | null;
   /** @nullable */
   updated_at?: string | null;

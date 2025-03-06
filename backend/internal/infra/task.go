@@ -4,15 +4,19 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/lighttiger2505/wakabata/internal/domain/entity"
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/infra/persistence/query"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type TaskInfra struct {
+	db *gorm.DB
 }
 
-func NewTaskInfra() *TaskInfra {
-	return &TaskInfra{}
+func NewTaskInfra(db *gorm.DB) *TaskInfra {
+	return &TaskInfra{db: db}
 }
 
 func (i *TaskInfra) Create(ctx context.Context, task *model.Task) (*model.Task, error) {
@@ -46,10 +50,30 @@ func (i *TaskInfra) Delete(ctx context.Context, task *model.Task) error {
 	return nil
 }
 
-func (i *TaskInfra) Search(ctx context.Context) ([]*model.Task, error) {
-	u := query.Task
-	db := query.Task.WithContext(ctx).Order(u.CreatedAt.Desc())
-	return db.Find()
+func (i *TaskInfra) Search(ctx context.Context) ([]*entity.Task, error) {
+	i.db.Logger = i.db.Logger.LogMode(logger.Info)
+	results := []*entity.Task{}
+	q := i.db.
+		Table("tasks").
+		Select(`
+			tasks.id as id
+			,tasks.name as name
+			,tasks.description as description
+			,tasks.due_date as due_date
+			,tasks.priority as priority
+			,tasks.status as status
+			,tasks.created_at as created_at
+			,tasks.updated_at as updated_at
+			,projects.id as project_id
+			,projects.name as project_name
+			`).
+		Joins("left join projects on projects.id = tasks.project_id").
+		Order("tasks.created_at desc").
+		Find(&results)
+	if q.Error != nil {
+		return nil, q.Error
+	}
+	return results, nil
 }
 
 func (i *TaskInfra) Get(ctx context.Context, id string) (*model.Task, error) {

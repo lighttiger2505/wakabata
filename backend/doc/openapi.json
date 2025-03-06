@@ -147,6 +147,10 @@
 						"nullable": true,
 						"type": "string"
 					},
+					"project_name": {
+						"nullable": true,
+						"type": "string"
+					},
 					"status": {
 						"nullable": true,
 						"type": "boolean"

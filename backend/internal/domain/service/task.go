@@ -3,8 +3,10 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/go-fuego/fuego"
+	"github.com/lighttiger2505/wakabata/internal/domain/entity"
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/infra"
 	"gorm.io/gorm"
@@ -51,12 +53,13 @@ func (s *TaskService) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
-func (s *TaskService) Search(ctx context.Context) ([]*model.Task, error) {
-	users, err := s.TaskInfra.Search(ctx)
+func (s *TaskService) Search(ctx context.Context) ([]*entity.Task, error) {
+	tasks, err := s.TaskInfra.Search(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return users, nil
+	fmt.Println(tasks)
+	return tasks, nil
 }
 
 func (s *TaskService) Get(ctx context.Context, id string) (*model.Task, error) {

@@ -4,14 +4,14 @@ pre-commit:
     check:
       root: "frontend/"
       glob: "*.{ts,tsx}"
-      run: pnpm biome check --apply --no-errors-on-unmatched --files-ignore-unknown=true <files> && git update-index --again
+      run: pnpm biome check
 pre-push:
   parallel: true
   commands:
     check:
       root: "frontend/"
       glob: "*.{ts,tsx}"
-      run: pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true <files>
+      run: pnpm biome check
     type-check:
       root: "frontend/"
       glob: "*.{ts,tsx}"
