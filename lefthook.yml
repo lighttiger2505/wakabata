@@ -1,18 +1,22 @@
 pre-commit:
   parallel: true
   commands:
-    check:
+    biome-check:
       root: "frontend/"
       glob: "*.{ts,tsx}"
       run: pnpm biome check
 pre-push:
   parallel: true
   commands:
-    check:
+    biome-check:
       root: "frontend/"
       glob: "*.{ts,tsx}"
       run: pnpm biome check
-    type-check:
+    ts-type-check:
       root: "frontend/"
       glob: "*.{ts,tsx}"
       run: pnpm type-check
+    golangci-lint:
+      root: "backend/"
+      glob: "*.{go}"
+      run: golangci-lint run
