@@ -94,7 +94,7 @@ export default function TodoItem({ todo, onStartEdit, onDeleteAction, onEditActi
         </AlertDialog>
       </div>
       {todo.due_date && (
-        <div className={`mt-2 text-sm ${isPast(parseISO(todo.due_date)) ? "text-red-500 font-bold" : "text-yellow-400"}`}>
+        <div className={`mt-2 text-sm ${isPast(parseISO(todo.due_date)) ? "font-bold text-red-500" : "text-yellow-400"}`}>
           Deadline: {todo.due_date}
         </div>
       )}
