@@ -1,5 +1,16 @@
 import { useDELETEApiV1TasksId, usePUTApiV1TasksId } from "@/api/generated/client";
 import type { Task, TaskToUpdate } from "@/api/generated/model";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Pencil, Trash2 } from "lucide-react";
 import { parseISO, isPast } from "date-fns";
 
@@ -54,16 +65,36 @@ export default function TodoItem({ todo, onStartEdit, onDeleteAction, onEditActi
         >
           <Pencil size={16} />
         </button>
-        <button
-          type="button"
-          onClick={async () => {
-            await deleteTrigger();
-            onDeleteAction(todo.id || "");
-          }}
-          className="ml-2 p-1 text-red-400 hover:text-red-800 focus:outline-none"
-        >
-          <Trash2 size={16} />
-        </button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button
+              type="button"
+              className="ml-2 p-1 text-red-400 hover:text-red-800 focus:outline-none"
+            >
+              <Trash2 size={16} />
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>タスクを削除しますか？</AlertDialogTitle>
+              <AlertDialogDescription>
+                この操作は取り消せません。タスク「{todo.name}」を削除してもよろしいですか？
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>キャンセル</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={async () => {
+                  await deleteTrigger();
+                  onDeleteAction(todo.id || "");
+                }}
+                className="bg-red-500 hover:bg-red-600"
+              >
+                削除する
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       {todo.due_date && (
         <div className={`mt-2 text-sm ${isPast(parseISO(todo.due_date)) ? "text-red-500 font-bold" : "text-yellow-400"}`}>
