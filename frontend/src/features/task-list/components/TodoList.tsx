@@ -1,10 +1,10 @@
 "use client";
 
 import { useGETApiV1Tasks } from "@/api/generated/client";
+import { Task } from "@/api/generated/model";
 import { useState } from "react";
 import EditTodoForm from "./EditTodoForm";
 import TodoItem from "./TodoItem";
-import { Task } from "@/api/generated/model";
 
 export default function TodoList() {
   const { data, isLoading, mutate } = useGETApiV1Tasks();

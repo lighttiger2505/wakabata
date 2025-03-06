@@ -11,8 +11,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { isPast, parseISO } from "date-fns";
 import { Pencil, Trash2 } from "lucide-react";
-import { parseISO, isPast } from "date-fns";
 
 interface TodoItemProps {
   todo: Task;
@@ -67,10 +67,7 @@ export default function TodoItem({ todo, onStartEdit, onDeleteAction, onEditActi
         </button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <button
-              type="button"
-              className="ml-2 p-1 text-red-400 hover:text-red-800 focus:outline-none"
-            >
+            <button type="button" className="ml-2 p-1 text-red-400 hover:text-red-800 focus:outline-none">
               <Trash2 size={16} />
             </button>
           </AlertDialogTrigger>
