@@ -62,5 +62,7 @@ func main() {
 	projectHandler := app.NewProjectHandler(projectService)
 	projectHandler.SetHandler(server)
 
-	server.Run()
+	if err := server.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
