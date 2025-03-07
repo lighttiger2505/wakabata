@@ -5,6 +5,10 @@ pre-commit:
       root: "frontend/"
       glob: "*.{ts,tsx}"
       run: pnpm biome check
+    actionlint:
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: docker run --rm -v $(pwd):/repo -w /repo rhysd/actionlint:latest -color
+
 pre-push:
   parallel: true
   commands:
