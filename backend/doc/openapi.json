@@ -291,72 +291,6 @@
 	},
 	"openapi": "3.1.0",
 	"paths": {
-		"/api/v1/health": {
-			"get": {
-				"description": "#### Controller: \n\n`main.main.func1`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
-				"operationId": "GET_/api/v1/health",
-				"parameters": [
-					{
-						"in": "header",
-						"name": "Accept",
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/string"
-								}
-							},
-							"application/xml": {
-								"schema": {
-									"$ref": "#/components/schemas/string"
-								}
-							}
-						},
-						"description": "OK"
-					},
-					"400": {
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPError"
-								}
-							},
-							"application/xml": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPError"
-								}
-							}
-						},
-						"description": "Bad Request _(validation or deserialization error)_"
-					},
-					"500": {
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPError"
-								}
-							},
-							"application/xml": {
-								"schema": {
-									"$ref": "#/components/schemas/HTTPError"
-								}
-							}
-						},
-						"description": "Internal Server Error _(panics)_"
-					},
-					"default": {
-						"description": ""
-					}
-				},
-				"summary": "func1"
-			}
-		},
 		"/api/v1/projects": {
 			"get": {
 				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*ProjectHandler).SearchProjects`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
@@ -428,6 +362,7 @@
 				},
 				"summary": "search projects",
 				"tags": [
+					"api/v1",
 					"project"
 				]
 			},
@@ -506,6 +441,7 @@
 				},
 				"summary": "create project",
 				"tags": [
+					"api/v1",
 					"project"
 				]
 			}
@@ -583,6 +519,7 @@
 				},
 				"summary": "delete project",
 				"tags": [
+					"api/v1",
 					"project"
 				]
 			},
@@ -658,6 +595,7 @@
 				},
 				"summary": "get project",
 				"tags": [
+					"api/v1",
 					"project"
 				]
 			},
@@ -744,6 +682,7 @@
 				},
 				"summary": "update project",
 				"tags": [
+					"api/v1",
 					"project"
 				]
 			}
@@ -819,6 +758,7 @@
 				},
 				"summary": "search tasks",
 				"tags": [
+					"api/v1",
 					"task"
 				]
 			},
@@ -897,6 +837,7 @@
 				},
 				"summary": "create task",
 				"tags": [
+					"api/v1",
 					"task"
 				]
 			}
@@ -974,6 +915,7 @@
 				},
 				"summary": "delete task",
 				"tags": [
+					"api/v1",
 					"task"
 				]
 			},
@@ -1049,6 +991,7 @@
 				},
 				"summary": "get task",
 				"tags": [
+					"api/v1",
 					"task"
 				]
 			},
@@ -1135,6 +1078,7 @@
 				},
 				"summary": "update task",
 				"tags": [
+					"api/v1",
 					"task"
 				]
 			}
@@ -1210,6 +1154,7 @@
 				},
 				"summary": "search users",
 				"tags": [
+					"api/v1",
 					"user"
 				]
 			},
@@ -1288,6 +1233,7 @@
 				},
 				"summary": "create user",
 				"tags": [
+					"api/v1",
 					"user"
 				]
 			}
@@ -1365,6 +1311,7 @@
 				},
 				"summary": "get user",
 				"tags": [
+					"api/v1",
 					"user"
 				]
 			},
@@ -1451,8 +1398,75 @@
 				},
 				"summary": "update user",
 				"tags": [
+					"api/v1",
 					"user"
 				]
+			}
+		},
+		"/health": {
+			"get": {
+				"description": "#### Controller: \n\n`main.main.func1`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "GET_/health",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/string"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/string"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "func1"
 			}
 		}
 	},
@@ -1463,6 +1477,9 @@
 		}
 	],
 	"tags": [
+		{
+			"name": "api/v1"
+		},
 		{
 			"name": "project"
 		},

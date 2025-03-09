@@ -43,7 +43,6 @@ func main() {
 			AllowedHeaders:   []string{"*"},
 			AllowCredentials: true,
 		}).Handler),
-		fuego.WithBasePath("/api/v1"),
 	)
 	server.OpenAPI.Description().Info.Description = "wakabata API"
 
@@ -52,20 +51,21 @@ func main() {
 		return "Server is running", nil
 	})
 
+	api := fuego.Group(server, "/api/v1")
 	userInfra := infra.NewUserInfra()
 	userService := service.NewUserService(userInfra)
 	userHandler := app.NewUserHandler(userService)
-	userHandler.SetHandler(server)
+	userHandler.SetHandler(api)
 
 	taskInfra := infra.NewTaskInfra(gormdb)
 	taskService := service.NewTaskService(taskInfra)
 	taskHandler := app.NewTaskHandler(taskService)
-	taskHandler.SetHandler(server)
+	taskHandler.SetHandler(api)
 
 	projectInfra := infra.NewProjectInfra()
 	projectService := service.NewProjectService(projectInfra)
 	projectHandler := app.NewProjectHandler(projectService)
-	projectHandler.SetHandler(server)
+	projectHandler.SetHandler(api)
 
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
