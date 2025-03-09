@@ -10,11 +10,36 @@ services:
       - "5432:5432"
     volumes:
       - ./.postgres/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U exampleuser -d wakabatasks"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wakabata-api
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: exampleuser
+      DB_PASSWORD: examplepass
+      DB_NAME: wakabatasks
+    ports:
+      - "8088:8088"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
   flyway:
     image: flyway/flyway:10.15.2
     container_name: flyway
     command: -url=jdbc:postgresql://db:5432/wakabatasks -user=exampleuser -password=examplepass migrate
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./flyway/sql:/flyway/sql

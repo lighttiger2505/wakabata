@@ -8,7 +8,6 @@ import (
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/infra/persistence/query"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 type TaskInfra struct {
@@ -51,7 +50,6 @@ func (i *TaskInfra) Delete(ctx context.Context, task *model.Task) error {
 }
 
 func (i *TaskInfra) Search(ctx context.Context) ([]*entity.Task, error) {
-	i.db.Logger = i.db.Logger.LogMode(logger.Info)
 	results := []*entity.Task{}
 	q := i.db.
 		Table("tasks").

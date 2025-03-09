@@ -22,7 +22,7 @@ func main() {
 	query.SetDefault(gormdb)
 
 	server := fuego.NewServer(
-		fuego.WithAddr("localhost:8088"),
+		fuego.WithAddr("0.0.0.0:8088"),
 		fuego.WithEngineOptions(
 			fuego.WithOpenAPIConfig(
 				fuego.OpenAPIConfig{
@@ -46,6 +46,11 @@ func main() {
 		fuego.WithBasePath("/api/v1"),
 	)
 	server.OpenAPI.Description().Info.Description = "wakabata API"
+
+	// Check health
+	fuego.Get(server, "/health", func(c fuego.ContextNoBody) (string, error) {
+		return "Server is running", nil
+	})
 
 	userInfra := infra.NewUserInfra()
 	userService := service.NewUserService(userInfra)

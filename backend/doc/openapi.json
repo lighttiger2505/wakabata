@@ -60,7 +60,7 @@
 						"type": "string"
 					},
 					"description": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"id": {
@@ -75,7 +75,7 @@
 						"type": "string"
 					},
 					"user_id": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					}
 				},
@@ -85,14 +85,14 @@
 				"description": "ProjectToCreate schema",
 				"properties": {
 					"description": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"name": {
 						"type": "string"
 					},
 					"user_id": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					}
 				},
@@ -102,14 +102,14 @@
 				"description": "ProjectToUpdate schema",
 				"properties": {
 					"description": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"name": {
 						"type": "string"
 					},
 					"user_id": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					}
 				},
@@ -124,7 +124,7 @@
 						"type": "string"
 					},
 					"description": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"due_date": {
@@ -144,11 +144,11 @@
 						"type": "integer"
 					},
 					"project_id": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"project_name": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"status": {
@@ -167,7 +167,7 @@
 				"description": "TaskToCreate schema",
 				"properties": {
 					"description": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"due_date": {
@@ -184,7 +184,7 @@
 						"type": "integer"
 					},
 					"project_id": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					}
 				},
@@ -197,7 +197,7 @@
 				"description": "TaskToUpdate schema",
 				"properties": {
 					"description": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"due_date": {
@@ -214,7 +214,7 @@
 						"type": "integer"
 					},
 					"project_id": {
-						"nullable": true,
+						"description": "string schema",
 						"type": "string"
 					},
 					"status": {
@@ -275,6 +275,10 @@
 				],
 				"type": "object"
 			},
+			"string": {
+				"description": "string schema",
+				"type": "string"
+			},
 			"unknown-interface": {
 				"description": "unknown-interface schema"
 			}
@@ -287,6 +291,72 @@
 	},
 	"openapi": "3.1.0",
 	"paths": {
+		"/api/v1/health": {
+			"get": {
+				"description": "#### Controller: \n\n`main.main.func1`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "GET_/api/v1/health",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/string"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/string"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "func1"
+			}
+		},
 		"/api/v1/projects": {
 			"get": {
 				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*ProjectHandler).SearchProjects`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
@@ -1389,7 +1459,7 @@
 	"servers": [
 		{
 			"description": "local server",
-			"url": "http://localhost:8088"
+			"url": "http://0.0.0.0:8088"
 		}
 	],
 	"tags": [
