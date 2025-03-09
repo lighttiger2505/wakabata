@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16.3
+    container_name: postgres
+    environment:
+      POSTGRES_USER: exampleuser
+      POSTGRES_PASSWORD: examplepass
+      POSTGRES_DB: wakabatasks
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.postgres/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U exampleuser -d wakabatasks"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: wakabata-api-dev
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: exampleuser
+      DB_PASSWORD: examplepass
+      DB_NAME: wakabatasks
+    ports:
+      - "8088:8088"
+    volumes:
+      - .:/app # ソースコードをマウントしてホットリロードを有効化
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  flyway:
+    image: flyway/flyway:10.15.2
+    container_name: flyway
+    command: -url=jdbc:postgresql://db:5432/wakabatasks -user=exampleuser -password=examplepass migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./flyway/sql:/flyway/sql
