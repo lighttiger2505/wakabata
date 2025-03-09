@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
@@ -14,7 +15,12 @@ import (
 	"github.com/rs/cors"
 )
 
+var generateOpenAPI bool
+
 func main() {
+	flag.BoolVar(&generateOpenAPI, "generate-open-api", false, "Generate OpenAPI specification and exit")
+	flag.Parse()
+
 	gormdb, err := postgres.OpenGormDB()
 	if err != nil {
 		log.Fatal(err)
@@ -66,6 +72,11 @@ func main() {
 	projectService := service.NewProjectService(projectInfra)
 	projectHandler := app.NewProjectHandler(projectService)
 	projectHandler.SetHandler(api)
+
+	if generateOpenAPI {
+		server.OutputOpenAPISpec()
+		return
+	}
 
 	if err := server.Run(); err != nil {
 		log.Fatal(err)

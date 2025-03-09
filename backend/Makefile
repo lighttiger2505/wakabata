@@ -53,3 +53,7 @@ gormgen:
 .PHONY: lint
 lint:
 	golangci-lint run
+
+.PHONY: openapi
+openapi:
+	go run $(SERVER_MAIN_FILE) --generate-open-api
