@@ -241,15 +241,21 @@
 					"id": {
 						"type": "string"
 					},
+					"is_email_verified": {
+						"nullable": true,
+						"type": "boolean"
+					},
 					"password_hash": {
+						"description": "string schema",
+						"type": "string"
+					},
+					"totp_secret": {
+						"description": "string schema",
 						"type": "string"
 					},
 					"updated_at": {
 						"format": "date-time",
 						"nullable": true,
-						"type": "string"
-					},
-					"username": {
 						"type": "string"
 					}
 				},
@@ -261,15 +267,11 @@
 					"email": {
 						"type": "string"
 					},
-					"name": {
-						"type": "string"
-					},
 					"password_hash": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"name",
 					"email",
 					"password_hash"
 				],

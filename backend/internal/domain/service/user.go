@@ -31,7 +31,6 @@ func (s *UserService) Update(ctx context.Context, id int, user *model.User) (*mo
 		return nil, err
 	}
 
-	existingUser.Username = user.Username
 	existingUser.Email = user.Email
 	existingUser.PasswordHash = user.PasswordHash
 
