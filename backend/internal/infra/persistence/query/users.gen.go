@@ -29,9 +29,10 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 	tableName := _user.userDo.TableName()
 	_user.ALL = field.NewAsterisk(tableName)
 	_user.ID = field.NewString(tableName, "id")
-	_user.Username = field.NewString(tableName, "username")
 	_user.Email = field.NewString(tableName, "email")
 	_user.PasswordHash = field.NewString(tableName, "password_hash")
+	_user.TotpSecret = field.NewString(tableName, "totp_secret")
+	_user.IsEmailVerified = field.NewBool(tableName, "is_email_verified")
 	_user.CreatedAt = field.NewTime(tableName, "created_at")
 	_user.UpdatedAt = field.NewTime(tableName, "updated_at")
 
@@ -43,13 +44,14 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 type user struct {
 	userDo
 
-	ALL          field.Asterisk
-	ID           field.String
-	Username     field.String
-	Email        field.String
-	PasswordHash field.String
-	CreatedAt    field.Time
-	UpdatedAt    field.Time
+	ALL             field.Asterisk
+	ID              field.String
+	Email           field.String
+	PasswordHash    field.String
+	TotpSecret      field.String
+	IsEmailVerified field.Bool
+	CreatedAt       field.Time
+	UpdatedAt       field.Time
 
 	fieldMap map[string]field.Expr
 }
@@ -67,9 +69,10 @@ func (u user) As(alias string) *user {
 func (u *user) updateTableName(table string) *user {
 	u.ALL = field.NewAsterisk(table)
 	u.ID = field.NewString(table, "id")
-	u.Username = field.NewString(table, "username")
 	u.Email = field.NewString(table, "email")
 	u.PasswordHash = field.NewString(table, "password_hash")
+	u.TotpSecret = field.NewString(table, "totp_secret")
+	u.IsEmailVerified = field.NewBool(table, "is_email_verified")
 	u.CreatedAt = field.NewTime(table, "created_at")
 	u.UpdatedAt = field.NewTime(table, "updated_at")
 
@@ -88,11 +91,12 @@ func (u *user) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (u *user) fillFieldMap() {
-	u.fieldMap = make(map[string]field.Expr, 6)
+	u.fieldMap = make(map[string]field.Expr, 7)
 	u.fieldMap["id"] = u.ID
-	u.fieldMap["username"] = u.Username
 	u.fieldMap["email"] = u.Email
 	u.fieldMap["password_hash"] = u.PasswordHash
+	u.fieldMap["totp_secret"] = u.TotpSecret
+	u.fieldMap["is_email_verified"] = u.IsEmailVerified
 	u.fieldMap["created_at"] = u.CreatedAt
 	u.fieldMap["updated_at"] = u.UpdatedAt
 }

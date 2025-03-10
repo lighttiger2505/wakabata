@@ -7,6 +7,7 @@ import (
 	"github.com/go-fuego/fuego/option"
 	"github.com/lighttiger2505/wakabata/internal/domain/model"
 	"github.com/lighttiger2505/wakabata/internal/domain/service"
+	"github.com/lighttiger2505/wakabata/pkg/util"
 )
 
 type UserHandler struct {
@@ -27,9 +28,8 @@ func (h *UserHandler) SetHandler(server *fuego.Server) {
 }
 
 type UserToCreate struct {
-	Username     string `json:"name" validate:"required"`
-	Email        string `json:"email" validate:"required"`
-	PasswordHash string `json:"password_hash" validate:"required"`
+	Email    string `json:"email" validate:"required"`
+	Password string `json:"password_hash" validate:"required"`
 }
 
 func (h *UserHandler) CreateUser(c fuego.ContextWithBody[*UserToCreate]) (*model.User, error) {
@@ -38,10 +38,14 @@ func (h *UserHandler) CreateUser(c fuego.ContextWithBody[*UserToCreate]) (*model
 		return nil, err
 	}
 
+	hashedPassword, err := util.GenerateHash(input.Password)
+	if err != nil {
+		panic(err)
+	}
+
 	user := &model.User{
-		Username:     input.Username,
 		Email:        input.Email,
-		PasswordHash: input.PasswordHash,
+		PasswordHash: &hashedPassword,
 	}
 
 	return h.Service.Create(c.Context(), user)
