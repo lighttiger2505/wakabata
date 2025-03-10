@@ -16,59 +16,84 @@ import (
 )
 
 var (
-	Q           = new(Query)
-	Project     *project
-	Tag         *tag
-	Task        *task
-	TaskComment *taskComment
-	TaskTag     *taskTag
-	User        *user
+	Q                      = new(Query)
+	AccessToken            *accessToken
+	AuthProvider           *authProvider
+	EmailVerificationToken *emailVerificationToken
+	Project                *project
+	RefreshToken           *refreshToken
+	Tag                    *tag
+	Task                   *task
+	TaskComment            *taskComment
+	TaskTag                *taskTag
+	User                   *user
+	WebauthnCredential     *webauthnCredential
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	AccessToken = &Q.AccessToken
+	AuthProvider = &Q.AuthProvider
+	EmailVerificationToken = &Q.EmailVerificationToken
 	Project = &Q.Project
+	RefreshToken = &Q.RefreshToken
 	Tag = &Q.Tag
 	Task = &Q.Task
 	TaskComment = &Q.TaskComment
 	TaskTag = &Q.TaskTag
 	User = &Q.User
+	WebauthnCredential = &Q.WebauthnCredential
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:          db,
-		Project:     newProject(db, opts...),
-		Tag:         newTag(db, opts...),
-		Task:        newTask(db, opts...),
-		TaskComment: newTaskComment(db, opts...),
-		TaskTag:     newTaskTag(db, opts...),
-		User:        newUser(db, opts...),
+		db:                     db,
+		AccessToken:            newAccessToken(db, opts...),
+		AuthProvider:           newAuthProvider(db, opts...),
+		EmailVerificationToken: newEmailVerificationToken(db, opts...),
+		Project:                newProject(db, opts...),
+		RefreshToken:           newRefreshToken(db, opts...),
+		Tag:                    newTag(db, opts...),
+		Task:                   newTask(db, opts...),
+		TaskComment:            newTaskComment(db, opts...),
+		TaskTag:                newTaskTag(db, opts...),
+		User:                   newUser(db, opts...),
+		WebauthnCredential:     newWebauthnCredential(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Project     project
-	Tag         tag
-	Task        task
-	TaskComment taskComment
-	TaskTag     taskTag
-	User        user
+	AccessToken            accessToken
+	AuthProvider           authProvider
+	EmailVerificationToken emailVerificationToken
+	Project                project
+	RefreshToken           refreshToken
+	Tag                    tag
+	Task                   task
+	TaskComment            taskComment
+	TaskTag                taskTag
+	User                   user
+	WebauthnCredential     webauthnCredential
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:          db,
-		Project:     q.Project.clone(db),
-		Tag:         q.Tag.clone(db),
-		Task:        q.Task.clone(db),
-		TaskComment: q.TaskComment.clone(db),
-		TaskTag:     q.TaskTag.clone(db),
-		User:        q.User.clone(db),
+		db:                     db,
+		AccessToken:            q.AccessToken.clone(db),
+		AuthProvider:           q.AuthProvider.clone(db),
+		EmailVerificationToken: q.EmailVerificationToken.clone(db),
+		Project:                q.Project.clone(db),
+		RefreshToken:           q.RefreshToken.clone(db),
+		Tag:                    q.Tag.clone(db),
+		Task:                   q.Task.clone(db),
+		TaskComment:            q.TaskComment.clone(db),
+		TaskTag:                q.TaskTag.clone(db),
+		User:                   q.User.clone(db),
+		WebauthnCredential:     q.WebauthnCredential.clone(db),
 	}
 }
 
@@ -82,33 +107,48 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:          db,
-		Project:     q.Project.replaceDB(db),
-		Tag:         q.Tag.replaceDB(db),
-		Task:        q.Task.replaceDB(db),
-		TaskComment: q.TaskComment.replaceDB(db),
-		TaskTag:     q.TaskTag.replaceDB(db),
-		User:        q.User.replaceDB(db),
+		db:                     db,
+		AccessToken:            q.AccessToken.replaceDB(db),
+		AuthProvider:           q.AuthProvider.replaceDB(db),
+		EmailVerificationToken: q.EmailVerificationToken.replaceDB(db),
+		Project:                q.Project.replaceDB(db),
+		RefreshToken:           q.RefreshToken.replaceDB(db),
+		Tag:                    q.Tag.replaceDB(db),
+		Task:                   q.Task.replaceDB(db),
+		TaskComment:            q.TaskComment.replaceDB(db),
+		TaskTag:                q.TaskTag.replaceDB(db),
+		User:                   q.User.replaceDB(db),
+		WebauthnCredential:     q.WebauthnCredential.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Project     IProjectDo
-	Tag         ITagDo
-	Task        ITaskDo
-	TaskComment ITaskCommentDo
-	TaskTag     ITaskTagDo
-	User        IUserDo
+	AccessToken            IAccessTokenDo
+	AuthProvider           IAuthProviderDo
+	EmailVerificationToken IEmailVerificationTokenDo
+	Project                IProjectDo
+	RefreshToken           IRefreshTokenDo
+	Tag                    ITagDo
+	Task                   ITaskDo
+	TaskComment            ITaskCommentDo
+	TaskTag                ITaskTagDo
+	User                   IUserDo
+	WebauthnCredential     IWebauthnCredentialDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Project:     q.Project.WithContext(ctx),
-		Tag:         q.Tag.WithContext(ctx),
-		Task:        q.Task.WithContext(ctx),
-		TaskComment: q.TaskComment.WithContext(ctx),
-		TaskTag:     q.TaskTag.WithContext(ctx),
-		User:        q.User.WithContext(ctx),
+		AccessToken:            q.AccessToken.WithContext(ctx),
+		AuthProvider:           q.AuthProvider.WithContext(ctx),
+		EmailVerificationToken: q.EmailVerificationToken.WithContext(ctx),
+		Project:                q.Project.WithContext(ctx),
+		RefreshToken:           q.RefreshToken.WithContext(ctx),
+		Tag:                    q.Tag.WithContext(ctx),
+		Task:                   q.Task.WithContext(ctx),
+		TaskComment:            q.TaskComment.WithContext(ctx),
+		TaskTag:                q.TaskTag.WithContext(ctx),
+		User:                   q.User.WithContext(ctx),
+		WebauthnCredential:     q.WebauthnCredential.WithContext(ctx),
 	}
 }
 

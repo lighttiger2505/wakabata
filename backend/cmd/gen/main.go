@@ -36,6 +36,11 @@ func main() {
 		g.GenerateModel("task_comments"),
 		g.GenerateModel("tags"),
 		g.GenerateModel("task_tags"),
+		g.GenerateModel("email_verification_tokens"),
+		g.GenerateModel("auth_providers"),
+		g.GenerateModel("webauthn_credentials"),
+		g.GenerateModel("access_tokens"),
+		g.GenerateModel("refresh_tokens"),
 	}
 
 	// Generate basic type-safe DAO API for struct `model.User` following conventions
