@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-fuego/fuego"
 	"github.com/lighttiger2505/wakabata/internal/app"
@@ -20,6 +21,20 @@ var generateOpenAPI bool
 func main() {
 	flag.BoolVar(&generateOpenAPI, "generate-open-api", false, "Generate OpenAPI specification and exit")
 	flag.Parse()
+
+	// 環境変数の取得
+	googleClientID := os.Getenv("GOOGLE_CLIENT_ID")
+	if googleClientID == "" {
+		log.Fatal("GOOGLE_CLIENT_ID is required")
+	}
+	googleClientSecret := os.Getenv("GOOGLE_CLIENT_SECRET")
+	if googleClientSecret == "" {
+		log.Fatal("GOOGLE_CLIENT_SECRET is required")
+	}
+	googleRedirectURL := os.Getenv("GOOGLE_REDIRECT_URL")
+	if googleRedirectURL == "" {
+		log.Fatal("GOOGLE_REDIRECT_URL is required")
+	}
 
 	gormdb, err := postgres.OpenGormDB()
 	if err != nil {
@@ -64,18 +79,30 @@ func main() {
 	emailVerificationTokenInfra := infra.NewEmailVerificationTokenInfra()
 	accessTokenInfra := infra.NewAccessTokenInfra()
 	refreshTokenInfra := infra.NewRefreshTokenInfra()
+	authProviderInfra := infra.NewAuthProviderInfra()
 	taskInfra := infra.NewTaskInfra(gormdb)
 	projectInfra := infra.NewProjectInfra()
 
 	// サービス層の初期化
 	userService := service.NewUserService(userInfra, emailVerificationTokenInfra)
 	authService := service.NewAuthService(userInfra, accessTokenInfra, refreshTokenInfra)
+	googleAuthService := service.NewGoogleAuthService(
+		googleClientID,
+		googleClientSecret,
+		googleRedirectURL,
+		userInfra,
+		authProviderInfra,
+		authService,
+	)
 	taskService := service.NewTaskService(taskInfra)
 	projectService := service.NewProjectService(projectInfra)
 
 	// ハンドラー層の初期化と登録
 	authHandler := app.NewAuthHandler(authService)
 	authHandler.SetHandler(api)
+
+	googleAuthHandler := app.NewGoogleAuthHandler(googleAuthService)
+	googleAuthHandler.SetHandler(api)
 
 	userHandler := app.NewUserHandler(userService)
 	userHandler.SetHandler(api)

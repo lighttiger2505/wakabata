@@ -6,6 +6,8 @@ require (
 	github.com/go-fuego/fuego v0.18.0
 	github.com/google/uuid v1.6.0
 	github.com/rs/cors v1.11.1
+	golang.org/x/oauth2 v0.18.0
+	google.golang.org/api v0.169.0
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gen v0.3.26
 	gorm.io/gorm v1.25.11
