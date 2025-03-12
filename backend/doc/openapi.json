@@ -51,6 +51,22 @@
 				},
 				"type": "object"
 			},
+			"LoginRequest": {
+				"description": "LoginRequest schema",
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object"
+			},
 			"Project": {
 				"description": "Project schema",
 				"properties": {
@@ -113,6 +129,18 @@
 						"type": "string"
 					}
 				},
+				"type": "object"
+			},
+			"RefreshTokenRequest": {
+				"description": "RefreshTokenRequest schema",
+				"properties": {
+					"refresh_token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"refresh_token"
+				],
 				"type": "object"
 			},
 			"Task": {
@@ -227,6 +255,18 @@
 				],
 				"type": "object"
 			},
+			"TokenPair": {
+				"description": "TokenPair schema",
+				"properties": {
+					"access_token": {
+						"type": "string"
+					},
+					"refresh_token": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
 			"User": {
 				"description": "User schema",
 				"properties": {
@@ -293,6 +333,168 @@
 	},
 	"openapi": "3.1.0",
 	"paths": {
+		"/api/v1/auth/login": {
+			"post": {
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*AuthHandler).Login`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "POST_/api/v1/auth/login",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						}
+					},
+					"description": "Request body for *app.LoginRequest",
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TokenPair"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/TokenPair"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "login",
+				"tags": [
+					"api/v1",
+					"auth"
+				]
+			}
+		},
+		"/api/v1/auth/refresh": {
+			"post": {
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*AuthHandler).RefreshToken`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "POST_/api/v1/auth/refresh",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RefreshTokenRequest"
+							}
+						}
+					},
+					"description": "Request body for *app.RefreshTokenRequest",
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TokenPair"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/TokenPair"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "refresh token",
+				"tags": [
+					"api/v1",
+					"auth"
+				]
+			}
+		},
 		"/api/v1/projects": {
 			"get": {
 				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*ProjectHandler).SearchProjects`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
@@ -1481,6 +1683,9 @@
 	"tags": [
 		{
 			"name": "api/v1"
+		},
+		{
+			"name": "auth"
 		},
 		{
 			"name": "project"

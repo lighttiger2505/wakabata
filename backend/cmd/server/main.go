@@ -58,19 +58,31 @@ func main() {
 	})
 
 	api := fuego.Group(server, "/api/v1")
+
+	// インフラ層の初期化
 	userInfra := infra.NewUserInfra()
 	emailVerificationTokenInfra := infra.NewEmailVerificationTokenInfra()
+	accessTokenInfra := infra.NewAccessTokenInfra()
+	refreshTokenInfra := infra.NewRefreshTokenInfra()
+	taskInfra := infra.NewTaskInfra(gormdb)
+	projectInfra := infra.NewProjectInfra()
+
+	// サービス層の初期化
 	userService := service.NewUserService(userInfra, emailVerificationTokenInfra)
+	authService := service.NewAuthService(userInfra, accessTokenInfra, refreshTokenInfra)
+	taskService := service.NewTaskService(taskInfra)
+	projectService := service.NewProjectService(projectInfra)
+
+	// ハンドラー層の初期化と登録
+	authHandler := app.NewAuthHandler(authService)
+	authHandler.SetHandler(api)
+
 	userHandler := app.NewUserHandler(userService)
 	userHandler.SetHandler(api)
 
-	taskInfra := infra.NewTaskInfra(gormdb)
-	taskService := service.NewTaskService(taskInfra)
 	taskHandler := app.NewTaskHandler(taskService)
 	taskHandler.SetHandler(api)
 
-	projectInfra := infra.NewProjectInfra()
-	projectService := service.NewProjectService(projectInfra)
 	projectHandler := app.NewProjectHandler(projectService)
 	projectHandler.SetHandler(api)
 
