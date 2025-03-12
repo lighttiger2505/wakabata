@@ -63,6 +63,24 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (*Token
 	return tokenPair, nil
 }
 
+func (s *AuthService) Logout(ctx context.Context, accessToken string) error {
+	// アクセストークンを検証
+	claims, err := util.ValidateJWTToken(accessToken)
+	if err != nil {
+		return fmt.Errorf("invalid access token: %v", err)
+	}
+
+	// 既存のトークンを無効化
+	if err := s.AccessTokenInfra.RevokeAllUserTokens(ctx, claims.UserID); err != nil {
+		return fmt.Errorf("failed to revoke access tokens: %v", err)
+	}
+	if err := s.RefreshTokenInfra.RevokeAllUserTokens(ctx, claims.UserID); err != nil {
+		return fmt.Errorf("failed to revoke refresh tokens: %v", err)
+	}
+
+	return nil
+}
+
 func (s *AuthService) RefreshTokens(ctx context.Context, refreshToken string) (*TokenPair, error) {
 	// リフレッシュトークンをハッシュ化して検証
 	tokenHash := util.HashToken(refreshToken)
