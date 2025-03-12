@@ -59,7 +59,8 @@ func main() {
 
 	api := fuego.Group(server, "/api/v1")
 	userInfra := infra.NewUserInfra()
-	userService := service.NewUserService(userInfra)
+	emailVerificationTokenInfra := infra.NewEmailVerificationTokenInfra()
+	userService := service.NewUserService(userInfra, emailVerificationTokenInfra)
 	userHandler := app.NewUserHandler(userService)
 	userHandler.SetHandler(api)
 

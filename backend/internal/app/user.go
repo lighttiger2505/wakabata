@@ -19,7 +19,6 @@ func NewUserHandler(s *service.UserService) *UserHandler {
 }
 
 func (h *UserHandler) SetHandler(server *fuego.Server) {
-
 	tagName := "user"
 	fuego.Get(server, "/users", h.SearchUsers, option.Tags(tagName))
 	fuego.Post(server, "/users", h.CreateUser, option.Tags(tagName), option.DefaultStatusCode(201), fuego.OptionRequestContentType("application/json"))
