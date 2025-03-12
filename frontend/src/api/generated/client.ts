@@ -17,8 +17,10 @@ import type {
 } from 'swr/mutation'
 import type {
   HTTPError,
+  LoginRequest,
   ProjectToCreate,
   ProjectToUpdate,
+  RefreshTokenRequest,
   TaskToCreate,
   TaskToUpdate,
   UserToCreate
@@ -33,7 +35,9 @@ import {
 } from 'msw'
 import type {
   Project,
+  String,
   Task,
+  TokenPair,
   UnknownInterface,
   User
 } from './model'
@@ -44,6 +48,120 @@ import type { ErrorType, BodyType } from '../../lib/custom-instance';
 
   
   type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*AuthHandler).Login`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary login
+ */
+export const pOSTApiV1AuthLogin = (
+    loginRequest: BodyType<LoginRequest>,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<TokenPair>(
+    {url: `/api/v1/auth/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginRequest
+    },
+    options);
+  }
+
+
+
+export const getPOSTApiV1AuthLoginMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, { arg }: { arg: LoginRequest }): Promise<TokenPair> => {
+    return pOSTApiV1AuthLogin(arg, options);
+  }
+}
+export const getPOSTApiV1AuthLoginMutationKey = () => [`/api/v1/auth/login`] as const;
+
+export type POSTApiV1AuthLoginMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTApiV1AuthLogin>>>
+export type POSTApiV1AuthLoginMutationError = ErrorType<HTTPError | void>
+
+/**
+ * @summary login
+ */
+export const usePOSTApiV1AuthLogin = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTApiV1AuthLogin>>, TError, Key, LoginRequest, Awaited<ReturnType<typeof pOSTApiV1AuthLogin>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+) => {
+
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPOSTApiV1AuthLoginMutationKey();
+  const swrFn = getPOSTApiV1AuthLoginMutationFetcher(requestOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*AuthHandler).RefreshToken`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary refresh token
+ */
+export const pOSTApiV1AuthRefresh = (
+    refreshTokenRequest: BodyType<RefreshTokenRequest>,
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<TokenPair>(
+    {url: `/api/v1/auth/refresh`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: refreshTokenRequest
+    },
+    options);
+  }
+
+
+
+export const getPOSTApiV1AuthRefreshMutationFetcher = ( options?: SecondParameter<typeof customInstance>) => {
+  return (_: Key, { arg }: { arg: RefreshTokenRequest }): Promise<TokenPair> => {
+    return pOSTApiV1AuthRefresh(arg, options);
+  }
+}
+export const getPOSTApiV1AuthRefreshMutationKey = () => [`/api/v1/auth/refresh`] as const;
+
+export type POSTApiV1AuthRefreshMutationResult = NonNullable<Awaited<ReturnType<typeof pOSTApiV1AuthRefresh>>>
+export type POSTApiV1AuthRefreshMutationError = ErrorType<HTTPError | void>
+
+/**
+ * @summary refresh token
+ */
+export const usePOSTApiV1AuthRefresh = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRMutationConfiguration<Awaited<ReturnType<typeof pOSTApiV1AuthRefresh>>, TError, Key, RefreshTokenRequest, Awaited<ReturnType<typeof pOSTApiV1AuthRefresh>>> & { swrKey?: string }, request?: SecondParameter<typeof customInstance>}
+) => {
+
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const swrKey = swrOptions?.swrKey ?? getPOSTApiV1AuthRefreshMutationKey();
+  const swrFn = getPOSTApiV1AuthRefreshMutationFetcher(requestOptions);
+
+  const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
 
 /**
  * #### Controller: 
@@ -800,36 +918,116 @@ export const usePUTApiV1UsersId = <TError = ErrorType<HTTPError | void>>(
   }
 }
 
+/**
+ * #### Controller: 
+
+`main.main.func1`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
 
 
-export const getGETApiV1ProjectsResponseMock = (): Project[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined])})))
+ * @summary func1
+ */
+export const gETHealth = (
+    
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<String>(
+    {url: `/health`, method: 'GET'
+    },
+    options);
+  }
 
-export const getPOSTApiV1ProjectsResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), ...overrideResponse})
+
+
+export const getGETHealthKey = () => [`/health`] as const;
+
+export type GETHealthQueryResult = NonNullable<Awaited<ReturnType<typeof gETHealth>>>
+export type GETHealthQueryError = ErrorType<HTTPError | void>
+
+/**
+ * @summary func1
+ */
+export const useGETHealth = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETHealth>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
+) => {
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const isEnabled = swrOptions?.enabled !== false
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETHealthKey() : null);
+  const swrFn = () => gETHealth(requestOptions)
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
+
+
+export const getPOSTApiV1AuthLoginResponseMock = (overrideResponse: Partial< TokenPair > = {}): TokenPair => ({access_token: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), refresh_token: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+
+export const getPOSTApiV1AuthRefreshResponseMock = (overrideResponse: Partial< TokenPair > = {}): TokenPair => ({access_token: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), refresh_token: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+
+export const getGETApiV1ProjectsResponseMock = (): Project[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined])})))
+
+export const getPOSTApiV1ProjectsResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
 
 export const getDELETEApiV1ProjectsIdResponseMock = (): UnknownInterface => ({})
 
-export const getGETApiV1ProjectsIdResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), ...overrideResponse})
+export const getGETApiV1ProjectsIdResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
 
-export const getPUTApiV1ProjectsIdResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), ...overrideResponse})
+export const getPUTApiV1ProjectsIdResponseMock = (overrideResponse: Partial< Project > = {}): Project => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
 
-export const getGETApiV1TasksResponseMock = (): Task[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), project_name: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined])})))
+export const getGETApiV1TasksResponseMock = (): Task[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), project_name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined])})))
 
-export const getPOSTApiV1TasksResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), project_name: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
+export const getPOSTApiV1TasksResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), project_name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
 
 export const getDELETEApiV1TasksIdResponseMock = (): UnknownInterface => ({})
 
-export const getGETApiV1TasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), project_name: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
+export const getGETApiV1TasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), project_name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
 
-export const getPUTApiV1TasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), project_name: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha(20), null]), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
+export const getPUTApiV1TasksIdResponseMock = (overrideResponse: Partial< Task > = {}): Task => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), due_date: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), priority: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), undefined]), project_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), project_name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), status: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
 
-export const getGETApiV1UsersResponseMock = (): User[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined])})))
+export const getGETApiV1UsersResponseMock = (): User[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), is_email_verified: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), totp_secret: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined])})))
 
-export const getPOSTApiV1UsersResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+export const getPOSTApiV1UsersResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), is_email_verified: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), totp_secret: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
 
-export const getGETApiV1UsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+export const getGETApiV1UsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), is_email_verified: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), totp_secret: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
 
-export const getPUTApiV1UsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), username: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+export const getPUTApiV1UsersIdResponseMock = (overrideResponse: Partial< User > = {}): User => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), is_email_verified: faker.helpers.arrayElement([faker.datatype.boolean(), undefined]), password_hash: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), totp_secret: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), ...overrideResponse})
 
+export const getGETHealthResponseMock = (): String => (faker.string.alpha(20))
+
+
+export const getPOSTApiV1AuthLoginMockHandler = (overrideResponse?: TokenPair | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<TokenPair> | TokenPair)) => {
+  return http.post('*/api/v1/auth/login', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getPOSTApiV1AuthLoginResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getPOSTApiV1AuthRefreshMockHandler = (overrideResponse?: TokenPair | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<TokenPair> | TokenPair)) => {
+  return http.post('*/api/v1/auth/refresh', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getPOSTApiV1AuthRefreshResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
 
 export const getGETApiV1ProjectsMockHandler = (overrideResponse?: Project[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<Project[]> | Project[])) => {
   return http.get('*/api/v1/projects', async (info) => {await delay(1000);
@@ -998,7 +1196,21 @@ export const getPUTApiV1UsersIdMockHandler = (overrideResponse?: User | ((info: 
       })
   })
 }
+
+export const getGETHealthMockHandler = (overrideResponse?: String | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<String> | String)) => {
+  return http.get('*/health', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGETHealthResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
 export const getOpenAPIMock = () => [
+  getPOSTApiV1AuthLoginMockHandler(),
+  getPOSTApiV1AuthRefreshMockHandler(),
   getGETApiV1ProjectsMockHandler(),
   getPOSTApiV1ProjectsMockHandler(),
   getDELETEApiV1ProjectsIdMockHandler(),
@@ -1012,5 +1224,6 @@ export const getOpenAPIMock = () => [
   getGETApiV1UsersMockHandler(),
   getPOSTApiV1UsersMockHandler(),
   getGETApiV1UsersIdMockHandler(),
-  getPUTApiV1UsersIdMockHandler()
+  getPUTApiV1UsersIdMockHandler(),
+  getGETHealthMockHandler()
 ]

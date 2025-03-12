@@ -14,8 +14,12 @@ export interface User {
   created_at?: string | null;
   email?: string;
   id?: string;
+  /** @nullable */
+  is_email_verified?: boolean | null;
+  /** string schema */
   password_hash?: string;
+  /** string schema */
+  totp_secret?: string;
   /** @nullable */
   updated_at?: string | null;
-  username?: string;
 }

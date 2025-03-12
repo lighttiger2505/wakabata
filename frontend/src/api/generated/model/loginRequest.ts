@@ -7,9 +7,9 @@
  */
 
 /**
- * UserToCreate schema
+ * LoginRequest schema
  */
-export interface UserToCreate {
+export interface LoginRequest {
   email: string;
-  password_hash: string;
+  password: string;
 }

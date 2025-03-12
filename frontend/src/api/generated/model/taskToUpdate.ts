@@ -10,15 +10,15 @@
  * TaskToUpdate schema
  */
 export interface TaskToUpdate {
-  /** @nullable */
-  description?: string | null;
+  /** string schema */
+  description?: string;
   /** @nullable */
   due_date?: string | null;
   name: string;
   /** @nullable */
   priority?: number | null;
-  /** @nullable */
-  project_id?: string | null;
+  /** string schema */
+  project_id?: string;
   /** @nullable */
   status?: boolean | null;
 }

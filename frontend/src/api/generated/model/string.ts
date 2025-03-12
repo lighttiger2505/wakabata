@@ -7,9 +7,6 @@
  */
 
 /**
- * UserToCreate schema
+ * string schema
  */
-export interface UserToCreate {
-  email: string;
-  password_hash: string;
-}
+export type String = string;

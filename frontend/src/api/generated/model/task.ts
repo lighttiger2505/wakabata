@@ -12,18 +12,18 @@
 export interface Task {
   /** @nullable */
   created_at?: string | null;
-  /** @nullable */
-  description?: string | null;
+  /** string schema */
+  description?: string;
   /** @nullable */
   due_date?: string | null;
   id?: string;
   name?: string;
   /** @nullable */
   priority?: number | null;
-  /** @nullable */
-  project_id?: string | null;
-  /** @nullable */
-  project_name?: string | null;
+  /** string schema */
+  project_id?: string;
+  /** string schema */
+  project_name?: string;
   /** @nullable */
   status?: boolean | null;
   /** @nullable */

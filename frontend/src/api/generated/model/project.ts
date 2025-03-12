@@ -12,12 +12,12 @@
 export interface Project {
   /** @nullable */
   created_at?: string | null;
-  /** @nullable */
-  description?: string | null;
+  /** string schema */
+  description?: string;
   id?: string;
   name?: string;
   /** @nullable */
   updated_at?: string | null;
-  /** @nullable */
-  user_id?: string | null;
+  /** string schema */
+  user_id?: string;
 }

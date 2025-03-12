@@ -7,9 +7,8 @@
  */
 
 /**
- * UserToCreate schema
+ * RefreshTokenRequest schema
  */
-export interface UserToCreate {
-  email: string;
-  password_hash: string;
+export interface RefreshTokenRequest {
+  refresh_token: string;
 }

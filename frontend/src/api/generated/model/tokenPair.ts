@@ -7,9 +7,9 @@
  */
 
 /**
- * UserToCreate schema
+ * TokenPair schema
  */
-export interface UserToCreate {
-  email: string;
-  password_hash: string;
+export interface TokenPair {
+  access_token?: string;
+  refresh_token?: string;
 }

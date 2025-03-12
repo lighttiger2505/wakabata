@@ -10,9 +10,9 @@
  * ProjectToUpdate schema
  */
 export interface ProjectToUpdate {
-  /** @nullable */
-  description?: string | null;
+  /** string schema */
+  description?: string;
   name?: string;
-  /** @nullable */
-  user_id?: string | null;
+  /** string schema */
+  user_id?: string;
 }
