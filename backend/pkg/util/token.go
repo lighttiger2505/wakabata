@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 var jwtSecretKey = []byte("your-secret-key") // TODO: 環境変数から取得するように変更する
