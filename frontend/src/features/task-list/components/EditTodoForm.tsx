@@ -49,9 +49,9 @@ export default function EditTodoForm({ todo, onCloseAction }: EditTodoFormProps)
     // request to update the task
     const editTask = {
       name: values.name,
-      description: values.description,
+      description: values.description || undefined,
       due_date: dateToRFC3339(values.due_date),
-      project_id: values.project_id,
+      project_id: values.project_id || undefined,
     } satisfies Task;
     await trigger(editTask);
 

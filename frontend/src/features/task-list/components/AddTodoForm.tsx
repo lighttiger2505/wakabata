@@ -44,9 +44,9 @@ export default function AddTodoForm() {
     form.reset();
     trigger({
       name: values.name,
-      description: values.description,
+      description: values.description || undefined,
       due_date: dateToRFC3339(values.due_date),
-      project_id: values.project_id,
+      project_id: values.project_id || undefined,
     });
   };
 

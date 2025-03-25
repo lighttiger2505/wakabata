@@ -32,7 +32,7 @@ export default function AddProjectForm() {
     form.reset();
     trigger({
       name: values.name,
-      description: values.description,
+      description: values.description || "",
     });
   };
 
