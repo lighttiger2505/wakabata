@@ -3,6 +3,7 @@
 import { useLogin } from "@/api/auth";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,42 +50,51 @@ export function LoginForm() {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>メールアドレス</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="example@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <Card>
+      <CardHeader>
+        <CardTitle>ログイン</CardTitle>
+        <CardDescription>ここにメールアドレスとパスワードをいれるとログインできる。スゴい</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>メールアドレス</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="example@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>パスワード</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="********" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>パスワード</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="********" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {error && <div className="text-red-500 text-sm dark:text-red-400">{error}</div>}
-
+            {error && <div className="text-red-500 text-sm dark:text-red-400">{error}</div>}
+          </form>
+        </Form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "ログイン中..." : "ログイン"}
         </Button>
-      </form>
-    </Form>
+      </CardFooter>
+    </Card>
   );
 }
