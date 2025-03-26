@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 // 認証が必要なパス
 const protectedPaths = ["/projects", "/settings"];
 // 認証済みユーザーがアクセスできないパス
-const authPaths = ["/login"];
+const publicPaths = ["/login", "signup", "/"];
 
 export function middleware(request: NextRequest) {
   const authToken = request.cookies.get("auth-storage")?.value;
@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 認証済みユーザーのログインページへのアクセス
-  if (authPaths.includes(path) && isAuthenticated) {
+  if (publicPaths.includes(path) && isAuthenticated) {
     return NextResponse.redirect(new URL("/projects", request.url));
   }
 
