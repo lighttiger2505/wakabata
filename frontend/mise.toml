@@ -1,0 +1,14 @@
+[tools]
+node = '24'
+pnpm = "10.12.2"
+
+[tasks.pnpm-install]
+description = 'Installs dependencies with pnpm'
+run = 'pnpm install --frozen-lockfile'
+sources = ['package.json', 'pnpm-lock.yaml', 'mise.toml']
+outputs = ['node_modules/.pnpm/lock.yaml']
+
+[tasks.dev]
+description = 'Calls your dev script in `package.json`'
+run = 'pnpm run dev'
+depends = ['pnpm-install']
