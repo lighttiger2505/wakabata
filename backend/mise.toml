@@ -2,10 +2,43 @@
 go = "1.24.4"
 golangci-lint = "2.1.6"
 
-[tasks.run]
-description = 'go run'
-run = 'go run ./cmd/server/main.go'
+[vars]
+server_main_file = "./cmd/server/main.go"
+server_bin_file = "./bin/server"
+flayway_cmd = "docker-compose run --rm flyway -url=jdbc:postgresql://db:5432/wakabatasks -user=exampleuser -password=examplepass"
+
+[tasks.upcontainer]
+run = 'docker compose -f docker-compose.dev.yml up -d'
+
+[tasks.flyway-migrate]
+run = '{{vars.flayway_cmd}} migrate'
+
+[tasks.flyway-clean]
+run = '{{vars.flayway_cmd}} -cleanDisabled=false clean'
+
+[tasks.flyway-validate]
+run = '{{vars.flayway_cmd}} validate'
+
+[tasks.flyway-repair]
+run = '{{vars.flayway_cmd}} repair'
+
+[tasks.dev]
+run = 'go run {{vars.server_main_file}}'
+depends = ['upcontainer']
+
+[tasks.build]
+run = 'go build -o {{vars.server_bin_file}} {{vars.server_main_file}}'
 
 [tasks.lint]
-description = 'golangci-lint run'
-run = 'go run ./cmd/server/main.go'
+run = 'golangci-lint run'
+
+[tasks.generate-openapi]
+run = 'go run {{vars.server_main_file}} --generate-open-api'
+
+[tasks.generate-gorm]
+run = 'go run ./cmd/gen/main.go'
+
+[env]
+GOOGLE_CLIENT_ID = "123456789012-abcdeFGHIjklMNopQRstuVwxyZ.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET = "XyZAbCdEfGhIjKlMnOpQrStUvWxYz1234"
+GOOGLE_REDIRECT_URL = "http://localhost:3000/auth/google/callback"
