@@ -4,10 +4,10 @@ import (
 	"flag"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/go-fuego/fuego"
 	"github.com/lighttiger2505/wakabata/internal/app"
+	"github.com/lighttiger2505/wakabata/internal/config"
 	"github.com/lighttiger2505/wakabata/internal/domain/service"
 	"github.com/lighttiger2505/wakabata/internal/infra"
 	"github.com/lighttiger2505/wakabata/internal/infra/persistence/postgres"
@@ -23,18 +23,7 @@ func main() {
 	flag.Parse()
 
 	// 環境変数の取得
-	googleClientID := os.Getenv("GOOGLE_CLIENT_ID")
-	if googleClientID == "" {
-		log.Fatal("GOOGLE_CLIENT_ID is required")
-	}
-	googleClientSecret := os.Getenv("GOOGLE_CLIENT_SECRET")
-	if googleClientSecret == "" {
-		log.Fatal("GOOGLE_CLIENT_SECRET is required")
-	}
-	googleRedirectURL := os.Getenv("GOOGLE_REDIRECT_URL")
-	if googleRedirectURL == "" {
-		log.Fatal("GOOGLE_REDIRECT_URL is required")
-	}
+	cfg := config.Get()
 
 	gormdb, err := postgres.OpenGormDB()
 	if err != nil {
@@ -43,7 +32,7 @@ func main() {
 	query.SetDefault(gormdb)
 
 	server := fuego.NewServer(
-		fuego.WithAddr("0.0.0.0:8088"),
+		fuego.WithAddr("0.0.0.0:"+cfg.PORT),
 		fuego.WithEngineOptions(
 			fuego.WithOpenAPIConfig(
 				fuego.OpenAPIConfig{
@@ -87,9 +76,9 @@ func main() {
 	userService := service.NewUserService(userInfra, emailVerificationTokenInfra)
 	authService := service.NewAuthService(userInfra, accessTokenInfra, refreshTokenInfra)
 	googleAuthService := service.NewGoogleAuthService(
-		googleClientID,
-		googleClientSecret,
-		googleRedirectURL,
+		cfg.GoogleClientID,
+		cfg.GoogleClientSecret,
+		cfg.GoogleRedirectURL,
 		userInfra,
 		authProviderInfra,
 		authService,
