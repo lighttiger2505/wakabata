@@ -1,16 +1,21 @@
 import Axios from "axios";
 import type { AxiosError, AxiosRequestConfig } from "axios";
+import { getCookieValue, removeCookieValue, setCookieValue } from "./cookie-utils";
 
 export const AXIOS_INSTANCE = Axios.create({ baseURL: process.env.NEXT_PUBLIC_API_HOST });
 
 // インターセプターを追加して認証トークンを設定
 AXIOS_INSTANCE.interceptors.request.use((config) => {
   // auth-storageからトークンを取得
-  const authStorage = localStorage.getItem("auth-storage");
+  const authStorage = getCookieValue("auth-storage");
   if (authStorage) {
-    const { state } = JSON.parse(authStorage);
-    if (state.token?.access_token) {
-      config.headers.Authorization = `Bearer ${state.token.access_token}`;
+    try {
+      const { state } = JSON.parse(authStorage);
+      if (state.token?.access_token) {
+        config.headers.Authorization = `Bearer ${state.token.access_token}`;
+      }
+    } catch (error) {
+      console.error("Failed to parse auth storage from cookie:", error);
     }
   }
   return config;
@@ -27,7 +32,7 @@ AXIOS_INSTANCE.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const authStorage = localStorage.getItem("auth-storage");
+        const authStorage = getCookieValue("auth-storage");
         if (authStorage) {
           const { state } = JSON.parse(authStorage);
           if (state.token?.refresh_token) {
@@ -43,7 +48,12 @@ AXIOS_INSTANCE.interceptors.response.use(
               ...state,
               token: { access_token, refresh_token },
             };
-            localStorage.setItem("auth-storage", JSON.stringify({ state: newState }));
+            setCookieValue("auth-storage", JSON.stringify({ state: newState }), {
+              httpOnly: false, // クライアントサイドからアクセス可能にする
+              secure: process.env.NODE_ENV === "production",
+              sameSite: "lax",
+              maxAge: 60 * 60 * 24 * 7, // 7 days
+            });
 
             // 元のリクエストを再試行
             originalRequest.headers.Authorization = `Bearer ${access_token}`;
@@ -53,7 +63,7 @@ AXIOS_INSTANCE.interceptors.response.use(
       } catch (refreshError) {
         // リフレッシュに失敗した場合、認証情報をクリアしてログインページにリダイレクト
         // middlewareが適切なリダイレクトを処理する
-        localStorage.removeItem("auth-storage");
+        removeCookieValue("auth-storage");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

@@ -1,5 +1,6 @@
 import { gETApiV1AuthMe, pOSTApiV1AuthLogin } from "@/api/generated/client";
 import { TokenPair, User } from "@/api/generated/model";
+import { createAuthStorageInterface } from "@/lib/cookie-utils";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -125,18 +126,8 @@ export const useAuth = create<AuthStore>()(
     },
     {
       name: "auth-storage",
-      // ローカルストレージを使用（custom-instanceとの整合性を保つため）
-      storage: {
-        getItem: (name) => {
-          const str = localStorage.getItem(name);
-          if (!str) return null;
-          return JSON.parse(str);
-        },
-        setItem: (name, value) => {
-          localStorage.setItem(name, JSON.stringify(value));
-        },
-        removeItem: (name) => localStorage.removeItem(name),
-      },
+      // Cookieベースのストレージを使用
+      storage: createAuthStorageInterface(),
     },
   ),
 );

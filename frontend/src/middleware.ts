@@ -5,8 +5,6 @@ import type { NextRequest } from "next/server";
 const protectedPaths = ["/projects", "/settings"];
 // 認証済みユーザーがアクセスできないパス（ログインページなど）
 const authOnlyPublicPaths = ["/login", "/signup"];
-// 完全に公開されているパス
-const publicPaths = ["/"];
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -36,7 +34,7 @@ function getAuthState(request: NextRequest): AuthState | null {
     }
 
     return state;
-  } catch (error) {
+  } catch (_error) {
     // JSONパースエラーなどの場合はnullを返す
     return null;
   }
@@ -48,10 +46,6 @@ function isProtectedPath(path: string): boolean {
 
 function isAuthOnlyPublicPath(path: string): boolean {
   return authOnlyPublicPaths.includes(path);
-}
-
-function isPublicPath(path: string): boolean {
-  return publicPaths.includes(path);
 }
 
 export function middleware(request: NextRequest) {
