@@ -4,7 +4,7 @@ SERVER_BIN_FILE="./bin/server"
 .PHONY: up
 up:
 	# docker-compose up -d
-	docker compose -f docker-compose.dev.yml up -d
+	docker compose -f docker-compose.yml up -d
 
 .PHONY: down
 down:
