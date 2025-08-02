@@ -11,5 +11,5 @@
  */
 export interface UserToCreate {
   email: string;
-  password_hash: string;
+  password: string;
 }

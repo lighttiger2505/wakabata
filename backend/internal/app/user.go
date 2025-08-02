@@ -28,7 +28,7 @@ func (h *UserHandler) SetHandler(server *fuego.Server) {
 
 type UserToCreate struct {
 	Email    string `json:"email" validate:"required"`
-	Password string `json:"password_hash" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 func (h *UserHandler) CreateUser(c fuego.ContextWithBody[*UserToCreate]) (*model.User, error) {

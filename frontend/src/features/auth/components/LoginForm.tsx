@@ -2,11 +2,12 @@
 
 import { useLogin } from "@/api/auth";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -90,10 +91,16 @@ export function LoginForm() {
           </form>
         </Form>
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex flex-col space-y-4">
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "ログイン中..." : "ログイン"}
         </Button>
+        <div className="text-center text-gray-600 text-sm dark:text-gray-400">
+          アカウントをお持ちでない方は{" "}
+          <Link href="/signup" className="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+            こちらから登録
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   );

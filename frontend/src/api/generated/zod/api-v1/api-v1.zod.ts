@@ -227,7 +227,7 @@ export const pUTApiV1TasksIdBody = zod.object({
  */
 export const pOSTApiV1UsersBody = zod.object({
   "email": zod.string(),
-  "password_hash": zod.string()
+  "password": zod.string()
 })
 
 /**

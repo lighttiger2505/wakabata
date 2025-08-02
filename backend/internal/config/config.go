@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	Port string `envconfig:"PORT" default:"8080"`
+	Port string `envconfig:"PORT" default:"8088"`
 }
 
 var (
@@ -22,7 +22,7 @@ func loadConfig() *Config {
 	if err != nil {
 		log.Fatal("Failed to load configuration:", err)
 	}
-	
+
 	log.Printf("Configuration loaded successfully - Port: %s", cfg.Port)
 	return &cfg
 }
@@ -33,3 +33,4 @@ func Get() *Config {
 	})
 	return config
 }
+
