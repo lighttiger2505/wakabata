@@ -51,7 +51,8 @@ AXIOS_INSTANCE.interceptors.response.use(
           }
         }
       } catch (refreshError) {
-        // リフレッシュに失敗した場合、ログアウト
+        // リフレッシュに失敗した場合、認証情報をクリアしてログインページにリダイレクト
+        // middlewareが適切なリダイレクトを処理する
         localStorage.removeItem("auth-storage");
         window.location.href = "/login";
         return Promise.reject(refreshError);

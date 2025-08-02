@@ -1,6 +1,5 @@
 "use client";
 
-import { useLogin } from "@/api/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -8,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,8 +21,8 @@ type LoginFormValues = z.infer<typeof loginFormSchema>;
 
 export function LoginForm() {
   const router = useRouter();
-  const { login: storeLogin } = useAuth();
-  const { login: apiLogin, isLoading } = useLogin();
+  const searchParams = useSearchParams();
+  const { login, isLoading } = useAuth();
   const [error, setError] = useState<string>("");
 
   const form = useForm<LoginFormValues>({
@@ -36,15 +35,17 @@ export function LoginForm() {
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
-      const tokenPair = await apiLogin(values);
-      if (tokenPair.access_token) {
-        const success = await storeLogin(values.email, values.password);
-        if (success) {
-          router.push("/projects");
-          return;
-        }
+      setError("");
+      const success = await login(values.email, values.password);
+      if (success) {
+        // ログイン成功後はmiddlewareがリダイレクトを処理するため、
+        // 単純にページを更新するか、元のページに戻る
+        const from = searchParams.get("from");
+        const redirectTo = from || "/projects";
+        router.push(redirectTo);
+      } else {
+        setError("メールアドレスまたはパスワードが正しくありません");
       }
-      setError("メールアドレスまたはパスワードが正しくありません");
     } catch (_error) {
       setError("ログイン中にエラーが発生しました");
     }
@@ -92,7 +93,7 @@ export function LoginForm() {
         </Form>
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" className="w-full" disabled={isLoading} onClick={form.handleSubmit(onSubmit)}>
           {isLoading ? "ログイン中..." : "ログイン"}
         </Button>
         <div className="text-center text-gray-600 text-sm dark:text-gray-400">
