@@ -32,7 +32,7 @@ func main() {
 	query.SetDefault(gormdb)
 
 	server := fuego.NewServer(
-		fuego.WithAddr("0.0.0.0:"+cfg.PORT),
+		fuego.WithAddr("0.0.0.0:"+cfg.Port),
 		fuego.WithEngineOptions(
 			fuego.WithOpenAPIConfig(
 				fuego.OpenAPIConfig{
