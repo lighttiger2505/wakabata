@@ -414,6 +414,76 @@
 				]
 			}
 		},
+		"/api/v1/auth/logout": {
+			"post": {
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*AuthHandler).Logout`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "POST_/api/v1/auth/logout",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/string"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/string"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "logout",
+				"tags": [
+					"api/v1",
+					"auth"
+				]
+			}
+		},
 		"/api/v1/auth/refresh": {
 			"post": {
 				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*AuthHandler).RefreshToken`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
@@ -1677,7 +1747,7 @@
 	"servers": [
 		{
 			"description": "local server",
-			"url": "http://0.0.0.0:8088"
+			"url": "http://0.0.0.0:8080"
 		}
 	],
 	"tags": [

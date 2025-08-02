@@ -8,10 +8,7 @@ import (
 )
 
 type Config struct {
-	Port               string `envconfig:"PORT" default:"8080"`
-	GoogleClientID     string `envconfig:"GOOGLE_CLIENT_ID" required:"true"`
-	GoogleClientSecret string `envconfig:"GOOGLE_CLIENT_SECRET" required:"true"`
-	GoogleRedirectURL  string `envconfig:"GOOGLE_REDIRECT_URL" required:"true"`
+	Port string `envconfig:"PORT" default:"8080"`
 }
 
 var (

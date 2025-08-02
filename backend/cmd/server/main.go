@@ -68,21 +68,13 @@ func main() {
 	emailVerificationTokenInfra := infra.NewEmailVerificationTokenInfra()
 	accessTokenInfra := infra.NewAccessTokenInfra()
 	refreshTokenInfra := infra.NewRefreshTokenInfra()
-	authProviderInfra := infra.NewAuthProviderInfra()
 	taskInfra := infra.NewTaskInfra(gormdb)
 	projectInfra := infra.NewProjectInfra()
 
 	// サービス層の初期化
 	userService := service.NewUserService(userInfra, emailVerificationTokenInfra)
 	authService := service.NewAuthService(userInfra, accessTokenInfra, refreshTokenInfra)
-	googleAuthService := service.NewGoogleAuthService(
-		cfg.GoogleClientID,
-		cfg.GoogleClientSecret,
-		cfg.GoogleRedirectURL,
-		userInfra,
-		authProviderInfra,
-		authService,
-	)
+
 	taskService := service.NewTaskService(taskInfra)
 	projectService := service.NewProjectService(projectInfra)
 
@@ -90,8 +82,7 @@ func main() {
 	authHandler := app.NewAuthHandler(authService)
 	authHandler.SetHandler(api)
 
-	googleAuthHandler := app.NewGoogleAuthHandler(googleAuthService)
-	googleAuthHandler.SetHandler(api)
+
 
 	userHandler := app.NewUserHandler(userService)
 	userHandler.SetHandler(api)

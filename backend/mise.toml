@@ -38,7 +38,3 @@ run = 'go run {{vars.server_main_file}} --generate-open-api'
 [tasks.generate-gorm]
 run = 'go run ./cmd/gen/main.go'
 
-[env]
-GOOGLE_CLIENT_ID = "123456789012-abcdeFGHIjklMNopQRstuVwxyZ.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET = "XyZAbCdEfGhIjKlMnOpQrStUvWxYz1234"
-GOOGLE_REDIRECT_URL = "http://localhost:3000/auth/google/callback"
