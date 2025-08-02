@@ -31,7 +31,7 @@ WakabaTa is a TODO application with a Go backend (using Fuego framework) and Nex
 
 ## Development Commands
 
-### Backend
+### Backend (run from `/backend`)
 - `make up` - Start PostgreSQL database in Docker
 - `make server` - Run Go server locally
 - `make watch` - Run server with hot reload (requires Air)
@@ -41,40 +41,46 @@ WakabaTa is a TODO application with a Go backend (using Fuego framework) and Nex
 - `make flyway-migrate` - Run database migrations
 - `make lint` - Run golangci-lint
 
-### Frontend
+### Frontend (run from `/frontend`)
 - `pnpm dev` - Start development server with Turbopack
 - `pnpm build` - Build for production
-- `pnpm lint` - Run Biome linting
+- `pnpm lint` - Run Biome linting (requires file paths)
 - `pnpm format` - Run Biome formatting
 - `pnpm check` - Run Biome checks (lint + format)
 - `pnpm type-check` - Run TypeScript type checking
 - Add `:fix` suffix to auto-fix issues (e.g., `pnpm lint:fix`)
 
 ### API Client Generation
-Generate frontend API client from OpenAPI spec:
+After backend API changes, regenerate frontend client:
 1. `cd backend && make openapi` - Generate OpenAPI spec
-2. `cd frontend && pnpm orval` - Generate API client and Zod schemas
+2. `cd frontend && pnpm orval` - Generate API client and Zod schemas from OpenAPI
+
+## Project Structure
+
+This is a monorepo with separate `/backend` (Go) and `/frontend` (Next.js) directories. Most development commands must be run from the appropriate subdirectory.
 
 ## Key Configuration
 
 - **Database migrations:** Located in `backend/flyway/sql/`
 - **Code generation:** 
-  - Backend: `backend/cmd/gen/main.go` generates GORM models
-  - Frontend: `frontend/orval.config.ts` generates API client from OpenAPI
-- **Git hooks:** Lefthook runs Biome checks and golangci-lint on pre-commit/pre-push
+  - Backend: `backend/cmd/gen/main.go` generates GORM models and queries
+  - Frontend: `frontend/orval.config.ts` generates API client and Zod schemas from OpenAPI
+- **Tool management:** Both directories use `mise.toml` for development tools
+- **Git hooks:** Lefthook configuration in root runs quality checks on pre-commit/pre-push
 - **Environment variables:** Backend requires `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URL`
 
-## Testing and Quality
+## Code Quality
 
 - Frontend uses Biome (configured in `biome.json`) for linting and formatting
-- Backend uses golangci-lint for Go code quality
+- Backend uses golangci-lint for Go code quality  
 - Git hooks automatically run quality checks before commits
 - Type checking enforced with TypeScript and `pnpm type-check`
+- No automated test suite currently configured
 
 ## Development Workflow
 
-1. Use `make up` to start the database
-2. Run `make gormgen` after database schema changes
-3. Use `make openapi` and `pnpm orval` after API changes
-4. Run `make server` (backend) and `pnpm dev` (frontend) for development
+1. `cd backend && make up` - Start the database
+2. `cd backend && make gormgen` - After database schema changes
+3. `cd backend && make openapi && cd ../frontend && pnpm orval` - After API changes
+4. `cd backend && make server` + `cd frontend && pnpm dev` - Start both servers for development
 5. All code must pass linting and type checking before commits
