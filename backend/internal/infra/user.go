@@ -16,7 +16,8 @@ func NewUserInfra() *UserInfra {
 }
 
 func (i *UserInfra) Create(ctx context.Context, user *model.User) (*model.User, error) {
-	if err := query.User.WithContext(ctx).Create(user); err != nil {
+	u:=query.User
+	if err := query.User.WithContext(ctx).Omit(u.ID, u.CreatedAt, u.UpdatedAt).Create(user); err != nil {
 		return nil, err
 	}
 	return user, nil
