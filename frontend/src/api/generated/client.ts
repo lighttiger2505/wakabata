@@ -39,7 +39,8 @@ import type {
   Task,
   TokenPair,
   UnknownInterface,
-  User
+  User,
+  UserInfo
 } from './model'
 import { customInstance } from '../../lib/custom-instance';
 import type { ErrorType, BodyType } from '../../lib/custom-instance';
@@ -154,6 +155,56 @@ export const usePOSTApiV1AuthLogout = <TError = ErrorType<HTTPError | void>>(
   const swrFn = getPOSTApiV1AuthLogoutMutationFetcher(requestOptions);
 
   const query = useSWRMutation(swrKey, swrFn, swrOptions)
+
+  return {
+    swrKey,
+    ...query
+  }
+}
+
+/**
+ * #### Controller: 
+
+`github.com/lighttiger2505/wakabata/internal/app.(*AuthHandler).GetCurrentUser`
+
+#### Middlewares:
+
+- `github.com/go-fuego/fuego.defaultLogger.middleware`
+
+---
+
+
+ * @summary get current user
+ */
+export const gETApiV1AuthMe = (
+    
+ options?: SecondParameter<typeof customInstance>) => {
+    return customInstance<UserInfo>(
+    {url: `/api/v1/auth/me`, method: 'GET'
+    },
+    options);
+  }
+
+
+
+export const getGETApiV1AuthMeKey = () => [`/api/v1/auth/me`] as const;
+
+export type GETApiV1AuthMeQueryResult = NonNullable<Awaited<ReturnType<typeof gETApiV1AuthMe>>>
+export type GETApiV1AuthMeQueryError = ErrorType<HTTPError | void>
+
+/**
+ * @summary get current user
+ */
+export const useGETApiV1AuthMe = <TError = ErrorType<HTTPError | void>>(
+   options?: { swr?:SWRConfiguration<Awaited<ReturnType<typeof gETApiV1AuthMe>>, TError> & { swrKey?: Key, enabled?: boolean }, request?: SecondParameter<typeof customInstance> }
+) => {
+  const {swr: swrOptions, request: requestOptions} = options ?? {}
+
+  const isEnabled = swrOptions?.enabled !== false
+  const swrKey = swrOptions?.swrKey ?? (() => isEnabled ? getGETApiV1AuthMeKey() : null);
+  const swrFn = () => gETApiV1AuthMe(requestOptions)
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(swrKey, swrFn, swrOptions)
 
   return {
     swrKey,
@@ -1029,6 +1080,8 @@ export const getPOSTApiV1AuthLoginResponseMock = (overrideResponse: Partial< Tok
 
 export const getPOSTApiV1AuthLogoutResponseMock = (): String => (faker.string.alpha(20))
 
+export const getGETApiV1AuthMeResponseMock = (overrideResponse: Partial< UserInfo > = {}): UserInfo => ({email: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
+
 export const getPOSTApiV1AuthRefreshResponseMock = (overrideResponse: Partial< TokenPair > = {}): TokenPair => ({access_token: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), refresh_token: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
 
 export const getGETApiV1ProjectsResponseMock = (): Project[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({created_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), description: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), id: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), name: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), updated_at: faker.helpers.arrayElement([faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), undefined]), user_id: faker.helpers.arrayElement([faker.string.alpha(20), undefined])})))
@@ -1080,6 +1133,18 @@ export const getPOSTApiV1AuthLogoutMockHandler = (overrideResponse?: String | ((
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
             : getPOSTApiV1AuthLogoutResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  })
+}
+
+export const getGETApiV1AuthMeMockHandler = (overrideResponse?: UserInfo | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserInfo> | UserInfo)) => {
+  return http.get('*/api/v1/auth/me', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGETApiV1AuthMeResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
@@ -1280,6 +1345,7 @@ export const getGETHealthMockHandler = (overrideResponse?: String | ((info: Para
 export const getOpenAPIMock = () => [
   getPOSTApiV1AuthLoginMockHandler(),
   getPOSTApiV1AuthLogoutMockHandler(),
+  getGETApiV1AuthMeMockHandler(),
   getPOSTApiV1AuthRefreshMockHandler(),
   getGETApiV1ProjectsMockHandler(),
   getPOSTApiV1ProjectsMockHandler(),

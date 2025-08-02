@@ -301,6 +301,18 @@
 				},
 				"type": "object"
 			},
+			"UserInfo": {
+				"description": "UserInfo schema",
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"id": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
 			"UserToCreate": {
 				"description": "UserToCreate schema",
 				"properties": {
@@ -478,6 +490,76 @@
 					}
 				},
 				"summary": "logout",
+				"tags": [
+					"api/v1",
+					"auth"
+				]
+			}
+		},
+		"/api/v1/auth/me": {
+			"get": {
+				"description": "#### Controller: \n\n`github.com/lighttiger2505/wakabata/internal/app.(*AuthHandler).GetCurrentUser`\n\n#### Middlewares:\n\n- `github.com/go-fuego/fuego.defaultLogger.middleware`\n\n---\n\n",
+				"operationId": "GET_/api/v1/auth/me",
+				"parameters": [
+					{
+						"in": "header",
+						"name": "Accept",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserInfo"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/UserInfo"
+								}
+							}
+						},
+						"description": "OK"
+					},
+					"400": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Bad Request _(validation or deserialization error)_"
+					},
+					"500": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							},
+							"application/xml": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPError"
+								}
+							}
+						},
+						"description": "Internal Server Error _(panics)_"
+					},
+					"default": {
+						"description": ""
+					}
+				},
+				"summary": "get current user",
 				"tags": [
 					"api/v1",
 					"auth"
@@ -1744,12 +1826,6 @@
 			}
 		}
 	},
-	"servers": [
-		{
-			"description": "local server",
-			"url": "http://0.0.0.0:8088"
-		}
-	],
 	"tags": [
 		{
 			"name": "api/v1"

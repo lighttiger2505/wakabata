@@ -21,6 +21,7 @@ func (h *AuthHandler) SetHandler(server *fuego.Server) {
 	fuego.Post(server, "/auth/login", h.Login, option.Tags(tagName), option.DefaultStatusCode(200), fuego.OptionRequestContentType("application/json"))
 	fuego.Post(server, "/auth/refresh", h.RefreshToken, option.Tags(tagName), option.DefaultStatusCode(200), fuego.OptionRequestContentType("application/json"))
 	fuego.Post(server, "/auth/logout", h.Logout, option.Tags(tagName), option.DefaultStatusCode(200))
+	fuego.Get(server, "/auth/me", h.GetCurrentUser, option.Tags(tagName), option.DefaultStatusCode(200))
 }
 
 type LoginRequest struct {
@@ -96,4 +97,35 @@ func (h *AuthHandler) Logout(c fuego.ContextNoBody) (string, error) {
 	}
 
 	return "Successfully logged out", nil
+}
+
+func (h *AuthHandler) GetCurrentUser(c fuego.ContextNoBody) (*service.UserInfo, error) {
+	// Bearerトークンを取得
+	authHeader := c.Header("Authorization")
+	if authHeader == "" {
+		return nil, fuego.UnauthorizedError{
+			Title:  "Unauthorized",
+			Detail: "Authorization header is missing",
+		}
+	}
+
+	parts := strings.Split(authHeader, " ")
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		return nil, fuego.UnauthorizedError{
+			Title:  "Unauthorized",
+			Detail: "Invalid authorization header format",
+		}
+	}
+
+	accessToken := parts[1]
+	userInfo, err := h.Service.GetCurrentUser(c.Context(), accessToken)
+	if err != nil {
+		return nil, fuego.UnauthorizedError{
+			Title:  "Unauthorized",
+			Detail: "Invalid or expired token",
+			Err:    err,
+		}
+	}
+
+	return userInfo, nil
 }

@@ -112,6 +112,40 @@ func (s *AuthService) RefreshTokens(ctx context.Context, refreshToken string) (*
 	return tokenPair, nil
 }
 
+type UserInfo struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+}
+
+func (s *AuthService) GetCurrentUser(ctx context.Context, accessToken string) (*UserInfo, error) {
+	// JWTトークンを検証
+	claims, err := util.ValidateJWTToken(accessToken)
+	if err != nil {
+		return nil, fmt.Errorf("invalid access token: %v", err)
+	}
+
+	// アクセストークンがDBに存在し有効であることを確認
+	tokenHash := util.HashToken(accessToken)
+	isValid, err := s.AccessTokenInfra.IsTokenValid(ctx, tokenHash)
+	if err != nil {
+		return nil, fmt.Errorf("failed to validate access token: %v", err)
+	}
+	if !isValid {
+		return nil, fmt.Errorf("access token is not valid")
+	}
+
+	// ユーザー情報を取得
+	user, err := s.UserInfra.GetByID(ctx, claims.UserID)
+	if err != nil {
+		return nil, fmt.Errorf("user not found: %v", err)
+	}
+
+	return &UserInfo{
+		ID:    user.ID,
+		Email: user.Email,
+	}, nil
+}
+
 func (s *AuthService) generateTokenPair(ctx context.Context, userID string) (*TokenPair, error) {
 	// JWTアクセストークンを生成
 	accessToken, err := util.GenerateJWTToken(userID)

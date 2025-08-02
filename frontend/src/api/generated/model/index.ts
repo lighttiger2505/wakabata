@@ -21,4 +21,5 @@ export * from './taskToUpdate';
 export * from './tokenPair';
 export * from './unknownInterface';
 export * from './user';
+export * from './userInfo';
 export * from './userToCreate';

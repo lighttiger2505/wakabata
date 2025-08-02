@@ -44,3 +44,13 @@ func (i *AccessTokenInfra) RevokeAllUserTokens(ctx context.Context, userID strin
 	_, err := db.Where(t.UserID.Eq(userID), t.RevokedAt.IsNull()).Update(t.RevokedAt, &now)
 	return err
 }
+
+func (i *AccessTokenInfra) IsTokenValid(ctx context.Context, tokenHash string) (bool, error) {
+	t := query.AccessToken
+	db := query.AccessToken.WithContext(ctx)
+	token, err := db.Where(t.TokenHash.Eq(tokenHash), t.RevokedAt.IsNull(), t.ExpiresAt.Gt(time.Now())).First()
+	if err != nil {
+		return false, err
+	}
+	return token != nil, nil
+}

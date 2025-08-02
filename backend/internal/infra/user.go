@@ -45,3 +45,9 @@ func (i *UserInfra) GetByEmail(ctx context.Context, user *model.User) (*model.Us
 	db := query.User.WithContext(ctx)
 	return db.Where(u.Email.Eq(user.Email)).First()
 }
+
+func (i *UserInfra) GetByID(ctx context.Context, id string) (*model.User, error) {
+	u := query.User
+	db := query.User.WithContext(ctx)
+	return db.Where(u.ID.Eq(id)).First()
+}
