@@ -22,4 +22,5 @@ go.work
 go.work.sum
 
 # Claude Code and MCP
+backend/.claude/settings.local.json
 .serena
