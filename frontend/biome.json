@@ -11,6 +11,7 @@
   },
   "formatter": {
     "enabled": true,
+    "include": ["**/*.ts", "**/*.tsx"],
     "indentStyle": "space",
     "lineWidth": 128
   },
@@ -47,6 +48,11 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "double"
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": false
     }
   }
 }
