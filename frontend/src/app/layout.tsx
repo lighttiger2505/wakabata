@@ -1,5 +1,4 @@
 import "./globals.css";
-import AuthProvider from "@/components/AuthProvider";
 import { Inter } from "next/font/google";
 import type React from "react"; // Added import for React
 import Footer from "./components/Footer";
@@ -21,12 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} flex min-h-screen flex-col bg-gray-900 text-gray-100`}>
-        <AuthProvider>
-          <Header />
-          <Navigation />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </AuthProvider>
+        <Header />
+        <Navigation />
+        <main className="flex-grow">{children}</main>
+        <Footer />
       </body>
     </html>
   );

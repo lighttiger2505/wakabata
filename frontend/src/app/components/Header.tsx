@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/features/auth/hooks/useAuthCookie";
+import useSession from "@/features/auth/hooks/useSession";
 import Link from "next/link";
 
 export default function Header() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { logout, isLoggedIn } = useSession();
 
   return (
     <header className="bg-gray-800 p-4 text-green-400">
@@ -19,9 +19,8 @@ export default function Header() {
           <p className="text-gray-400">Nurture your tasks, grow your productivity</p>
         </div>
 
-        {isAuthenticated && (
+        {isLoggedIn && (
           <div className="flex items-center gap-4">
-            <span className="text-gray-400 text-sm">{user?.email}</span>
             <Button variant="outline" size="sm" onClick={() => logout()} className="text-green-400 hover:text-green-500">
               ログアウト
             </Button>

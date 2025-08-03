@@ -44,5 +44,5 @@ export default function useSession() {
   const { trigger: logout } = useSWRMutation(sessionApiRoute, doLogout);
   const { trigger: increment } = useSWRMutation(sessionApiRoute, doIncrement);
 
-  return { session, logout, login, increment, isLoading };
+  return { session, logout, login, increment, isLoading, isLoggedIn: session.isLoggedIn };
 }
