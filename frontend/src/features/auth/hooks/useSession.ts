@@ -2,7 +2,7 @@ import { SessionData, defaultSession } from "@/lib/session";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
-const sessionApiRoute = "/session";
+const sessionApiRoute = "/api/session";
 
 async function fetchJson<JSON = unknown>(input: RequestInfo, init?: RequestInit): Promise<JSON> {
   return fetch(input, {
