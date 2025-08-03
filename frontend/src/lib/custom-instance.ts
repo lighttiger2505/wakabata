@@ -1,7 +1,7 @@
 import Axios from "axios";
 import type { AxiosError, AxiosRequestConfig } from "axios";
 
-export const AXIOS_INSTANCE = Axios.create({ baseURL: process.env.NEXT_PUBLIC_API_HOST });
+export const AXIOS_INSTANCE = Axios.create({ baseURL: process.env.NEXT_PUBLIC_API_HOST ?? "http://0.0.0.0:8088" });
 
 export const customInstance = <T>(config: AxiosRequestConfig, options?: AxiosRequestConfig): Promise<T> => {
   const source = Axios.CancelToken.source();

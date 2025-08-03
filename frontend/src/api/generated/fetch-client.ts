@@ -22,6 +22,7 @@ import type {
   UserInfo,
   UserToCreate
 } from './model'
+import { customFetch } from '../../lib/custom-fetch';
 
 
 /**
@@ -52,7 +53,7 @@ export const getPOSTApiV1AuthLoginUrl = () => {
 
 export const pOSTApiV1AuthLogin = async (loginRequest: LoginRequest, options?: RequestInit): Promise<pOSTApiV1AuthLoginResponse> => {
   
-  const res = await fetch(getPOSTApiV1AuthLoginUrl(),
+  return customFetch<pOSTApiV1AuthLoginResponse>(getPOSTApiV1AuthLoginUrl(),
   {      
     ...options,
     method: 'POST',
@@ -60,13 +61,7 @@ export const pOSTApiV1AuthLogin = async (loginRequest: LoginRequest, options?: R
     body: JSON.stringify(
       loginRequest,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pOSTApiV1AuthLoginResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pOSTApiV1AuthLoginResponse
-}
+);}
 
 
 
@@ -98,20 +93,14 @@ export const getPOSTApiV1AuthLogoutUrl = () => {
 
 export const pOSTApiV1AuthLogout = async ( options?: RequestInit): Promise<pOSTApiV1AuthLogoutResponse> => {
   
-  const res = await fetch(getPOSTApiV1AuthLogoutUrl(),
+  return customFetch<pOSTApiV1AuthLogoutResponse>(getPOSTApiV1AuthLogoutUrl(),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pOSTApiV1AuthLogoutResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pOSTApiV1AuthLogoutResponse
-}
+);}
 
 
 
@@ -143,20 +132,14 @@ export const getGETApiV1AuthMeUrl = () => {
 
 export const gETApiV1AuthMe = async ( options?: RequestInit): Promise<gETApiV1AuthMeResponse> => {
   
-  const res = await fetch(getGETApiV1AuthMeUrl(),
+  return customFetch<gETApiV1AuthMeResponse>(getGETApiV1AuthMeUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: gETApiV1AuthMeResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as gETApiV1AuthMeResponse
-}
+);}
 
 
 
@@ -188,7 +171,7 @@ export const getPOSTApiV1AuthRefreshUrl = () => {
 
 export const pOSTApiV1AuthRefresh = async (refreshTokenRequest: RefreshTokenRequest, options?: RequestInit): Promise<pOSTApiV1AuthRefreshResponse> => {
   
-  const res = await fetch(getPOSTApiV1AuthRefreshUrl(),
+  return customFetch<pOSTApiV1AuthRefreshResponse>(getPOSTApiV1AuthRefreshUrl(),
   {      
     ...options,
     method: 'POST',
@@ -196,13 +179,7 @@ export const pOSTApiV1AuthRefresh = async (refreshTokenRequest: RefreshTokenRequ
     body: JSON.stringify(
       refreshTokenRequest,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pOSTApiV1AuthRefreshResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pOSTApiV1AuthRefreshResponse
-}
+);}
 
 
 
@@ -234,20 +211,14 @@ export const getGETApiV1ProjectsUrl = () => {
 
 export const gETApiV1Projects = async ( options?: RequestInit): Promise<gETApiV1ProjectsResponse> => {
   
-  const res = await fetch(getGETApiV1ProjectsUrl(),
+  return customFetch<gETApiV1ProjectsResponse>(getGETApiV1ProjectsUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: gETApiV1ProjectsResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as gETApiV1ProjectsResponse
-}
+);}
 
 
 
@@ -279,7 +250,7 @@ export const getPOSTApiV1ProjectsUrl = () => {
 
 export const pOSTApiV1Projects = async (projectToCreate: ProjectToCreate, options?: RequestInit): Promise<pOSTApiV1ProjectsResponse> => {
   
-  const res = await fetch(getPOSTApiV1ProjectsUrl(),
+  return customFetch<pOSTApiV1ProjectsResponse>(getPOSTApiV1ProjectsUrl(),
   {      
     ...options,
     method: 'POST',
@@ -287,13 +258,7 @@ export const pOSTApiV1Projects = async (projectToCreate: ProjectToCreate, option
     body: JSON.stringify(
       projectToCreate,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pOSTApiV1ProjectsResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pOSTApiV1ProjectsResponse
-}
+);}
 
 
 
@@ -325,20 +290,14 @@ export const getDELETEApiV1ProjectsIdUrl = (id: string,) => {
 
 export const dELETEApiV1ProjectsId = async (id: string, options?: RequestInit): Promise<dELETEApiV1ProjectsIdResponse> => {
   
-  const res = await fetch(getDELETEApiV1ProjectsIdUrl(id),
+  return customFetch<dELETEApiV1ProjectsIdResponse>(getDELETEApiV1ProjectsIdUrl(id),
   {      
     ...options,
     method: 'DELETE'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: dELETEApiV1ProjectsIdResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as dELETEApiV1ProjectsIdResponse
-}
+);}
 
 
 
@@ -370,20 +329,14 @@ export const getGETApiV1ProjectsIdUrl = (id: string,) => {
 
 export const gETApiV1ProjectsId = async (id: string, options?: RequestInit): Promise<gETApiV1ProjectsIdResponse> => {
   
-  const res = await fetch(getGETApiV1ProjectsIdUrl(id),
+  return customFetch<gETApiV1ProjectsIdResponse>(getGETApiV1ProjectsIdUrl(id),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: gETApiV1ProjectsIdResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as gETApiV1ProjectsIdResponse
-}
+);}
 
 
 
@@ -416,7 +369,7 @@ export const getPUTApiV1ProjectsIdUrl = (id: string,) => {
 export const pUTApiV1ProjectsId = async (id: string,
     projectToUpdate: ProjectToUpdate, options?: RequestInit): Promise<pUTApiV1ProjectsIdResponse> => {
   
-  const res = await fetch(getPUTApiV1ProjectsIdUrl(id),
+  return customFetch<pUTApiV1ProjectsIdResponse>(getPUTApiV1ProjectsIdUrl(id),
   {      
     ...options,
     method: 'PUT',
@@ -424,13 +377,7 @@ export const pUTApiV1ProjectsId = async (id: string,
     body: JSON.stringify(
       projectToUpdate,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pUTApiV1ProjectsIdResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pUTApiV1ProjectsIdResponse
-}
+);}
 
 
 
@@ -462,20 +409,14 @@ export const getGETApiV1TasksUrl = () => {
 
 export const gETApiV1Tasks = async ( options?: RequestInit): Promise<gETApiV1TasksResponse> => {
   
-  const res = await fetch(getGETApiV1TasksUrl(),
+  return customFetch<gETApiV1TasksResponse>(getGETApiV1TasksUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: gETApiV1TasksResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as gETApiV1TasksResponse
-}
+);}
 
 
 
@@ -507,7 +448,7 @@ export const getPOSTApiV1TasksUrl = () => {
 
 export const pOSTApiV1Tasks = async (taskToCreate: TaskToCreate, options?: RequestInit): Promise<pOSTApiV1TasksResponse> => {
   
-  const res = await fetch(getPOSTApiV1TasksUrl(),
+  return customFetch<pOSTApiV1TasksResponse>(getPOSTApiV1TasksUrl(),
   {      
     ...options,
     method: 'POST',
@@ -515,13 +456,7 @@ export const pOSTApiV1Tasks = async (taskToCreate: TaskToCreate, options?: Reque
     body: JSON.stringify(
       taskToCreate,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pOSTApiV1TasksResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pOSTApiV1TasksResponse
-}
+);}
 
 
 
@@ -553,20 +488,14 @@ export const getDELETEApiV1TasksIdUrl = (id: string,) => {
 
 export const dELETEApiV1TasksId = async (id: string, options?: RequestInit): Promise<dELETEApiV1TasksIdResponse> => {
   
-  const res = await fetch(getDELETEApiV1TasksIdUrl(id),
+  return customFetch<dELETEApiV1TasksIdResponse>(getDELETEApiV1TasksIdUrl(id),
   {      
     ...options,
     method: 'DELETE'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: dELETEApiV1TasksIdResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as dELETEApiV1TasksIdResponse
-}
+);}
 
 
 
@@ -598,20 +527,14 @@ export const getGETApiV1TasksIdUrl = (id: string,) => {
 
 export const gETApiV1TasksId = async (id: string, options?: RequestInit): Promise<gETApiV1TasksIdResponse> => {
   
-  const res = await fetch(getGETApiV1TasksIdUrl(id),
+  return customFetch<gETApiV1TasksIdResponse>(getGETApiV1TasksIdUrl(id),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: gETApiV1TasksIdResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as gETApiV1TasksIdResponse
-}
+);}
 
 
 
@@ -644,7 +567,7 @@ export const getPUTApiV1TasksIdUrl = (id: string,) => {
 export const pUTApiV1TasksId = async (id: string,
     taskToUpdate: TaskToUpdate, options?: RequestInit): Promise<pUTApiV1TasksIdResponse> => {
   
-  const res = await fetch(getPUTApiV1TasksIdUrl(id),
+  return customFetch<pUTApiV1TasksIdResponse>(getPUTApiV1TasksIdUrl(id),
   {      
     ...options,
     method: 'PUT',
@@ -652,13 +575,7 @@ export const pUTApiV1TasksId = async (id: string,
     body: JSON.stringify(
       taskToUpdate,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pUTApiV1TasksIdResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pUTApiV1TasksIdResponse
-}
+);}
 
 
 
@@ -690,20 +607,14 @@ export const getGETApiV1UsersUrl = () => {
 
 export const gETApiV1Users = async ( options?: RequestInit): Promise<gETApiV1UsersResponse> => {
   
-  const res = await fetch(getGETApiV1UsersUrl(),
+  return customFetch<gETApiV1UsersResponse>(getGETApiV1UsersUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: gETApiV1UsersResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as gETApiV1UsersResponse
-}
+);}
 
 
 
@@ -735,7 +646,7 @@ export const getPOSTApiV1UsersUrl = () => {
 
 export const pOSTApiV1Users = async (userToCreate: UserToCreate, options?: RequestInit): Promise<pOSTApiV1UsersResponse> => {
   
-  const res = await fetch(getPOSTApiV1UsersUrl(),
+  return customFetch<pOSTApiV1UsersResponse>(getPOSTApiV1UsersUrl(),
   {      
     ...options,
     method: 'POST',
@@ -743,13 +654,7 @@ export const pOSTApiV1Users = async (userToCreate: UserToCreate, options?: Reque
     body: JSON.stringify(
       userToCreate,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pOSTApiV1UsersResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pOSTApiV1UsersResponse
-}
+);}
 
 
 
@@ -781,20 +686,14 @@ export const getGETApiV1UsersIdUrl = (id: string,) => {
 
 export const gETApiV1UsersId = async (id: string, options?: RequestInit): Promise<gETApiV1UsersIdResponse> => {
   
-  const res = await fetch(getGETApiV1UsersIdUrl(id),
+  return customFetch<gETApiV1UsersIdResponse>(getGETApiV1UsersIdUrl(id),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: gETApiV1UsersIdResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as gETApiV1UsersIdResponse
-}
+);}
 
 
 
@@ -827,7 +726,7 @@ export const getPUTApiV1UsersIdUrl = (id: string,) => {
 export const pUTApiV1UsersId = async (id: string,
     user: User, options?: RequestInit): Promise<pUTApiV1UsersIdResponse> => {
   
-  const res = await fetch(getPUTApiV1UsersIdUrl(id),
+  return customFetch<pUTApiV1UsersIdResponse>(getPUTApiV1UsersIdUrl(id),
   {      
     ...options,
     method: 'PUT',
@@ -835,13 +734,7 @@ export const pUTApiV1UsersId = async (id: string,
     body: JSON.stringify(
       user,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: pUTApiV1UsersIdResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as pUTApiV1UsersIdResponse
-}
+);}
 
 
 
@@ -873,20 +766,14 @@ export const getGETHealthUrl = () => {
 
 export const gETHealth = async ( options?: RequestInit): Promise<gETHealthResponse> => {
   
-  const res = await fetch(getGETHealthUrl(),
+  return customFetch<gETHealthResponse>(getGETHealthUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: gETHealthResponse['data'] = body ? JSON.parse(body) : {}
-
-  return { data, status: res.status, headers: res.headers } as gETHealthResponse
-}
+);}
 
 
 

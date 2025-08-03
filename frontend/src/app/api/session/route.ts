@@ -1,8 +1,17 @@
 import { pOSTApiV1AuthLogin, pOSTApiV1AuthLogout, pOSTApiV1AuthRefresh } from "@/api/generated/fetch-client";
+import { HTTPError, TokenPair } from "@/api/generated/model";
 import { SessionData, defaultSession, sessionOptions } from "@/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
+
+function isHTTPError(data: unknown): data is HTTPError {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    ("status" in data || "title" in data || "detail" in data || "type" in data || "errors" in data || "instance" in data)
+  );
+}
 
 // login
 export async function POST(request: NextRequest) {
@@ -18,8 +27,21 @@ export async function POST(request: NextRequest) {
     password: password,
   });
 
+  if (!result.data || isHTTPError(result.data)) {
+    session.isLoggedIn = false;
+    session.token = null;
+    await session.save();
+    return Response.json(
+      {
+        error: true,
+        message: "Authentication failed",
+      },
+      { status: 401 },
+    );
+  }
+
   session.isLoggedIn = true;
-  session.token = result;
+  session.token = result.data as TokenPair;
   await session.save();
 
   return Response.json(session);
@@ -37,8 +59,21 @@ export async function PUT() {
     refresh_token: session.token?.refresh_token ?? "",
   });
 
+  if (!result.data || isHTTPError(result.data)) {
+    session.isLoggedIn = false;
+    session.token = null;
+    await session.save();
+    return Response.json(
+      {
+        error: true,
+        message: "Authentication failed",
+      },
+      { status: 401 },
+    );
+  }
+
   session.isLoggedIn = true;
-  session.token = result;
+  session.token = result.data as TokenPair;
   await session.save();
 
   return Response.json(session);

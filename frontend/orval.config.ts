@@ -27,6 +27,12 @@ export default defineConfig({
       target: `${outputDir}/fetch-client.ts`,
       schemas: `${outputDir}/model`,
       client: "fetch",
+      override: {
+        mutator: {
+          path: "./src/lib/custom-fetch.ts",
+          name: "customFetch",
+        },
+      },
     },
   },
   wakabataZod: {
