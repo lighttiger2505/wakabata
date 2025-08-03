@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useAuth } from "@/features/auth/hooks/useAuthCookie";
 import type React from "react";
 import { useEffect } from "react";
 

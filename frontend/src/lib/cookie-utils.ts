@@ -74,27 +74,3 @@ export const removeCookieValue = (name: string, path = "/"): void => {
   document.cookie = `${encodeURIComponent(name)}=; Path=${path}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 };
 
-export const createAuthStorageInterface = () => {
-  return {
-    getItem: (name: string) => {
-      const value = getCookieValue(name);
-      if (!value) return null;
-      try {
-        return JSON.parse(value);
-      } catch {
-        return null;
-      }
-    },
-    setItem: (name: string, value: unknown) => {
-      setCookieValue(name, JSON.stringify(value), {
-        httpOnly: false, // Zustandからアクセスするためfalseにする
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-      });
-    },
-    removeItem: (name: string) => {
-      removeCookieValue(name);
-    },
-  };
-};
