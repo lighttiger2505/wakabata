@@ -1,4 +1,4 @@
-import { getOpenAPI } from "@/api/generated/fetch-client";
+import { pOSTApiV1AuthLogin, pOSTApiV1AuthLogout, pOSTApiV1AuthRefresh } from "@/api/generated/fetch-client";
 import { SessionData, defaultSession, sessionOptions } from "@/lib/session";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     email: string;
     password: string;
   };
-  const result = await getOpenAPI().pOSTApiV1AuthLogin({
+  const result = await pOSTApiV1AuthLogin({
     email: email,
     password: password,
   });
@@ -33,7 +33,7 @@ export async function PUT() {
   if (session.isLoggedIn !== true) {
     return Response.json(defaultSession);
   }
-  const result = await getOpenAPI().pOSTApiV1AuthRefresh({
+  const result = await pOSTApiV1AuthRefresh({
     refresh_token: session.token?.refresh_token ?? "",
   });
 
@@ -61,7 +61,7 @@ export async function DELETE() {
   const cookieStore = await cookies();
   const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
 
-  await getOpenAPI().pOSTApiV1AuthLogout();
+  await pOSTApiV1AuthLogout();
   session.destroy();
 
   return Response.json(defaultSession);
