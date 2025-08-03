@@ -2,6 +2,15 @@
   "hooks": {
     "PostToolUse": [
       {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | { read file_path; if echo \"$file_path\" | grep -Eq '\\.(ts|tsx)$'; then pnpm biome format \"$file_path\"; fi; }"
+          }
+        ]
+      },
+      {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
