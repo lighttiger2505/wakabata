@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.0.1
  */
 import type {
+  HTTPError,
   LoginRequest,
   Project,
   ProjectToCreate,
@@ -21,15 +22,8 @@ import type {
   UserInfo,
   UserToCreate
 } from './model'
-import { customInstance } from '../../lib/custom-instance';
-import type { BodyType } from '../../lib/custom-instance';
 
 
-
-type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
-
-
-  export const getOpenAPI = () => {
 /**
  * #### Controller: 
 
@@ -44,17 +38,38 @@ type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
 
  * @summary login
  */
-const pOSTApiV1AuthLogin = (
-    loginRequest: BodyType<LoginRequest>,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<TokenPair>(
-      {url: `/api/v1/auth/login`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: loginRequest
-    },
-      options);
-    }
+export type pOSTApiV1AuthLoginResponse = {
+  data: TokenPair | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPOSTApiV1AuthLoginUrl = () => {
+
+
+  return `/api/v1/auth/login`
+}
+
+export const pOSTApiV1AuthLogin = async (loginRequest: LoginRequest, options?: RequestInit): Promise<pOSTApiV1AuthLoginResponse> => {
   
+  const res = await fetch(getPOSTApiV1AuthLoginUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      loginRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pOSTApiV1AuthLoginResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pOSTApiV1AuthLoginResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -69,15 +84,37 @@ const pOSTApiV1AuthLogin = (
 
  * @summary logout
  */
-const pOSTApiV1AuthLogout = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<String>(
-      {url: `/api/v1/auth/logout`, method: 'POST'
-    },
-      options);
-    }
+export type pOSTApiV1AuthLogoutResponse = {
+  data: String | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPOSTApiV1AuthLogoutUrl = () => {
+
+
+  return `/api/v1/auth/logout`
+}
+
+export const pOSTApiV1AuthLogout = async ( options?: RequestInit): Promise<pOSTApiV1AuthLogoutResponse> => {
   
+  const res = await fetch(getPOSTApiV1AuthLogoutUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pOSTApiV1AuthLogoutResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pOSTApiV1AuthLogoutResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -92,15 +129,37 @@ const pOSTApiV1AuthLogout = (
 
  * @summary get current user
  */
-const gETApiV1AuthMe = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<UserInfo>(
-      {url: `/api/v1/auth/me`, method: 'GET'
-    },
-      options);
-    }
+export type gETApiV1AuthMeResponse = {
+  data: UserInfo | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getGETApiV1AuthMeUrl = () => {
+
+
+  return `/api/v1/auth/me`
+}
+
+export const gETApiV1AuthMe = async ( options?: RequestInit): Promise<gETApiV1AuthMeResponse> => {
   
+  const res = await fetch(getGETApiV1AuthMeUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: gETApiV1AuthMeResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as gETApiV1AuthMeResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -115,17 +174,38 @@ const gETApiV1AuthMe = (
 
  * @summary refresh token
  */
-const pOSTApiV1AuthRefresh = (
-    refreshTokenRequest: BodyType<RefreshTokenRequest>,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<TokenPair>(
-      {url: `/api/v1/auth/refresh`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: refreshTokenRequest
-    },
-      options);
-    }
+export type pOSTApiV1AuthRefreshResponse = {
+  data: TokenPair | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPOSTApiV1AuthRefreshUrl = () => {
+
+
+  return `/api/v1/auth/refresh`
+}
+
+export const pOSTApiV1AuthRefresh = async (refreshTokenRequest: RefreshTokenRequest, options?: RequestInit): Promise<pOSTApiV1AuthRefreshResponse> => {
   
+  const res = await fetch(getPOSTApiV1AuthRefreshUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      refreshTokenRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pOSTApiV1AuthRefreshResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pOSTApiV1AuthRefreshResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -140,15 +220,37 @@ const pOSTApiV1AuthRefresh = (
 
  * @summary search projects
  */
-const gETApiV1Projects = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<Project[]>(
-      {url: `/api/v1/projects`, method: 'GET'
-    },
-      options);
-    }
+export type gETApiV1ProjectsResponse = {
+  data: Project[] | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getGETApiV1ProjectsUrl = () => {
+
+
+  return `/api/v1/projects`
+}
+
+export const gETApiV1Projects = async ( options?: RequestInit): Promise<gETApiV1ProjectsResponse> => {
   
+  const res = await fetch(getGETApiV1ProjectsUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: gETApiV1ProjectsResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as gETApiV1ProjectsResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -163,17 +265,38 @@ const gETApiV1Projects = (
 
  * @summary create project
  */
-const pOSTApiV1Projects = (
-    projectToCreate: BodyType<ProjectToCreate>,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<Project>(
-      {url: `/api/v1/projects`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: projectToCreate
-    },
-      options);
-    }
+export type pOSTApiV1ProjectsResponse = {
+  data: Project | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPOSTApiV1ProjectsUrl = () => {
+
+
+  return `/api/v1/projects`
+}
+
+export const pOSTApiV1Projects = async (projectToCreate: ProjectToCreate, options?: RequestInit): Promise<pOSTApiV1ProjectsResponse> => {
   
+  const res = await fetch(getPOSTApiV1ProjectsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      projectToCreate,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pOSTApiV1ProjectsResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pOSTApiV1ProjectsResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -188,15 +311,37 @@ const pOSTApiV1Projects = (
 
  * @summary delete project
  */
-const dELETEApiV1ProjectsId = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<UnknownInterface>(
-      {url: `/api/v1/projects/${id}`, method: 'DELETE'
-    },
-      options);
-    }
+export type dELETEApiV1ProjectsIdResponse = {
+  data: UnknownInterface | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getDELETEApiV1ProjectsIdUrl = (id: string,) => {
+
+
+  return `/api/v1/projects/${id}`
+}
+
+export const dELETEApiV1ProjectsId = async (id: string, options?: RequestInit): Promise<dELETEApiV1ProjectsIdResponse> => {
   
+  const res = await fetch(getDELETEApiV1ProjectsIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: dELETEApiV1ProjectsIdResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as dELETEApiV1ProjectsIdResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -211,15 +356,37 @@ const dELETEApiV1ProjectsId = (
 
  * @summary get project
  */
-const gETApiV1ProjectsId = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<Project>(
-      {url: `/api/v1/projects/${id}`, method: 'GET'
-    },
-      options);
-    }
+export type gETApiV1ProjectsIdResponse = {
+  data: Project | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getGETApiV1ProjectsIdUrl = (id: string,) => {
+
+
+  return `/api/v1/projects/${id}`
+}
+
+export const gETApiV1ProjectsId = async (id: string, options?: RequestInit): Promise<gETApiV1ProjectsIdResponse> => {
   
+  const res = await fetch(getGETApiV1ProjectsIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: gETApiV1ProjectsIdResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as gETApiV1ProjectsIdResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -234,18 +401,39 @@ const gETApiV1ProjectsId = (
 
  * @summary update project
  */
-const pUTApiV1ProjectsId = (
-    id: string,
-    projectToUpdate: BodyType<ProjectToUpdate>,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<Project>(
-      {url: `/api/v1/projects/${id}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: projectToUpdate
-    },
-      options);
-    }
+export type pUTApiV1ProjectsIdResponse = {
+  data: Project | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPUTApiV1ProjectsIdUrl = (id: string,) => {
+
+
+  return `/api/v1/projects/${id}`
+}
+
+export const pUTApiV1ProjectsId = async (id: string,
+    projectToUpdate: ProjectToUpdate, options?: RequestInit): Promise<pUTApiV1ProjectsIdResponse> => {
   
+  const res = await fetch(getPUTApiV1ProjectsIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      projectToUpdate,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pUTApiV1ProjectsIdResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pUTApiV1ProjectsIdResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -260,15 +448,37 @@ const pUTApiV1ProjectsId = (
 
  * @summary search tasks
  */
-const gETApiV1Tasks = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<Task[]>(
-      {url: `/api/v1/tasks`, method: 'GET'
-    },
-      options);
-    }
+export type gETApiV1TasksResponse = {
+  data: Task[] | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getGETApiV1TasksUrl = () => {
+
+
+  return `/api/v1/tasks`
+}
+
+export const gETApiV1Tasks = async ( options?: RequestInit): Promise<gETApiV1TasksResponse> => {
   
+  const res = await fetch(getGETApiV1TasksUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: gETApiV1TasksResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as gETApiV1TasksResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -283,17 +493,38 @@ const gETApiV1Tasks = (
 
  * @summary create task
  */
-const pOSTApiV1Tasks = (
-    taskToCreate: BodyType<TaskToCreate>,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<Task>(
-      {url: `/api/v1/tasks`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: taskToCreate
-    },
-      options);
-    }
+export type pOSTApiV1TasksResponse = {
+  data: Task | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPOSTApiV1TasksUrl = () => {
+
+
+  return `/api/v1/tasks`
+}
+
+export const pOSTApiV1Tasks = async (taskToCreate: TaskToCreate, options?: RequestInit): Promise<pOSTApiV1TasksResponse> => {
   
+  const res = await fetch(getPOSTApiV1TasksUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      taskToCreate,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pOSTApiV1TasksResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pOSTApiV1TasksResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -308,15 +539,37 @@ const pOSTApiV1Tasks = (
 
  * @summary delete task
  */
-const dELETEApiV1TasksId = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<UnknownInterface>(
-      {url: `/api/v1/tasks/${id}`, method: 'DELETE'
-    },
-      options);
-    }
+export type dELETEApiV1TasksIdResponse = {
+  data: UnknownInterface | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getDELETEApiV1TasksIdUrl = (id: string,) => {
+
+
+  return `/api/v1/tasks/${id}`
+}
+
+export const dELETEApiV1TasksId = async (id: string, options?: RequestInit): Promise<dELETEApiV1TasksIdResponse> => {
   
+  const res = await fetch(getDELETEApiV1TasksIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: dELETEApiV1TasksIdResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as dELETEApiV1TasksIdResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -331,15 +584,37 @@ const dELETEApiV1TasksId = (
 
  * @summary get task
  */
-const gETApiV1TasksId = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<Task>(
-      {url: `/api/v1/tasks/${id}`, method: 'GET'
-    },
-      options);
-    }
+export type gETApiV1TasksIdResponse = {
+  data: Task | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getGETApiV1TasksIdUrl = (id: string,) => {
+
+
+  return `/api/v1/tasks/${id}`
+}
+
+export const gETApiV1TasksId = async (id: string, options?: RequestInit): Promise<gETApiV1TasksIdResponse> => {
   
+  const res = await fetch(getGETApiV1TasksIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: gETApiV1TasksIdResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as gETApiV1TasksIdResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -354,18 +629,39 @@ const gETApiV1TasksId = (
 
  * @summary update task
  */
-const pUTApiV1TasksId = (
-    id: string,
-    taskToUpdate: BodyType<TaskToUpdate>,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<Task>(
-      {url: `/api/v1/tasks/${id}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: taskToUpdate
-    },
-      options);
-    }
+export type pUTApiV1TasksIdResponse = {
+  data: Task | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPUTApiV1TasksIdUrl = (id: string,) => {
+
+
+  return `/api/v1/tasks/${id}`
+}
+
+export const pUTApiV1TasksId = async (id: string,
+    taskToUpdate: TaskToUpdate, options?: RequestInit): Promise<pUTApiV1TasksIdResponse> => {
   
+  const res = await fetch(getPUTApiV1TasksIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      taskToUpdate,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pUTApiV1TasksIdResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pUTApiV1TasksIdResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -380,15 +676,37 @@ const pUTApiV1TasksId = (
 
  * @summary search users
  */
-const gETApiV1Users = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<User[]>(
-      {url: `/api/v1/users`, method: 'GET'
-    },
-      options);
-    }
+export type gETApiV1UsersResponse = {
+  data: User[] | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getGETApiV1UsersUrl = () => {
+
+
+  return `/api/v1/users`
+}
+
+export const gETApiV1Users = async ( options?: RequestInit): Promise<gETApiV1UsersResponse> => {
   
+  const res = await fetch(getGETApiV1UsersUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: gETApiV1UsersResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as gETApiV1UsersResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -403,17 +721,38 @@ const gETApiV1Users = (
 
  * @summary create user
  */
-const pOSTApiV1Users = (
-    userToCreate: BodyType<UserToCreate>,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<User>(
-      {url: `/api/v1/users`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: userToCreate
-    },
-      options);
-    }
+export type pOSTApiV1UsersResponse = {
+  data: User | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPOSTApiV1UsersUrl = () => {
+
+
+  return `/api/v1/users`
+}
+
+export const pOSTApiV1Users = async (userToCreate: UserToCreate, options?: RequestInit): Promise<pOSTApiV1UsersResponse> => {
   
+  const res = await fetch(getPOSTApiV1UsersUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      userToCreate,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pOSTApiV1UsersResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pOSTApiV1UsersResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -428,15 +767,37 @@ const pOSTApiV1Users = (
 
  * @summary get user
  */
-const gETApiV1UsersId = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<User>(
-      {url: `/api/v1/users/${id}`, method: 'GET'
-    },
-      options);
-    }
+export type gETApiV1UsersIdResponse = {
+  data: User | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getGETApiV1UsersIdUrl = (id: string,) => {
+
+
+  return `/api/v1/users/${id}`
+}
+
+export const gETApiV1UsersId = async (id: string, options?: RequestInit): Promise<gETApiV1UsersIdResponse> => {
   
+  const res = await fetch(getGETApiV1UsersIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: gETApiV1UsersIdResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as gETApiV1UsersIdResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -451,18 +812,39 @@ const gETApiV1UsersId = (
 
  * @summary update user
  */
-const pUTApiV1UsersId = (
-    id: string,
-    user: BodyType<User>,
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<User>(
-      {url: `/api/v1/users/${id}`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: user
-    },
-      options);
-    }
+export type pUTApiV1UsersIdResponse = {
+  data: User | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getPUTApiV1UsersIdUrl = (id: string,) => {
+
+
+  return `/api/v1/users/${id}`
+}
+
+export const pUTApiV1UsersId = async (id: string,
+    user: User, options?: RequestInit): Promise<pUTApiV1UsersIdResponse> => {
   
+  const res = await fetch(getPUTApiV1UsersIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      user,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: pUTApiV1UsersIdResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as pUTApiV1UsersIdResponse
+}
+
+
+
 /**
  * #### Controller: 
 
@@ -477,32 +859,34 @@ const pUTApiV1UsersId = (
 
  * @summary func1
  */
-const gETHealth = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      return customInstance<String>(
-      {url: `/health`, method: 'GET'
-    },
-      options);
-    }
+export type gETHealthResponse = {
+  data: String | HTTPError | void;
+  status: number;
+  headers: Headers;
+}
+
+export const getGETHealthUrl = () => {
+
+
+  return `/health`
+}
+
+export const gETHealth = async ( options?: RequestInit): Promise<gETHealthResponse> => {
   
-return {pOSTApiV1AuthLogin,pOSTApiV1AuthLogout,gETApiV1AuthMe,pOSTApiV1AuthRefresh,gETApiV1Projects,pOSTApiV1Projects,dELETEApiV1ProjectsId,gETApiV1ProjectsId,pUTApiV1ProjectsId,gETApiV1Tasks,pOSTApiV1Tasks,dELETEApiV1TasksId,gETApiV1TasksId,pUTApiV1TasksId,gETApiV1Users,pOSTApiV1Users,gETApiV1UsersId,pUTApiV1UsersId,gETHealth}};
-export type POSTApiV1AuthLoginResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pOSTApiV1AuthLogin']>>>
-export type POSTApiV1AuthLogoutResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pOSTApiV1AuthLogout']>>>
-export type GETApiV1AuthMeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['gETApiV1AuthMe']>>>
-export type POSTApiV1AuthRefreshResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pOSTApiV1AuthRefresh']>>>
-export type GETApiV1ProjectsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['gETApiV1Projects']>>>
-export type POSTApiV1ProjectsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pOSTApiV1Projects']>>>
-export type DELETEApiV1ProjectsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['dELETEApiV1ProjectsId']>>>
-export type GETApiV1ProjectsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['gETApiV1ProjectsId']>>>
-export type PUTApiV1ProjectsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pUTApiV1ProjectsId']>>>
-export type GETApiV1TasksResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['gETApiV1Tasks']>>>
-export type POSTApiV1TasksResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pOSTApiV1Tasks']>>>
-export type DELETEApiV1TasksIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['dELETEApiV1TasksId']>>>
-export type GETApiV1TasksIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['gETApiV1TasksId']>>>
-export type PUTApiV1TasksIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pUTApiV1TasksId']>>>
-export type GETApiV1UsersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['gETApiV1Users']>>>
-export type POSTApiV1UsersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pOSTApiV1Users']>>>
-export type GETApiV1UsersIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['gETApiV1UsersId']>>>
-export type PUTApiV1UsersIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['pUTApiV1UsersId']>>>
-export type GETHealthResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getOpenAPI>['gETHealth']>>>
+  const res = await fetch(getGETHealthUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
+  const data: gETHealthResponse['data'] = body ? JSON.parse(body) : {}
+
+  return { data, status: res.status, headers: res.headers } as gETHealthResponse
+}
+
+
+
