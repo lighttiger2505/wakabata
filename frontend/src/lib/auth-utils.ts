@@ -1,6 +1,6 @@
 import { gETApiV1AuthMe, pOSTApiV1AuthLogin } from "@/api/generated/client";
 import { TokenPair, User } from "@/api/generated/model";
-import { getCookieValue, setCookieValue, removeCookieValue } from "./cookie-utils";
+import { getCookieValue, removeCookieValue, setCookieValue } from "./cookie-utils";
 
 export interface AuthState {
   user: User | null;
@@ -24,7 +24,7 @@ export const getAuthState = (): AuthState => {
   try {
     const value = getCookieValue(AUTH_STORAGE_KEY);
     if (!value) return defaultAuthState;
-    
+
     const parsed = JSON.parse(value);
     return parsed.state || defaultAuthState;
   } catch {
@@ -35,7 +35,7 @@ export const getAuthState = (): AuthState => {
 export const setAuthState = (state: Partial<AuthState>): void => {
   const currentState = getAuthState();
   const newState = { ...currentState, ...state };
-  
+
   setCookieValue(AUTH_STORAGE_KEY, JSON.stringify({ state: newState }), {
     httpOnly: false,
     secure: process.env.NODE_ENV === "production",
@@ -50,7 +50,7 @@ export const clearAuthState = (): void => {
 
 export const login = async (email: string, password: string): Promise<boolean> => {
   setAuthState({ isLoading: true });
-  
+
   try {
     const tokenPair = await pOSTApiV1AuthLogin({ email, password });
     setAuthState({ token: tokenPair });
@@ -66,7 +66,7 @@ export const login = async (email: string, password: string): Promise<boolean> =
         is_email_verified: true,
         totp_secret: "",
       };
-      
+
       setAuthState({
         user,
         isAuthenticated: true,
@@ -107,17 +107,17 @@ export const login = async (email: string, password: string): Promise<boolean> =
 };
 
 export const logout = (): void => {
-  setAuthState({ 
-    user: null, 
-    token: null, 
-    isAuthenticated: false, 
-    isInitialized: true 
+  setAuthState({
+    user: null,
+    token: null,
+    isAuthenticated: false,
+    isInitialized: true,
   });
 };
 
 export const checkAuth = async (): Promise<void> => {
   setAuthState({ isLoading: true });
-  
+
   try {
     const userInfo = await gETApiV1AuthMe();
     if (userInfo.id && userInfo.email) {
@@ -130,38 +130,38 @@ export const checkAuth = async (): Promise<void> => {
         is_email_verified: true,
         totp_secret: "",
       };
-      
-      setAuthState({ 
-        user, 
-        isAuthenticated: true, 
-        isLoading: false, 
-        isInitialized: true 
+
+      setAuthState({
+        user,
+        isAuthenticated: true,
+        isLoading: false,
+        isInitialized: true,
       });
     } else {
-      setAuthState({ 
-        user: null, 
-        isAuthenticated: false, 
-        isLoading: false, 
-        isInitialized: true 
+      setAuthState({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        isInitialized: true,
       });
     }
   } catch (error: unknown) {
     const axiosError = error as { response?: { status?: number } };
 
     if (axiosError?.response?.status === 401) {
-      setAuthState({ 
-        user: null, 
-        isAuthenticated: false, 
-        isLoading: false, 
-        isInitialized: true 
+      setAuthState({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        isInitialized: true,
       });
     } else {
       console.error("認証チェックに失敗しました:", error);
-      setAuthState({ 
-        user: null, 
-        isAuthenticated: false, 
-        isLoading: false, 
-        isInitialized: true 
+      setAuthState({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        isInitialized: true,
       });
     }
   }

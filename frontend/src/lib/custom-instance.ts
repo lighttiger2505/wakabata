@@ -1,23 +1,48 @@
 import Axios from "axios";
 import type { AxiosError, AxiosRequestConfig } from "axios";
-import { getCookieValue, removeCookieValue, setCookieValue } from "./cookie-utils";
+import {
+  getAccessTokenForAxios,
+  getGlobalRefreshFunction,
+  isRefreshingForAxios,
+  shouldRefreshTokenForAxios,
+} from "./auth-manager";
 
 export const AXIOS_INSTANCE = Axios.create({ baseURL: process.env.NEXT_PUBLIC_API_HOST });
 
 // インターセプターを追加して認証トークンを設定
-AXIOS_INSTANCE.interceptors.request.use((config) => {
-  // auth-storageからトークンを取得
-  const authStorage = getCookieValue("auth-storage");
-  if (authStorage) {
+AXIOS_INSTANCE.interceptors.request.use(async (config) => {
+  const refreshFunction = getGlobalRefreshFunction();
+
+  // リフレッシュ処理中の場合は待機
+  if (isRefreshingForAxios() && refreshFunction) {
     try {
-      const { state } = JSON.parse(authStorage);
-      if (state.token?.access_token) {
-        config.headers.Authorization = `Bearer ${state.token.access_token}`;
-      }
-    } catch (error) {
-      console.error("Failed to parse auth storage from cookie:", error);
+      const { access_token } = await refreshFunction();
+      config.headers.Authorization = `Bearer ${access_token}`;
+      return config;
+    } catch {
+      // リフレッシュ失敗時はトークンなしで続行
+      return config;
     }
   }
+
+  // トークンの期限をチェックし、必要に応じてリフレッシュ
+  if (shouldRefreshTokenForAxios() && refreshFunction) {
+    try {
+      const { access_token } = await refreshFunction();
+      config.headers.Authorization = `Bearer ${access_token}`;
+      return config;
+    } catch {
+      // リフレッシュ失敗時はトークンなしで続行
+      return config;
+    }
+  }
+
+  // 通常のトークン設定
+  const accessToken = getAccessTokenForAxios();
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
   return config;
 });
 
@@ -26,45 +51,25 @@ AXIOS_INSTANCE.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const refreshFunction = getGlobalRefreshFunction();
 
     // 401エラーの場合、トークンをリフレッシュして再試行
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry && refreshFunction) {
       originalRequest._retry = true;
 
       try {
-        const authStorage = getCookieValue("auth-storage");
-        if (authStorage) {
-          const { state } = JSON.parse(authStorage);
-          if (state.token?.refresh_token) {
-            // リフレッシュトークンを使用して新しいトークンを取得
-            const response = await AXIOS_INSTANCE.post("/api/v1/auth/refresh", {
-              refresh_token: state.token.refresh_token,
-            });
+        // グローバルリフレッシュ関数を使用してリフレッシュ
+        const { access_token } = await refreshFunction();
 
-            const { access_token, refresh_token } = response.data;
-
-            // 新しいトークンを保存
-            const newState = {
-              ...state,
-              token: { access_token, refresh_token },
-            };
-            setCookieValue("auth-storage", JSON.stringify({ state: newState }), {
-              httpOnly: false, // クライアントサイドからアクセス可能にする
-              secure: process.env.NODE_ENV === "production",
-              sameSite: "lax",
-              maxAge: 60 * 60 * 24 * 7, // 7 days
-            });
-
-            // 元のリクエストを再試行
-            originalRequest.headers.Authorization = `Bearer ${access_token}`;
-            return AXIOS_INSTANCE(originalRequest);
-          }
-        }
+        // 元のリクエストを再試行
+        originalRequest.headers.Authorization = `Bearer ${access_token}`;
+        return AXIOS_INSTANCE(originalRequest);
       } catch (refreshError) {
-        // リフレッシュに失敗した場合、認証情報をクリアしてログインページにリダイレクト
+        // リフレッシュに失敗した場合、ログインページにリダイレクト
         // middlewareが適切なリダイレクトを処理する
-        removeCookieValue("auth-storage");
-        window.location.href = "/login";
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       }
     }

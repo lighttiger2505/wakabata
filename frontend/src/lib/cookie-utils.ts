@@ -73,4 +73,3 @@ export const removeCookieValue = (name: string, path = "/"): void => {
   // クライアントサイド
   document.cookie = `${encodeURIComponent(name)}=; Path=${path}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 };
-
