@@ -2,7 +2,7 @@ import { SessionData, defaultSession } from "@/lib/session";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
-const sessionApiRoute = "/app-router-client-component-route-handler-swr/session";
+const sessionApiRoute = "/session";
 
 async function fetchJson<JSON = unknown>(input: RequestInfo, init?: RequestInit): Promise<JSON> {
   return fetch(input, {
@@ -14,10 +14,10 @@ async function fetchJson<JSON = unknown>(input: RequestInfo, init?: RequestInit)
   }).then((res) => res.json());
 }
 
-function doLogin(url: string, { arg }: { arg: string }) {
+function doLogin(url: string, { arg }: { arg: { email: string; password: string } }) {
   return fetchJson<SessionData>(url, {
     method: "POST",
-    body: JSON.stringify({ username: arg }),
+    body: JSON.stringify(arg),
   });
 }
 

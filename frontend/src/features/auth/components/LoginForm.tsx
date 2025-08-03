@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/features/auth/hooks/useAuthCookie";
+// import { useAuth } from "@/features/auth/hooks/useAuthCookie";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import useSession from "../hooks/useSession";
 
 const loginFormSchema = z.object({
   email: z.string().email("有効なメールアドレスを入力してください"),
@@ -22,7 +23,8 @@ type LoginFormValues = z.infer<typeof loginFormSchema>;
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, isLoading } = useAuth();
+  // const { login, isLoading } = useAuth();
+  const { login, isLoading } = useSession();
   const [error, setError] = useState<string>("");
 
   const form = useForm<LoginFormValues>({
@@ -36,10 +38,8 @@ export function LoginForm() {
   const onSubmit = async (values: LoginFormValues) => {
     try {
       setError("");
-      const success = await login(values.email, values.password);
+      const success = await login({ email: values.email, password: values.password });
       if (success) {
-        // ログイン成功後はmiddlewareがリダイレクトを処理するため、
-        // 単純にページを更新するか、元のページに戻る
         const from = searchParams.get("from");
         const redirectTo = from || "/projects";
         router.push(redirectTo);

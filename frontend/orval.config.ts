@@ -20,6 +20,15 @@ export default defineConfig({
       },
     },
   },
+  wakabataFetch: {
+    input: openAPIFilePath,
+    output: {
+      mode: "single",
+      target: `${outputDir}/fetch-client.ts`,
+      schemas: `${outputDir}/model`,
+      client: "fetch",
+    },
+  },
   wakabataZod: {
     input: {
       target: openAPIFilePath,
